@@ -23,8 +23,7 @@ import java.util.*;
 @RestController
 public class PayChannelChangJieController {
 
-    private final MyLog _log = MyLog.getLog(PayChannelChangJieController.class);
-
+    private final MyLog log = MyLog.getLog(PayChannelChangJieController.class);
 
     /**
      * 畅捷支付平台公钥
@@ -34,7 +33,7 @@ public class PayChannelChangJieController {
     /**
      * 商户号私钥
      */
-    private static String MERCHANT_PRIVATE_KEY = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANB5cQ5pf+QHF9Z2+DjrAXstdxQHJDHyrni1PHijKVn5VHy/+ONiEUwSd5nx1d/W+mtYKxyc6HiN+5lgWSB5DFimyYCiOInh3tGQtN+pN/AtE0dhMh4J9NXad0XEetLPRgmZ795O/sZZTnA3yo54NBquT19ijYfrvi0JVf3BY9glAgMBAAECgYBFdSCox5eXlpFnn+2lsQ6mRoiVAKgbiBp/FwsVum7NjleK1L8MqyDOMpzsinlSgaKfXxnGB7UgbVW1TTeErS/iQ06zx3r4CNMDeIG1lYwiUUuguIDMedIJxzSNXfk65Bhps37lm129AE/VnIecpKxzelaUuzyGEoFWYGevwc/lQQJBAPO0mGUxOR/0eDzqsf7ehE+Iq9tEr+aztPVacrLsEBAwqOjUEYABvEasJiBVj4tECnbgGxXeZAwyQAJ5YmgseLUCQQDa/dgviW/4UMrY+cQnzXVSZewISKg/bv+nW1rsbnk+NNwdVBxR09j7ifxg9DnQNk1Edardpu3z7ipHDTC+z7exAkAM5llOue1JKLqYlt+3GvYr85MNNzSMZKTGe/QoTmCHStwV/uuyN+VMZF5cRcskVwSqyDAG10+6aYqD1wMDep8lAkBQBoVS0cmOF5AY/CTXWrht1PsNB+gbzic0dCjkz3YU6mIpgYwbxuu69/C3SWg7EyznQIyhFRhNlJH0hvhyMhvxAkEAuf7DNrgmOJjRPcmAXfkbaZUf+F4iK+szpggOZ9XvKAhJ+JGd+3894Y/05uYYRhECmSlPv55CBAPwd8VUsSb/1w==";
+    private static String MERCHANT_PRIVATE_KEY = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAOhQ+OV9NjzRHgFqsEatX149qvEcXiyAlKIJhVbluAi46q3CLRivVGeuQ7LQ7Wt99HJ1maYpQv3sedryKVlWe3FiGIo6En/+E62s6PVAVXcvTmM3lNNlDVD8arp4Qy7wH5M7ofqSKsKCibtIzQkkhio6O+ti2Tjf7rDcl8TE9fefAgMBAAECgYEAtN++OWa4YLdrxiybnBuF4ejfe6Pbioh9sH77KsHl/ByE0s4YsFxpueOK3+EcyJEjTi5Td3QurWZ9JUNfgCf+KLgrusJgUW4tOLbaS51HRFsTgXbqiEw7dr4jPKuSTbeMkmuhp/57hbsUpPoyCKsmtzgMLVMa/HUXoLzh0dcg+fECQQD4AiITSFestrUmJmh+NzQsQkVfdqkC8oVbhIfCoo/uh+YMIvRmSD2oK9c9EIjrmeQxREriU4DGLbatbALJqB2HAkEA781kg3iYPOZkG9bm7bkMMqVNbgPjwgx93V2xReVKFOl9xb/WZweHhiwPaOy/F2BZNOzxjsO0BCjaacIl7bQbKQJABLI9pPHUvy+ChKNrjSBMe54RpDoh/y1Key4qR/Q+F305TPeIeztY94tE+yIKBbQXTxuE834zTQ1mjSgjcWAelwJASORFBlWU6QYbLf8v6NjT5V0r4SIbjDOh2rUNGrLsxtiGm6KJeH3oaxdfg8Ra/a8SzqyrbHr+cDk+0uDqCIwzqQJBAK1E2Y7SnH4QS+F50j/TMC1wEBmQjRBt+E0AjjMoti7O0zU/MzjvguIiAVeRuxs3AVRGmpw2yaYsUjky6nb9i2I=";
 
 
     private static String urlStr = "https://pay.chanpay.com/mag-unify/gateway/receiveOrder.do";
@@ -373,7 +372,6 @@ public class PayChannelChangJieController {
         origMap.put("Memo", null);
         return origMap;
     }
-
 
     @PostMapping("/nmg_quick_payment_notify")
     private String nmg_quick_payment_notify(@RequestBody ChangJieEntity changJieEntity) {
