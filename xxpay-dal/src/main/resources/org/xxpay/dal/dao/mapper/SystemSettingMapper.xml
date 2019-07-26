@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.SystemSettingMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.SystemSetting">
+        <id column="Id" property="id" jdbcType="VARCHAR"/>
+        <result column="ParamName" property="paramName" jdbcType="VARCHAR"/>
+        <result column="ParamValue" property="paramValue" jdbcType="VARCHAR"/>
+        <result column="ParamDesc" property="paramDesc" jdbcType="VARCHAR"/>
+        <result column="ParamOrder" property="paramOrder" jdbcType="TINYINT"/>
+        <result column="FlagEditable" property="flagEditable" jdbcType="TINYINT"/>
+        <result column="FlagNullable" property="flagNullable" jdbcType="TINYINT"/>
+        <result column="FlagMoney" property="flagMoney" jdbcType="TINYINT"/>
+        <result column="FlagNumber" property="flagNumber" jdbcType="TINYINT"/>
+        <result column="Version" property="version" jdbcType="TINYINT"/>
+        <result column="CreateBy" property="createBy" jdbcType="VARCHAR"/>
+        <result column="UpdateBy" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    Id,
+    ParamName,
+ParamValue,
+ParamDesc,
+ParamOrder,
+FlagEditable,
+FlagNullable,
+FlagMoney,
+FlagNumber,
+Version,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.SystemSettingExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_system_setting
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_system_setting
+        where Id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_system_setting
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.SystemSettingExample">
+        delete from t_system_setting
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.SystemSetting">
+    insert into t_system_setting (Id,
+        ParamName,
+ParamValue,
+ParamDesc,
+ParamOrder,
+FlagEditable,
+FlagNullable,
+FlagMoney,
+FlagNumber,
+Version,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime)
+      values (#{Id,jdbcType=VARCHAR},
+        #{paramName,jdbcType=VARCHAR},
+#{paramValue,jdbcType=VARCHAR},
+#{paramDesc,jdbcType=VARCHAR},
+#{paramOrder,jdbcType=TINYINT},
+#{flagEditable,jdbcType=TINYINT},
+#{flagNullable,jdbcType=TINYINT},
+#{flagMoney,jdbcType=TINYINT},
+#{flagNumber,jdbcType=TINYINT},
+#{version,jdbcType=TINYINT},
+#{createBy,jdbcType=VARCHAR},
+#{updateBy,jdbcType=VARCHAR},
+#{createTime,jdbcType=TIMESTAMP},
+#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.SystemSetting">
+        insert into t_system_setting
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">Id,</if>
+            <if test="paramName != null ">ParamName,</if>
+            <if test="paramValue != null ">ParamValue,</if>
+            <if test="paramDesc != null ">ParamDesc,</if>
+            <if test="paramOrder != null ">ParamOrder,</if>
+            <if test="flagEditable != null ">FlagEditable,</if>
+            <if test="flagNullable != null ">FlagNullable,</if>
+            <if test="flagMoney != null ">FlagMoney,</if>
+            <if test="flagNumber != null ">FlagNumber,</if>
+            <if test="version != null ">Version,</if>
+            <if test="createBy != null ">CreateBy,</if>
+            <if test="updateBy != null ">UpdateBy,</if>
+            <if test="createTime != null ">CreateTime,</if>
+            <if test="updateTime != null ">UpdateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id,jdbcType=VARCHAR},</if>
+            <if test="paramName != null ">#{paramName,jdbcType=VARCHAR},</if>
+            <if test="paramValue != null ">#{paramValue,jdbcType=VARCHAR},</if>
+            <if test="paramDesc != null ">#{paramDesc,jdbcType=VARCHAR},</if>
+            <if test="paramOrder != null ">#{paramOrder,jdbcType=TINYINT},</if>
+            <if test="flagEditable != null ">#{flagEditable,jdbcType=TINYINT},</if>
+            <if test="flagNullable != null ">#{flagNullable,jdbcType=TINYINT},</if>
+            <if test="flagMoney != null ">#{flagMoney,jdbcType=TINYINT},</if>
+            <if test="flagNumber != null ">#{flagNumber,jdbcType=TINYINT},</if>
+            <if test="version != null ">#{version,jdbcType=TINYINT},</if>
+            <if test="createBy != null ">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null ">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.SystemSettingExample" resultType="java.lang.Integer">
+        select count(*) from t_system_setting
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_system_setting
+        <set>
+            <if test="record.paramName != null "> ParamName = #{record.paramName,jdbcType=VARCHAR},</if>
+            <if test="record.paramValue != null "> ParamValue = #{record.paramValue,jdbcType=VARCHAR},</if>
+            <if test="record.paramDesc != null "> ParamDesc = #{record.paramDesc,jdbcType=VARCHAR},</if>
+            <if test="record.paramOrder != null "> ParamOrder = #{record.paramOrder,jdbcType=TINYINT},</if>
+            <if test="record.flagEditable != null "> FlagEditable = #{record.flagEditable,jdbcType=TINYINT},</if>
+            <if test="record.flagNullable != null "> FlagNullable = #{record.flagNullable,jdbcType=TINYINT},</if>
+            <if test="record.flagMoney != null "> FlagMoney = #{record.flagMoney,jdbcType=TINYINT},</if>
+            <if test="record.flagNumber != null "> FlagNumber = #{record.flagNumber,jdbcType=TINYINT},</if>
+            <if test="record.version != null "> Version = #{record.version,jdbcType=TINYINT},</if>
+            <if test="record.createBy != null "> CreateBy = #{record.createBy,jdbcType=VARCHAR},</if>
+            <if test="record.updateBy != null "> UpdateBy = #{record.updateBy,jdbcType=VARCHAR},</if>
+            <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.updateTime != null "> UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_system_setting
+        set
+        ParamName = #{record.paramName,jdbcType=VARCHAR},
+        ParamValue = #{record.paramValue,jdbcType=VARCHAR},
+        ParamDesc = #{record.paramDesc,jdbcType=VARCHAR},
+        ParamOrder = #{record.paramOrder,jdbcType=TINYINT},
+        FlagEditable = #{record.flagEditable,jdbcType=TINYINT},
+        FlagNullable = #{record.flagNullable,jdbcType=TINYINT},
+        FlagMoney = #{record.flagMoney,jdbcType=TINYINT},
+        FlagNumber = #{record.flagNumber,jdbcType=TINYINT},
+        Version = #{record.version,jdbcType=TINYINT},
+        CreateBy = #{record.createBy,jdbcType=VARCHAR},
+        UpdateBy = #{record.updateBy,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.SystemSetting">
+        update t_system_setting
+        <set>
+            <if test="paramName != null "> ParamName = #{paramName,jdbcType=VARCHAR},</if>
+            <if test="paramValue != null "> ParamValue = #{paramValue,jdbcType=VARCHAR},</if>
+            <if test="paramDesc != null "> ParamDesc = #{paramDesc,jdbcType=VARCHAR},</if>
+            <if test="paramOrder != null "> ParamOrder = #{paramOrder,jdbcType=TINYINT},</if>
+            <if test="flagEditable != null "> FlagEditable = #{flagEditable,jdbcType=TINYINT},</if>
+            <if test="flagNullable != null "> FlagNullable = #{flagNullable,jdbcType=TINYINT},</if>
+            <if test="flagMoney != null "> FlagMoney = #{flagMoney,jdbcType=TINYINT},</if>
+            <if test="flagNumber != null "> FlagNumber = #{flagNumber,jdbcType=TINYINT},</if>
+            <if test="version != null "> Version = #{version,jdbcType=TINYINT},</if>
+            <if test="createBy != null "> CreateBy = #{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null "> UpdateBy = #{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null "> UpdateTime = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where Id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.SystemSetting">
+    update t_system_setting
+    set
+        ParamName = #{paramName,jdbcType=VARCHAR},
+ParamValue = #{paramValue,jdbcType=VARCHAR},
+ParamDesc = #{paramDesc,jdbcType=VARCHAR},
+ParamOrder = #{paramOrder,jdbcType=TINYINT},
+FlagEditable = #{flagEditable,jdbcType=TINYINT},
+FlagNullable = #{flagNullable,jdbcType=TINYINT},
+FlagMoney = #{flagMoney,jdbcType=TINYINT},
+FlagNumber = #{flagNumber,jdbcType=TINYINT},
+Version = #{version,jdbcType=TINYINT},
+CreateBy = #{createBy,jdbcType=VARCHAR},
+UpdateBy = #{updateBy,jdbcType=VARCHAR},
+CreateTime = #{createTime,jdbcType=TIMESTAMP},
+UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_system_setting
+        where `ParamName` = #{paramName,jdbcType=VARCHAR}
+    </select>
+</mapper>

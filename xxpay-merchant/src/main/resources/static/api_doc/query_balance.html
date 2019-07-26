@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>账户余额查询</title>
+    <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="../css/global.css" media="all">
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/table.css"/>
+    <meta http-equiv="pragma" content="no-cache"/><!-- 禁止浏览器从本地机的缓存中调阅页面内容 -->
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate"/>
+    <meta http-equiv="expires" content="0"/> <!-- 定义网页 缓存中的过期时间-->
+</head>
+
+<body>
+<div class="admin-main">
+    <blockquote class="layui-elem-quote">
+        <p>接口名称：<span style="color:red;">账户余额查询接口</span></p>
+        <p>接口说明：<span style="color:red;">商户可查询用于代付交易的资金余额</span></p>
+        <p>请求方式：<span style="color:red;">POST</span></p>
+        <p>请求地址：<span style="color:red;">http://domain:3030/api/balance/query</span></p>
+    </blockquote>
+
+    <fieldset class="layui-elem-field">
+        <legend>查询参数</legend>
+        <div class="layui-field-box layui-form">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th>接口参数</th>
+                    <th>类型</th>
+                    <th>是否可空</th>
+                    <th>参数说明</th>
+                    <th>其他</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>sign</td>
+                    <td>string(32)</td>
+                    <td>否</td>
+                    <td>请求参数的签名</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>signType</td>
+                    <td>string(10)</td>
+                    <td>否</td>
+                    <td>签名类型（固定传MD5）</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>mchId</td>
+                    <td>string(20)</td>
+                    <td>否</td>
+                    <td>商户号</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+
+    <fieldset class="layui-elem-field">
+        <legend>返回参数</legend>
+        <div class="layui-field-box layui-form">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th>接口参数</th>
+                    <th>类型</th>
+                    <th>是否可空</th>
+                    <th>参数说明</th>
+                    <th>其他</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>sign</td>
+                    <td>string(32)</td>
+                    <td>否</td>
+                    <td>请求参数的签名</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>signType</td>
+                    <td>string(10)</td>
+                    <td>否</td>
+                    <td>签名类型（固定传MD5）</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>mchId</td>
+                    <td>string(20)</td>
+                    <td>否</td>
+                    <td>商户号</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>retCode</td>
+                    <td>string(10)</td>
+                    <td>否</td>
+                    <td>返回状态，SUCCESS和FAIL，SUCCESS只在查询成功的时候返回</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>resCode</td>
+                    <td>string(10)</td>
+                    <td>否</td>
+                    <td>返回状态，SUCCESS和FAIL，SUCCESS只在查询成功的时候返回</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>retMsg</td>
+                    <td>string(64)</td>
+                    <td>否</td>
+                    <td>说明信息</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>time</td>
+                    <td>string(20)</td>
+                    <td>否</td>
+                    <td>时间戳</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>balance</td>
+                    <td>string(20)</td>
+                    <td>否</td>
+                    <td>余额</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="paged" class="page">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../plugins/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../js/'
+    });
+
+</script>
+</body>
+
+</html>

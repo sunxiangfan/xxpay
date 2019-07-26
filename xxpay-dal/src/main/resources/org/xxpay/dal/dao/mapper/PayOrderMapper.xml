@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.PayOrderMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.PayOrder" >
+    <id column="Id" property="id" jdbcType="VARCHAR" />
+    <result column="AgentMchId" property="agentMchId" jdbcType="VARCHAR" />
+    <result column="MchId" property="mchId" jdbcType="VARCHAR" />
+    <result column="MchOrderNo" property="mchOrderNo" jdbcType="VARCHAR" />
+    <result column="MchPayChannelId" property="mchPayChannelId" jdbcType="VARCHAR" />
+    <result column="AgentMchPayChannelId" property="agentMchPayChannelId" jdbcType="VARCHAR" />
+    <result column="PayChannelId" property="payChannelId" jdbcType="VARCHAR" />
+    <result column="Amount" property="amount" jdbcType="BIGINT" />
+    <result column="PayAmount" property="payAmount" jdbcType="BIGINT" />
+    <result column="Currency" property="currency" jdbcType="VARCHAR" />
+    <result column="PlatformActualAmount" property="platformActualAmount" jdbcType="BIGINT"/>
+    <result column="SubMchActualAmount" property="subMchActualAmount" jdbcType="BIGINT"/>
+    <result column="PlatformDeductionRate" property="platformDeductionRate" jdbcType="DECIMAL"/>
+    <result column="AgentMchCommissionRate" property="agentMchCommissionRate" jdbcType="DECIMAL"/>
+    <result column="ThirdDeductionRate" property="thirdDeductionRate" jdbcType="DECIMAL"/>
+    <result column="Status" property="status" jdbcType="TINYINT" />
+    <result column="ClientIp" property="clientIp" jdbcType="VARCHAR" />
+    <result column="Device" property="device" jdbcType="VARCHAR" />
+    <result column="Subject" property="subject" jdbcType="VARCHAR" />
+    <result column="Body" property="body" jdbcType="VARCHAR" />
+    <result column="ChannelOrderNo" property="channelOrderNo" jdbcType="VARCHAR" />
+    <result column="ErrCode" property="errCode" jdbcType="VARCHAR" />
+    <result column="ErrMsg" property="errMsg" jdbcType="VARCHAR" />
+    <result column="Param1" property="param1" jdbcType="VARCHAR" />
+    <result column="Param2" property="param2" jdbcType="VARCHAR" />
+    <result column="FrontUrl" property="frontUrl" jdbcType="VARCHAR" />
+    <result column="NotifyUrl" property="notifyUrl" jdbcType="VARCHAR" />
+    <result column="NotifyCount" property="notifyCount" jdbcType="TINYINT" />
+    <result column="LastNotifyTime" property="lastNotifyTime" jdbcType="BIGINT" />
+    <result column="ExpireTime" property="expireTime" jdbcType="BIGINT" />
+    <result column="PaySuccTime" property="paySuccTime" jdbcType="BIGINT" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id,
+    AgentMchId,
+MchId,
+MchOrderNo,
+MchPayChannelId,
+AgentMchPayChannelId,
+PayChannelId,
+Amount,
+PayAmount,
+Currency,
+PlatformActualAmount,
+SubMchActualAmount,
+PlatformDeductionRate,
+AgentMchCommissionRate,
+ThirdDeductionRate,
+Status,
+ClientIp,
+Device,
+Subject,
+Body,
+ChannelOrderNo,
+ErrCode,
+ErrMsg,
+Param1,
+Param2,
+FrontUrl,
+NotifyUrl,
+NotifyCount,
+LastNotifyTime,
+ExpireTime,
+PaySuccTime,
+CreateTime,
+UpdateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.PayOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_pay_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_pay_order
+    where Id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_pay_order
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.PayOrderExample" >
+    delete from t_pay_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.dal.dao.model.PayOrder" >
+    insert into t_pay_order (Id,
+    AgentMchId,
+MchId,
+MchOrderNo,
+MchPayChannelId,
+AgentMchPayChannelId,
+PayChannelId,
+Amount,
+PayAmount,
+Currency,
+PlatformActualAmount,
+SubMchActualAmount,
+PlatformDeductionRate,
+AgentMchCommissionRate,
+ThirdDeductionRate,
+Status,
+ClientIp,
+Device,
+Subject,
+Body,
+ChannelOrderNo,
+ErrCode,
+ErrMsg,
+Param1,
+Param2,
+FrontUrl,
+NotifyUrl,
+NotifyCount,
+LastNotifyTime,
+ExpireTime,
+PaySuccTime,
+CreateTime,
+UpdateTime)
+    values (#{id,jdbcType=VARCHAR},
+    #{agentMchId,jdbcType=VARCHAR},
+#{mchId,jdbcType=VARCHAR},
+#{mchOrderNo,jdbcType=VARCHAR},
+#{mchPayChannelId,jdbcType=VARCHAR},
+#{agentMchPayChannelId,jdbcType=VARCHAR},
+#{payChannelId,jdbcType=VARCHAR},
+#{amount,jdbcType=BIGINT},
+#{payAmount,jdbcType=BIGINT},
+#{currency,jdbcType=VARCHAR},
+#{platformActualAmount,jdbcType=BIGINT},
+#{subMchActualAmount,jdbcType=BIGINT},
+#{platformDeductionRate,jdbcType=DECIMAL},
+#{agentMchCommissionRate,jdbcType=DECIMAL},
+#{thirdDeductionRate,jdbcType=DECIMAL},
+#{status,jdbcType=TINYINT},
+#{clientIp,jdbcType=VARCHAR},
+#{device,jdbcType=VARCHAR},
+#{subject,jdbcType=VARCHAR},
+#{body,jdbcType=VARCHAR},
+#{channelOrderNo,jdbcType=VARCHAR},
+#{errCode,jdbcType=VARCHAR},
+#{errMsg,jdbcType=VARCHAR},
+#{param1,jdbcType=VARCHAR},
+#{param2,jdbcType=VARCHAR},
+#{frontUrl,jdbcType=VARCHAR},
+#{notifyUrl,jdbcType=VARCHAR},
+#{notifyCount,jdbcType=TINYINT},
+#{lastNotifyTime,jdbcType=BIGINT},
+#{expireTime,jdbcType=BIGINT},
+#{paySuccTime,jdbcType=BIGINT},
+#{createTime,jdbcType=TIMESTAMP},
+#{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.PayOrder" >
+    insert into t_pay_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >        Id,      </if>
+      <if test="agentMchId != null ">AgentMchId,</if>
+      <if test="mchId != null ">MchId,</if>
+      <if test="mchOrderNo != null ">MchOrderNo,</if>
+      <if test="mchPayChannelId != null ">MchPayChannelId,</if>
+      <if test="agentMchPayChannelId != null ">AgentMchPayChannelId,</if>
+      <if test="payChannelId != null ">PayChannelId,</if>
+      <if test="amount != null ">Amount,</if>
+      <if test="payAmount != null ">PayAmount,</if>
+      <if test="currency != null ">Currency,</if>
+      <if test="platformActualAmount != null ">PlatformActualAmount,</if>
+      <if test="subMchActualAmount != null ">SubMchActualAmount,</if>
+      <if test="platformDeductionRate != null ">PlatformDeductionRate,</if>
+      <if test="agentMchCommissionRate != null ">AgentMchCommissionRate,</if>
+      <if test="thirdDeductionRate != null ">ThirdDeductionRate,</if>
+      <if test="status != null ">Status,</if>
+      <if test="clientIp != null ">ClientIp,</if>
+      <if test="device != null ">Device,</if>
+      <if test="subject != null ">Subject,</if>
+      <if test="body != null ">Body,</if>
+      <if test="channelOrderNo != null ">ChannelOrderNo,</if>
+      <if test="errCode != null ">ErrCode,</if>
+      <if test="errMsg != null ">ErrMsg,</if>
+      <if test="param1 != null ">Param1,</if>
+      <if test="param2 != null ">Param2,</if>
+      <if test="frontUrl != null ">FrontUrl,</if>
+      <if test="notifyUrl != null ">NotifyUrl,</if>
+      <if test="notifyCount != null ">NotifyCount,</if>
+      <if test="lastNotifyTime != null ">LastNotifyTime,</if>
+      <if test="expireTime != null ">ExpireTime,</if>
+      <if test="paySuccTime != null ">PaySuccTime,</if>
+      <if test="createTime != null ">CreateTime,</if>
+      <if test="updateTime != null ">UpdateTime,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >        #{id,jdbcType=VARCHAR},      </if>
+      <if test="agentMchId != null ">#{agentMchId,jdbcType=VARCHAR},</if>
+      <if test="mchId != null ">#{mchId,jdbcType=VARCHAR},</if>
+      <if test="mchOrderNo != null ">#{mchOrderNo,jdbcType=VARCHAR},</if>
+      <if test="mchPayChannelId != null ">#{mchPayChannelId,jdbcType=VARCHAR},</if>
+      <if test="agentMchPayChannelId != null ">#{agentMchPayChannelId,jdbcType=VARCHAR},</if>
+      <if test="payChannelId != null ">#{payChannelId,jdbcType=VARCHAR},</if>
+      <if test="amount != null ">#{amount,jdbcType=BIGINT},</if>
+      <if test="payAmount != null ">#{payAmount,jdbcType=BIGINT},</if>
+      <if test="currency != null ">#{currency,jdbcType=VARCHAR},</if>
+      <if test="platformActualAmount != null ">#{platformActualAmount,jdbcType=BIGINT},</if>
+      <if test="subMchActualAmount != null ">#{subMchActualAmount,jdbcType=BIGINT},</if>
+      <if test="platformDeductionRate != null ">#{platformDeductionRate,jdbcType=DECIMAL},</if>
+      <if test="agentMchCommissionRate != null ">#{agentMchCommissionRate,jdbcType=DECIMAL},</if>
+      <if test="thirdDeductionRate != null ">#{thirdDeductionRate,jdbcType=DECIMAL},</if>
+      <if test="status != null ">#{status,jdbcType=TINYINT},</if>
+      <if test="clientIp != null ">#{clientIp,jdbcType=VARCHAR},</if>
+      <if test="device != null ">#{device,jdbcType=VARCHAR},</if>
+      <if test="subject != null ">#{subject,jdbcType=VARCHAR},</if>
+      <if test="body != null ">#{body,jdbcType=VARCHAR},</if>
+      <if test="channelOrderNo != null ">#{channelOrderNo,jdbcType=VARCHAR},</if>
+      <if test="errCode != null ">#{errCode,jdbcType=VARCHAR},</if>
+      <if test="errMsg != null ">#{errMsg,jdbcType=VARCHAR},</if>
+      <if test="param1 != null ">#{param1,jdbcType=VARCHAR},</if>
+      <if test="param2 != null ">#{param2,jdbcType=VARCHAR},</if>
+      <if test="frontUrl != null ">#{frontUrl,jdbcType=VARCHAR},</if>
+      <if test="notifyUrl != null ">#{notifyUrl,jdbcType=VARCHAR},</if>
+      <if test="notifyCount != null ">#{notifyCount,jdbcType=TINYINT},</if>
+      <if test="lastNotifyTime != null ">#{lastNotifyTime,jdbcType=BIGINT},</if>
+      <if test="expireTime != null ">#{expireTime,jdbcType=BIGINT},</if>
+      <if test="paySuccTime != null ">#{paySuccTime,jdbcType=BIGINT},</if>
+      <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+      <if test="updateTime != null ">#{updateTime,jdbcType=TIMESTAMP},</if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.dal.dao.model.PayOrderExample" resultType="java.lang.Integer" >
+    select count(*) from t_pay_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_pay_order
+    <set >
+      <if test="record.agentMchId != null "> AgentMchId = #{record.agentMchId,jdbcType=VARCHAR},</if>
+      <if test="record.mchId != null "> MchId = #{record.mchId,jdbcType=VARCHAR},</if>
+      <if test="record.mchOrderNo != null "> MchOrderNo = #{record.mchOrderNo,jdbcType=VARCHAR},</if>
+      <if test="record.mchPayChannelId != null "> MchPayChannelId = #{record.mchPayChannelId,jdbcType=VARCHAR},</if>
+      <if test="record.agentMchPayChannelId != null "> AgentMchPayChannelId = #{record.agentMchPayChannelId,jdbcType=VARCHAR},</if>
+      <if test="record.payChannelId != null "> PayChannelId = #{record.payChannelId,jdbcType=VARCHAR},</if>
+      <if test="record.amount != null "> Amount = #{record.amount,jdbcType=BIGINT},</if>
+      <if test="record.payAmount != null "> PayAmount = #{record.payAmount,jdbcType=BIGINT},</if>
+      <if test="record.currency != null "> Currency = #{record.currency,jdbcType=VARCHAR},</if>
+      <if test="record.platformActualAmount != null "> PlatformActualAmount = #{record.platformActualAmount,jdbcType=BIGINT},</if>
+      <if test="record.subMchActualAmount != null "> SubMchActualAmount = #{record.subMchActualAmount,jdbcType=BIGINT},</if>
+      <if test="record.platformDeductionRate != null "> PlatformDeductionRate = #{record.platformDeductionRate,jdbcType=DECIMAL},</if>
+      <if test="record.agentMchCommissionRate != null "> AgentMchCommissionRate = #{record.agentMchCommissionRate,jdbcType=DECIMAL},</if>
+      <if test="record.thirdDeductionRate != null "> ThirdDeductionRate = #{record.thirdDeductionRate,jdbcType=DECIMAL},</if>
+      <if test="record.status != null "> Status = #{record.status,jdbcType=TINYINT},</if>
+      <if test="record.clientIp != null "> ClientIp = #{record.clientIp,jdbcType=VARCHAR},</if>
+      <if test="record.device != null "> Device = #{record.device,jdbcType=VARCHAR},</if>
+      <if test="record.subject != null "> Subject = #{record.subject,jdbcType=VARCHAR},</if>
+      <if test="record.body != null "> Body = #{record.body,jdbcType=VARCHAR},</if>
+      <if test="record.channelOrderNo != null "> ChannelOrderNo = #{record.channelOrderNo,jdbcType=VARCHAR},</if>
+      <if test="record.errCode != null "> ErrCode = #{record.errCode,jdbcType=VARCHAR},</if>
+      <if test="record.errMsg != null "> ErrMsg = #{record.errMsg,jdbcType=VARCHAR},</if>
+      <if test="record.param1 != null "> Param1 = #{record.param1,jdbcType=VARCHAR},</if>
+      <if test="record.param2 != null "> Param2 = #{record.param2,jdbcType=VARCHAR},</if>
+      <if test="record.frontUrl != null "> FrontUrl = #{record.frontUrl,jdbcType=VARCHAR},</if>
+      <if test="record.notifyUrl != null "> NotifyUrl = #{record.notifyUrl,jdbcType=VARCHAR},</if>
+      <if test="record.notifyCount != null "> NotifyCount = #{record.notifyCount,jdbcType=TINYINT},</if>
+      <if test="record.lastNotifyTime != null "> LastNotifyTime = #{record.lastNotifyTime,jdbcType=BIGINT},</if>
+      <if test="record.expireTime != null "> ExpireTime = #{record.expireTime,jdbcType=BIGINT},</if>
+      <if test="record.paySuccTime != null "> PaySuccTime = #{record.paySuccTime,jdbcType=BIGINT},</if>
+      <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+      <if test="record.updateTime != null "> UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},</if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_pay_order
+    set
+    AgentMchId = #{record.agentMchId,jdbcType=VARCHAR},
+    MchId = #{record.mchId,jdbcType=VARCHAR},
+    MchOrderNo = #{record.mchOrderNo,jdbcType=VARCHAR},
+    MchPayChannelId = #{record.mchPayChannelId,jdbcType=VARCHAR},
+    AgentMchPayChannelId = #{record.agentMchPayChannelId,jdbcType=VARCHAR},
+    PayChannelId = #{record.payChannelId,jdbcType=VARCHAR},
+    Amount = #{record.amount,jdbcType=BIGINT},
+    PayAmount = #{record.payAmount,jdbcType=BIGINT},
+    Currency = #{record.currency,jdbcType=VARCHAR},
+    PlatformActualAmount = #{record.platformActualAmount,jdbcType=BIGINT},
+    SubMchActualAmount = #{record.subMchActualAmount,jdbcType=BIGINT},
+    PlatformDeductionRate = #{record.platformDeductionRate,jdbcType=DECIMAL},
+    AgentMchCommissionRate = #{record.agentMchCommissionRate,jdbcType=DECIMAL},
+    ThirdDeductionRate = #{record.thirdDeductionRate,jdbcType=DECIMAL},
+    Status = #{record.status,jdbcType=TINYINT},
+    ClientIp = #{record.clientIp,jdbcType=VARCHAR},
+    Device = #{record.device,jdbcType=VARCHAR},
+    Subject = #{record.subject,jdbcType=VARCHAR},
+    Body = #{record.body,jdbcType=VARCHAR},
+    ChannelOrderNo = #{record.channelOrderNo,jdbcType=VARCHAR},
+    ErrCode = #{record.errCode,jdbcType=VARCHAR},
+    ErrMsg = #{record.errMsg,jdbcType=VARCHAR},
+    Param1 = #{record.param1,jdbcType=VARCHAR},
+    Param2 = #{record.param2,jdbcType=VARCHAR},
+    FrontUrl = #{record.frontUrl,jdbcType=VARCHAR},
+    NotifyUrl = #{record.notifyUrl,jdbcType=VARCHAR},
+    NotifyCount = #{record.notifyCount,jdbcType=TINYINT},
+    LastNotifyTime = #{record.lastNotifyTime,jdbcType=BIGINT},
+    ExpireTime = #{record.expireTime,jdbcType=BIGINT},
+    PaySuccTime = #{record.paySuccTime,jdbcType=BIGINT},
+    CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+    UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.PayOrder" >
+    update t_pay_order
+    <set >
+      <if test="agentMchId != null "> AgentMchId = #{agentMchId,jdbcType=VARCHAR},</if>
+      <if test="mchId != null "> MchId = #{mchId,jdbcType=VARCHAR},</if>
+      <if test="mchOrderNo != null "> MchOrderNo = #{mchOrderNo,jdbcType=VARCHAR},</if>
+      <if test="mchPayChannelId != null "> MchPayChannelId = #{mchPayChannelId,jdbcType=VARCHAR},</if>
+      <if test="agentMchPayChannelId != null "> AgentMchPayChannelId = #{agentMchPayChannelId,jdbcType=VARCHAR},</if>
+      <if test="payChannelId != null "> PayChannelId = #{payChannelId,jdbcType=VARCHAR},</if>
+      <if test="amount != null "> Amount = #{amount,jdbcType=BIGINT},</if>
+      <if test="payAmount != null "> PayAmount = #{payAmount,jdbcType=BIGINT},</if>
+      <if test="currency != null "> Currency = #{currency,jdbcType=VARCHAR},</if>
+      <if test="platformActualAmount != null "> PlatformActualAmount = #{platformActualAmount,jdbcType=BIGINT},</if>
+      <if test="subMchActualAmount != null "> SubMchActualAmount = #{subMchActualAmount,jdbcType=BIGINT},</if>
+      <if test="platformDeductionRate != null "> PlatformDeductionRate = #{platformDeductionRate,jdbcType=DECIMAL},</if>
+      <if test="agentMchCommissionRate != null "> AgentMchCommissionRate = #{agentMchCommissionRate,jdbcType=DECIMAL},</if>
+      <if test="thirdDeductionRate != null "> ThirdDeductionRate = #{thirdDeductionRate,jdbcType=DECIMAL},</if>
+      <if test="status != null "> Status = #{status,jdbcType=TINYINT},</if>
+      <if test="clientIp != null "> ClientIp = #{clientIp,jdbcType=VARCHAR},</if>
+      <if test="device != null "> Device = #{device,jdbcType=VARCHAR},</if>
+      <if test="subject != null "> Subject = #{subject,jdbcType=VARCHAR},</if>
+      <if test="body != null "> Body = #{body,jdbcType=VARCHAR},</if>
+      <if test="channelOrderNo != null "> ChannelOrderNo = #{channelOrderNo,jdbcType=VARCHAR},</if>
+      <if test="errCode != null "> ErrCode = #{errCode,jdbcType=VARCHAR},</if>
+      <if test="errMsg != null "> ErrMsg = #{errMsg,jdbcType=VARCHAR},</if>
+      <if test="param1 != null "> Param1 = #{param1,jdbcType=VARCHAR},</if>
+      <if test="param2 != null "> Param2 = #{param2,jdbcType=VARCHAR},</if>
+      <if test="frontUrl != null "> FrontUrl = #{frontUrl,jdbcType=VARCHAR},</if>
+      <if test="notifyUrl != null "> NotifyUrl = #{notifyUrl,jdbcType=VARCHAR},</if>
+      <if test="notifyCount != null "> NotifyCount = #{notifyCount,jdbcType=TINYINT},</if>
+      <if test="lastNotifyTime != null "> LastNotifyTime = #{lastNotifyTime,jdbcType=BIGINT},</if>
+      <if test="expireTime != null "> ExpireTime = #{expireTime,jdbcType=BIGINT},</if>
+      <if test="paySuccTime != null "> PaySuccTime = #{paySuccTime,jdbcType=BIGINT},</if>
+      <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+      <if test="updateTime != null "> UpdateTime = #{updateTime,jdbcType=TIMESTAMP},</if>
+    </set>
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.PayOrder" >
+    update t_pay_order
+    set
+    AgentMchId = #{agentMchId,jdbcType=VARCHAR},
+MchId = #{mchId,jdbcType=VARCHAR},
+MchOrderNo = #{mchOrderNo,jdbcType=VARCHAR},
+MchPayChannelId = #{mchPayChannelId,jdbcType=VARCHAR},
+AgentMchPayChannelId = #{agentMchPayChannelId,jdbcType=VARCHAR},
+PayChannelId = #{payChannelId,jdbcType=VARCHAR},
+Amount = #{amount,jdbcType=BIGINT},
+PayAmount = #{payAmount,jdbcType=BIGINT},
+Currency = #{currency,jdbcType=VARCHAR},
+PlatformActualAmount = #{platformActualAmount,jdbcType=BIGINT},
+SubMchActualAmount = #{subMchActualAmount,jdbcType=BIGINT},
+PlatformDeductionRate = #{platformDeductionRate,jdbcType=DECIMAL},
+AgentMchCommissionRate = #{agentMchCommissionRate,jdbcType=DECIMAL},
+ThirdDeductionRate = #{thirdDeductionRate,jdbcType=DECIMAL},
+Status = #{status,jdbcType=TINYINT},
+ClientIp = #{clientIp,jdbcType=VARCHAR},
+Device = #{device,jdbcType=VARCHAR},
+Subject = #{subject,jdbcType=VARCHAR},
+Body = #{body,jdbcType=VARCHAR},
+ChannelOrderNo = #{channelOrderNo,jdbcType=VARCHAR},
+ErrCode = #{errCode,jdbcType=VARCHAR},
+ErrMsg = #{errMsg,jdbcType=VARCHAR},
+Param1 = #{param1,jdbcType=VARCHAR},
+Param2 = #{param2,jdbcType=VARCHAR},
+FrontUrl = #{frontUrl,jdbcType=VARCHAR},
+NotifyUrl = #{notifyUrl,jdbcType=VARCHAR},
+NotifyCount = #{notifyCount,jdbcType=TINYINT},
+LastNotifyTime = #{lastNotifyTime,jdbcType=BIGINT},
+ExpireTime = #{expireTime,jdbcType=BIGINT},
+PaySuccTime = #{paySuccTime,jdbcType=BIGINT},
+CreateTime = #{createTime,jdbcType=TIMESTAMP},
+UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="sumAmountByExample" parameterType="org.xxpay.dal.dao.model.PayOrderExample" resultType="java.lang.Long" >
+    select sum(Amount) as sumAmount from t_pay_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="sumMchActualAmountByExample" parameterType="org.xxpay.dal.dao.model.PayOrderExample" resultType="java.lang.Long" >
+    select sum(SubMchActualAmount) as sumAmount from t_pay_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <select id="statementByExample" parameterType="org.xxpay.dal.dao.model.PayOrderExample" resultType="org.xxpay.dal.dao.model.StatementModel" >
+    select MchId as mchId,createDate,SUM(1) as totalCount,SUM(successCount) as successCount, SUM(failCount) as failCount,sum(Amount) as applyAmount, sum(successAmount) as successAmount,sum(successActualAmount) as successActualAmount
+    from (
+    select MchId,
+    DATE_FORMAT(CreateTime,'%Y-%m-%d') as createDate,
+    case when `Status` in (2,3) then 1 else 0 end as successCount,
+    case when `Status` in (0,1) then 1 else 0 end as failCount,
+    Amount,
+    case when `Status` in (2,3) then Amount else 0 end as successAmount  ,
+    case when `Status` in (2,3) then SubMchActualAmount else 0 end as successActualAmount
+    from t_pay_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    ) as t1 GROUP BY MchId,createDate
+    ORDER BY createDate desc,successCount desc
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="countStatementByExample" parameterType="org.xxpay.dal.dao.model.PayOrderExample" resultType="java.lang.Integer" >
+    select count(*) from (
+    select MchId,createDate
+    from (
+    select MchId,
+    DATE_FORMAT(CreateTime,'%Y-%m-%d') as createDate
+    from t_pay_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    ) as t1
+    GROUP BY MchId,createDate
+    )as t2
+  </select>
+  <select id="groupCreateDateSumAmountByExample" parameterType="org.xxpay.dal.dao.model.PayOrderExample" resultType="org.xxpay.dal.dao.model.dto.PayOrderGroupCreateDateSumAmountModel" >
+    select date(CreateTime) as CreateDate,sum( Amount) as Amount from t_pay_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP BY DATE(CreateTime)
+  </select>
+</mapper>

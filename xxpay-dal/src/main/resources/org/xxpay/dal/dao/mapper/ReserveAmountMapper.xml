@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.ReserveAmountMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.ReserveAmount">
+        <id column="Id" property="id" jdbcType="VARCHAR"/>
+        <result column="FlowType" property="flowType" jdbcType="TINYINT"/>
+        <result column="Amount" property="amount" jdbcType="BIGINT"/>
+        <result column="Balance" property="balance" jdbcType="BIGINT"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    Id,
+    FlowType,
+Amount,
+Balance,
+Remark,
+CreateTime,
+UpdateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.BillExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_reserve_amount
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_reserve_amount
+        where Id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_reserve_amount
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.BillExample">
+        delete from t_reserve_amount
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.ReserveAmount">
+    insert into t_reserve_amount (
+       Id,
+       FlowType,
+Amount,
+Balance,
+Remark,
+CreateTime,
+UpdateTime)
+    values (#{id,jdbcType=VARCHAR},
+     #{flowType,jdbcType=TINYINT},
+#{amount,jdbcType=BIGINT},
+#{balance,jdbcType=BIGINT},
+#{remark,jdbcType=VARCHAR},
+#{createTime,jdbcType=TIMESTAMP},
+#{updateTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.ReserveAmount">
+        insert into t_reserve_amount
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">Id,</if>
+            <if test="flowType != null ">FlowType,</if>
+            <if test="amount != null ">Amount,</if>
+            <if test="balance != null ">Balance,</if>
+            <if test="remark != null ">Remark,</if>
+            <if test="createTime != null ">CreateTime,</if>
+            <if test="updateTime != null ">UpdateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id,jdbcType=VARCHAR},</if>
+            <if test="flowType != null ">#{flowType,jdbcType=TINYINT},</if>
+            <if test="amount != null ">#{amount,jdbcType=BIGINT},</if>
+            <if test="balance != null ">#{balance,jdbcType=BIGINT},</if>
+            <if test="remark != null ">#{remark,jdbcType=VARCHAR},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.ReserveAmountExample" resultType="java.lang.Integer">
+        select count(*) from t_reserve_amount
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_reserve_amount
+        <set>
+            <if test="record.flowType != null "> FlowType = #{record.flowType,jdbcType=TINYINT},</if>
+            <if test="record.amount != null "> Amount = #{record.amount,jdbcType=BIGINT},</if>
+            <if test="record.balance != null "> Balance = #{record.balance,jdbcType=BIGINT},</if>
+            <if test="record.remark != null "> Remark = #{record.remark,jdbcType=VARCHAR},</if>
+            <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.updateTime != null "> UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_reserve_amount
+        set
+        FlowType = #{record.flowType,jdbcType=TINYINT},
+        Amount = #{record.amount,jdbcType=BIGINT},
+        Balance = #{record.balance,jdbcType=BIGINT},
+        Remark = #{record.remark,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.ReserveAmount">
+        update t_reserve_amount
+        <set>
+            <if test="flowType != null "> FlowType = #{flowType,jdbcType=TINYINT},</if>
+            <if test="amount != null "> Amount = #{amount,jdbcType=BIGINT},</if>
+            <if test="balance != null "> Balance = #{balance,jdbcType=BIGINT},</if>
+            <if test="remark != null "> Remark = #{remark,jdbcType=VARCHAR},</if>
+            <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null "> UpdateTime = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where Id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.ReserveAmount">
+    update t_reserve_amount
+    set
+        FlowType = #{flowType,jdbcType=TINYINT},
+Amount = #{amount,jdbcType=BIGINT},
+Balance = #{balance,jdbcType=BIGINT},
+Remark = #{remark,jdbcType=VARCHAR},
+CreateTime = #{createTime,jdbcType=TIMESTAMP},
+UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="sumAmountByExample" parameterType="org.xxpay.dal.dao.model.ReserveAmount" resultType="java.lang.Long" >
+        select sum(Amount) as sumAmount from t_reserve_amount
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+</mapper>

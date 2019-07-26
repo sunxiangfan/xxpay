@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.MchCompanyMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.MchCompany">
+        <id column="Id" property="id" jdbcType="VARCHAR"/>
+        <result column="MchId" property="mchId" jdbcType="VARCHAR"/>
+        <result column="CompanyName" property="companyName" jdbcType="VARCHAR"/>
+        <result column="CompanyTel" property="companyTel" jdbcType="VARCHAR"/>
+        <result column="CorpType" property="corpType" jdbcType="VARCHAR"/>
+        <result column="ShortName" property="shortName" jdbcType="VARCHAR"/>
+        <result column="Address" property="address" jdbcType="VARCHAR"/>
+        <result column="CompanyType" property="companyType" jdbcType="VARCHAR"/>
+        <result column="BusinessNo" property="businessNo" jdbcType="VARCHAR"/>
+        <result column="BusinessNoExpiryDate" property="businessNoExpiryDate" jdbcType="VARCHAR"/>
+        <result column="CorporationName" property="corporationName" jdbcType="VARCHAR"/>
+        <result column="CorporationId" property="corporationId" jdbcType="VARCHAR"/>
+        <result column="CorporationMobile" property="corporationMobile" jdbcType="VARCHAR"/>
+        <result column="IdCardFrontUrl" property="idCardFrontUrl" jdbcType="VARCHAR"/>
+        <result column="IdCardBackUrl" property="idCardBackUrl" jdbcType="VARCHAR"/>
+        <result column="BusinessNoUrl" property="businessNoUrl" jdbcType="VARCHAR"/>
+        <result column="CreateBy" property="createBy" jdbcType="VARCHAR"/>
+        <result column="UpdateBy" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    Id,
+    MchId,
+CompanyName,
+CompanyTel,
+CorpType,
+ShortName,
+Address,
+CompanyType,
+BusinessNo,
+BusinessNoExpiryDate,
+CorporationName,
+CorporationId,
+CorporationMobile,
+IdCardFrontUrl,
+IdCardBackUrl,
+BusinessNoUrl,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.MchCompanyExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_mch_company
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_mch_company
+        where Id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_mch_company
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.MchCompanyExample">
+        delete from t_mch_company
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.MchCompany">
+    insert into t_mch_company (
+       Id,
+       MchId,
+CompanyName,
+CompanyTel,
+CorpType,
+ShortName,
+Address,
+CompanyType,
+BusinessNo,
+BusinessNoExpiryDate,
+CorporationName,
+CorporationId,
+CorporationMobile,
+IdCardFrontUrl,
+IdCardBackUrl,
+BusinessNoUrl,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime)
+    values (#{id,jdbcType=VARCHAR},
+      #{mchId,jdbcType=VARCHAR},
+#{companyName,jdbcType=VARCHAR},
+#{companyTel,jdbcType=VARCHAR},
+#{corpType,jdbcType=VARCHAR},
+#{shortName,jdbcType=VARCHAR},
+#{address,jdbcType=VARCHAR},
+#{companyType,jdbcType=VARCHAR},
+#{businessNo,jdbcType=VARCHAR},
+#{businessNoExpiryDate,jdbcType=VARCHAR},
+#{corporationName,jdbcType=VARCHAR},
+#{corporationId,jdbcType=VARCHAR},
+#{corporationMobile,jdbcType=VARCHAR},
+#{idCardFrontUrl,jdbcType=VARCHAR},
+#{idCardBackUrl,jdbcType=VARCHAR},
+#{businessNoUrl,jdbcType=VARCHAR},
+#{createBy,jdbcType=VARCHAR},
+#{updateBy,jdbcType=VARCHAR},
+#{createTime,jdbcType=TIMESTAMP},
+#{updateTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.MchCompany">
+        insert into t_mch_company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">Id,</if>
+            <if test="mchId != null ">MchId,</if>
+            <if test="companyName != null ">CompanyName,</if>
+            <if test="companyTel != null ">CompanyTel,</if>
+            <if test="corpType != null ">CorpType,</if>
+            <if test="shortName != null ">ShortName,</if>
+            <if test="address != null ">Address,</if>
+            <if test="companyType != null ">CompanyType,</if>
+            <if test="businessNo != null ">BusinessNo,</if>
+            <if test="businessNoExpiryDate != null ">BusinessNoExpiryDate,</if>
+            <if test="corporationName != null ">CorporationName,</if>
+            <if test="corporationId != null ">CorporationId,</if>
+            <if test="corporationMobile != null ">CorporationMobile,</if>
+            <if test="idCardFrontUrl != null ">IdCardFrontUrl,</if>
+            <if test="idCardBackUrl != null ">IdCardBackUrl,</if>
+            <if test="businessNoUrl != null ">BusinessNoUrl,</if>
+            <if test="createBy != null ">CreateBy,</if>
+            <if test="updateBy != null ">UpdateBy,</if>
+            <if test="createTime != null ">CreateTime,</if>
+            <if test="updateTime != null ">UpdateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id,jdbcType=VARCHAR},</if>
+            <if test="mchId != null ">#{mchId,jdbcType=VARCHAR},</if>
+            <if test="companyName != null ">#{companyName,jdbcType=VARCHAR},</if>
+            <if test="companyTel != null ">#{companyTel,jdbcType=VARCHAR},</if>
+            <if test="corpType != null ">#{corpType,jdbcType=VARCHAR},</if>
+            <if test="shortName != null ">#{shortName,jdbcType=VARCHAR},</if>
+            <if test="address != null ">#{address,jdbcType=VARCHAR},</if>
+            <if test="companyType != null ">#{companyType,jdbcType=VARCHAR},</if>
+            <if test="businessNo != null ">#{businessNo,jdbcType=VARCHAR},</if>
+            <if test="businessNoExpiryDate != null ">#{businessNoExpiryDate,jdbcType=VARCHAR},</if>
+            <if test="corporationName != null ">#{corporationName,jdbcType=VARCHAR},</if>
+            <if test="corporationId != null ">#{corporationId,jdbcType=VARCHAR},</if>
+            <if test="corporationMobile != null ">#{corporationMobile,jdbcType=VARCHAR},</if>
+            <if test="idCardFrontUrl != null ">#{idCardFrontUrl,jdbcType=VARCHAR},</if>
+            <if test="idCardBackUrl != null ">#{idCardBackUrl,jdbcType=VARCHAR},</if>
+            <if test="businessNoUrl != null ">#{businessNoUrl,jdbcType=VARCHAR},</if>
+            <if test="createBy != null ">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null ">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.MchCompanyExample" resultType="java.lang.Integer">
+        select count(*) from t_mch_company
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_mch_company
+        <set>
+            <if test="record.mchId != null "> MchId = #{record.mchId,jdbcType=VARCHAR},</if>
+            <if test="record.companyName != null "> CompanyName = #{record.companyName,jdbcType=VARCHAR},</if>
+            <if test="record.companyTel != null "> CompanyTel = #{record.companyTel,jdbcType=VARCHAR},</if>
+            <if test="record.corpType != null "> CorpType = #{record.corpType,jdbcType=VARCHAR},</if>
+            <if test="record.shortName != null "> ShortName = #{record.shortName,jdbcType=VARCHAR},</if>
+            <if test="record.address != null "> Address = #{record.address,jdbcType=VARCHAR},</if>
+            <if test="record.companyType != null "> CompanyType = #{record.companyType,jdbcType=VARCHAR},</if>
+            <if test="record.businessNo != null "> BusinessNo = #{record.businessNo,jdbcType=VARCHAR},</if>
+            <if test="record.businessNoExpiryDate != null "> BusinessNoExpiryDate = #{record.businessNoExpiryDate,jdbcType=VARCHAR},</if>
+            <if test="record.corporationName != null "> CorporationName = #{record.corporationName,jdbcType=VARCHAR},</if>
+            <if test="record.corporationId != null "> CorporationId = #{record.corporationId,jdbcType=VARCHAR},</if>
+            <if test="record.corporationMobile != null "> CorporationMobile = #{record.corporationMobile,jdbcType=VARCHAR},</if>
+            <if test="record.idCardFrontUrl != null "> IdCardFrontUrl = #{record.idCardFrontUrl,jdbcType=VARCHAR},</if>
+            <if test="record.idCardBackUrl != null "> IdCardBackUrl = #{record.idCardBackUrl,jdbcType=VARCHAR},</if>
+            <if test="record.businessNoUrl != null "> BusinessNoUrl = #{record.businessNoUrl,jdbcType=VARCHAR},</if>
+            <if test="record.createBy != null "> CreateBy = #{record.createBy,jdbcType=VARCHAR},</if>
+            <if test="record.updateBy != null "> UpdateBy = #{record.updateBy,jdbcType=VARCHAR},</if>
+            <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.updateTime != null "> UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_mch_company
+        set
+        MchId = #{record.mchId,jdbcType=VARCHAR},
+        CompanyName = #{record.companyName,jdbcType=VARCHAR},
+        CompanyTel = #{record.companyTel,jdbcType=VARCHAR},
+        CorpType = #{record.corpType,jdbcType=VARCHAR},
+        ShortName = #{record.shortName,jdbcType=VARCHAR},
+        Address = #{record.address,jdbcType=VARCHAR},
+        CompanyType = #{record.companyType,jdbcType=VARCHAR},
+        BusinessNo = #{record.businessNo,jdbcType=VARCHAR},
+        BusinessNoExpiryDate = #{record.businessNoExpiryDate,jdbcType=VARCHAR},
+        CorporationName = #{record.corporationName,jdbcType=VARCHAR},
+        CorporationId = #{record.corporationId,jdbcType=VARCHAR},
+        CorporationMobile = #{record.corporationMobile,jdbcType=VARCHAR},
+        IdCardFrontUrl = #{record.idCardFrontUrl,jdbcType=VARCHAR},
+        IdCardBackUrl = #{record.idCardBackUrl,jdbcType=VARCHAR},
+        BusinessNoUrl = #{record.businessNoUrl,jdbcType=VARCHAR},
+        CreateBy = #{record.createBy,jdbcType=VARCHAR},
+        UpdateBy = #{record.updateBy,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.MchCompany">
+        update t_mch_company
+        <set>
+            <if test="mchId != null "> MchId = #{mchId,jdbcType=VARCHAR},</if>
+            <if test="companyName != null "> CompanyName = #{companyName,jdbcType=VARCHAR},</if>
+            <if test="companyTel != null "> CompanyTel = #{companyTel,jdbcType=VARCHAR},</if>
+            <if test="corpType != null "> CorpType = #{corpType,jdbcType=VARCHAR},</if>
+            <if test="shortName != null "> ShortName = #{shortName,jdbcType=VARCHAR},</if>
+            <if test="address != null "> Address = #{address,jdbcType=VARCHAR},</if>
+            <if test="companyType != null "> CompanyType = #{companyType,jdbcType=VARCHAR},</if>
+            <if test="businessNo != null "> BusinessNo = #{businessNo,jdbcType=VARCHAR},</if>
+            <if test="businessNoExpiryDate != null "> BusinessNoExpiryDate = #{businessNoExpiryDate,jdbcType=VARCHAR},</if>
+            <if test="corporationName != null "> CorporationName = #{corporationName,jdbcType=VARCHAR},</if>
+            <if test="corporationId != null "> CorporationId = #{corporationId,jdbcType=VARCHAR},</if>
+            <if test="corporationMobile != null "> CorporationMobile = #{corporationMobile,jdbcType=VARCHAR},</if>
+            <if test="idCardFrontUrl != null "> IdCardFrontUrl = #{idCardFrontUrl,jdbcType=VARCHAR},</if>
+            <if test="idCardBackUrl != null "> IdCardBackUrl = #{idCardBackUrl,jdbcType=VARCHAR},</if>
+            <if test="businessNoUrl != null "> BusinessNoUrl = #{businessNoUrl,jdbcType=VARCHAR},</if>
+            <if test="createBy != null "> CreateBy = #{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null "> UpdateBy = #{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null "> UpdateTime = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where Id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.MchCompany">
+    update t_mch_company
+    set
+        MchId = #{mchId,jdbcType=VARCHAR},
+CompanyName = #{companyName,jdbcType=VARCHAR},
+CompanyTel = #{companyTel,jdbcType=VARCHAR},
+CorpType = #{corpType,jdbcType=VARCHAR},
+ShortName = #{shortName,jdbcType=VARCHAR},
+Address = #{address,jdbcType=VARCHAR},
+CompanyType = #{companyType,jdbcType=VARCHAR},
+BusinessNo = #{businessNo,jdbcType=VARCHAR},
+BusinessNoExpiryDate = #{businessNoExpiryDate,jdbcType=VARCHAR},
+CorporationName = #{corporationName,jdbcType=VARCHAR},
+CorporationId = #{corporationId,jdbcType=VARCHAR},
+CorporationMobile = #{corporationMobile,jdbcType=VARCHAR},
+IdCardFrontUrl = #{idCardFrontUrl,jdbcType=VARCHAR},
+IdCardBackUrl = #{idCardBackUrl,jdbcType=VARCHAR},
+BusinessNoUrl = #{businessNoUrl,jdbcType=VARCHAR},
+CreateBy = #{createBy,jdbcType=VARCHAR},
+UpdateBy = #{updateBy,jdbcType=VARCHAR},
+CreateTime = #{createTime,jdbcType=TIMESTAMP},
+UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

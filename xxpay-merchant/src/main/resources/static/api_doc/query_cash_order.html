@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>代付订单查询接口</title>
+		<link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/global.css" media="all">
+		<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../css/table.css" />
+		<meta http-equiv="pragma" content="no-cache"/><!-- 禁止浏览器从本地机的缓存中调阅页面内容 -->
+		<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"/>
+		<meta http-equiv="expires" content="0"/> <!-- 定义网页 缓存中的过期时间-->
+	</head>
+
+	<body>
+		<div class="admin-main">
+			<blockquote class="layui-elem-quote">
+				<p>接口名称：<span style="color:red;">代付订单查询接口</span></p>
+				<p>请求方式：<span style="color:red;">POST</span></p>
+				<p>请求地址：<span style="color:red;">http://domain:3030/api/cash/query_order</span></p>
+			</blockquote>
+
+			<fieldset class="layui-elem-field">
+				<legend>查询参数</legend>
+				<div class="layui-field-box layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th>接口参数</th>
+								<th>类型</th>
+								<th>是否可空</th>
+								<th>参数说明</th>
+								<th>其他</th>
+							</tr>
+						</thead>
+						<tbody >
+							<tr>
+								<td>sign</td>
+								<td>string(32)</td>
+								<td>否</td>
+								<td>请求参数的签名</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>mchOrderNo</td>
+								<td>string(30)</td>
+								<td>否</td>
+								<td>商户订单编号</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>mchId</td>
+								<td>string(20)</td>
+								<td>否</td>
+								<td>商户号</td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+
+			<fieldset class="layui-elem-field">
+				<legend>返回参数</legend>
+				<div class="layui-field-box layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+						<tr>
+							<th>接口参数</th>
+							<th>类型</th>
+							<th>是否可空</th>
+							<th>参数说明</th>
+							<th>其他</th>
+						</tr>
+						</thead>
+						<tbody >
+						<tr>
+							<td>sign</td>
+							<td>string(32)</td>
+							<td>否</td>
+							<td>请求参数的签名</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>retCode</td>
+							<td>string(10)</td>
+							<td>否</td>
+							<td>(返回状态码).SUCCESS/FAIL此字段是通信标识，非交易标识，交易是否成功需要结合resCode和result中state来判断</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>resCode</td>
+							<td>string(10)</td>
+							<td>否</td>
+							<td>业务结果，SUCCESS/FAIL</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>retMsg</td>
+							<td>string(10)</td>
+							<td>否</td>
+							<td>(返回状态码)返回信息，如非空，为错误原因 签名失败 参数格式校验错误</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>result</td>
+							<td>string(10)</td>
+							<td>否</td>
+							<td>订单详情。base64编码的json内容。</td>
+							<td></td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+			<fieldset class="layui-elem-field">
+				<legend>result明细</legend>
+				<div class="layui-field-box layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+						<tr>
+							<th>接口参数</th>
+							<th>类型</th>
+							<th>是否可空</th>
+							<th>参数说明</th>
+							<th>其他</th>
+						</tr>
+						</thead>
+						<tbody >
+						<tr>
+							<td>payOrderId</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>平台代付订单编号</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>mchId</td>
+							<td>string(20)</td>
+							<td>否</td>
+							<td>商户号</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>mchOrderNo</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>商户订单编号，唯一不允许重复</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>amount</td>
+							<td>string(20)</td>
+							<td>否</td>
+							<td>金额，单位分</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>currency</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>币种</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>state</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>支付状态(2-代付成功。)。 0/1代付中。2代付成功。3支付失败。</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>paySuccTime</td>
+							<td>string(256)</td>
+							<td>是</td>
+							<td>支付时间</td>
+							<td></td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+			<div class="admin-table-page">
+				<div id="paged" class="page">
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../plugins/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '../js/'
+			});
+
+		</script>
+	</body>
+
+</html>

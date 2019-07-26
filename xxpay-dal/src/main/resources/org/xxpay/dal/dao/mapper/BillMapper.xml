@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.BillMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.Bill">
+        <id column="Id" property="id" jdbcType="VARCHAR"/>
+        <result column="MchId" property="mchId" jdbcType="VARCHAR"/>
+        <result column="AgentMchId" property="agentMchId" jdbcType="VARCHAR"/>
+        <result column="PayOrderId" property="payOrderId" jdbcType="VARCHAR"/>
+        <result column="PayChannelId" property="payChannelId" jdbcType="VARCHAR"/>
+        <result column="Amount" property="amount" jdbcType="BIGINT"/>
+        <result column="PlatformActualAmount" property="platformActualAmount" jdbcType="BIGINT"/>
+        <result column="MchActualAmount" property="mchActualAmount" jdbcType="BIGINT"/>
+        <result column="ThirdDeductionRate" property="thirdDeductionRate" jdbcType="DECIMAL"/>
+        <result column="ThirdDeduction" property="thirdDeduction" jdbcType="BIGINT"/>
+        <result column="AgentMchCommissionRate" property="agentMchCommissionRate" jdbcType="DECIMAL"/>
+        <result column="AgentMchCommission" property="agentMchCommission" jdbcType="BIGINT"/>
+        <result column="PlatformDeductionRate" property="platformDeductionRate" jdbcType="DECIMAL"/>
+        <result column="PlatformDeduction" property="platformDeduction" jdbcType="BIGINT"/>
+        <result column="PlatformCommissionRate" property="platformCommissionRate" jdbcType="DECIMAL"/>
+        <result column="PlatformCommission" property="platformCommission" jdbcType="BIGINT"/>
+        <result column="State" property="state" jdbcType="TINYINT"/>
+        <result column="PayOrderTime" property="payOrderTime" jdbcType="TIMESTAMP"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    Id,
+    MchId,
+AgentMchId,
+PayOrderId,
+PayChannelId,
+Amount,
+PlatformActualAmount,
+MchActualAmount,
+ThirdDeductionRate,
+ThirdDeduction,
+AgentMchCommissionRate,
+AgentMchCommission,
+PlatformDeductionRate,
+PlatformDeduction,
+PlatformCommissionRate,
+PlatformCommission,
+State,
+PayOrderTime,
+CreateTime,
+UpdateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.BillExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_bill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_bill
+        where Id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_bill
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.BillExample">
+        delete from t_bill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.Bill">
+    insert into t_bill (
+       Id,
+       MchId,
+AgentMchId,
+PayOrderId,
+PayChannelId,
+Amount,
+PlatformActualAmount,
+MchActualAmount,
+ThirdDeductionRate,
+ThirdDeduction,
+AgentMchCommissionRate,
+AgentMchCommission,
+PlatformDeductionRate,
+PlatformDeduction,
+PlatformCommissionRate,
+PlatformCommission,
+State,
+PayOrderTime,
+CreateTime,
+UpdateTime)
+    values (#{id,jdbcType=VARCHAR},
+     #{mchId,jdbcType=VARCHAR},
+#{agentMchId,jdbcType=VARCHAR},
+#{payOrderId,jdbcType=VARCHAR},
+#{payChannelId,jdbcType=VARCHAR},
+#{amount,jdbcType=BIGINT},
+#{platformActualAmount,jdbcType=BIGINT},
+#{mchActualAmount,jdbcType=BIGINT},
+#{thirdDeductionRate,jdbcType=DECIMAL},
+#{thirdDeduction,jdbcType=BIGINT},
+#{agentMchCommissionRate,jdbcType=DECIMAL},
+#{agentMchCommission,jdbcType=BIGINT},
+#{platformDeductionRate,jdbcType=DECIMAL},
+#{platformDeduction,jdbcType=BIGINT},
+#{platformCommissionRate,jdbcType=DECIMAL},
+#{platformCommission,jdbcType=BIGINT},
+#{state,jdbcType=TINYINT},
+#{payOrderTime,jdbcType=TIMESTAMP},
+#{createTime,jdbcType=TIMESTAMP},
+#{updateTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.Bill">
+        insert into t_bill
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">Id,</if>
+            <if test="mchId != null ">MchId,</if>
+            <if test="agentMchId != null ">AgentMchId,</if>
+            <if test="payOrderId != null ">PayOrderId,</if>
+            <if test="payChannelId != null ">PayChannelId,</if>
+            <if test="amount != null ">Amount,</if>
+            <if test="platformActualAmount != null ">PlatformActualAmount,</if>
+            <if test="mchActualAmount != null ">MchActualAmount,</if>
+            <if test="thirdDeductionRate != null ">ThirdDeductionRate,</if>
+            <if test="thirdDeduction != null ">ThirdDeduction,</if>
+            <if test="agentMchCommissionRate != null ">AgentMchCommissionRate,</if>
+            <if test="agentMchCommission != null ">AgentMchCommission,</if>
+            <if test="platformDeductionRate != null ">PlatformDeductionRate,</if>
+            <if test="platformDeduction != null ">PlatformDeduction,</if>
+            <if test="platformCommissionRate != null ">PlatformCommissionRate,</if>
+            <if test="platformCommission != null ">PlatformCommission,</if>
+            <if test="state != null ">State,</if>
+            <if test="payOrderTime != null ">PayOrderTime,</if>
+            <if test="createTime != null ">CreateTime,</if>
+            <if test="updateTime != null ">UpdateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id,jdbcType=VARCHAR},</if>
+            <if test="mchId != null ">#{mchId,jdbcType=VARCHAR},</if>
+            <if test="agentMchId != null ">#{agentMchId,jdbcType=VARCHAR},</if>
+            <if test="payOrderId != null ">#{payOrderId,jdbcType=VARCHAR},</if>
+            <if test="payChannelId != null ">#{payChannelId,jdbcType=VARCHAR},</if>
+            <if test="amount != null ">#{amount,jdbcType=BIGINT},</if>
+            <if test="platformActualAmount != null ">#{platformActualAmount,jdbcType=BIGINT},</if>
+            <if test="mchActualAmount != null ">#{mchActualAmount,jdbcType=BIGINT},</if>
+            <if test="thirdDeductionRate != null ">#{thirdDeductionRate,jdbcType=DECIMAL},</if>
+            <if test="thirdDeduction != null ">#{thirdDeduction,jdbcType=BIGINT},</if>
+            <if test="agentMchCommissionRate != null ">#{agentMchCommissionRate,jdbcType=DECIMAL},</if>
+            <if test="agentMchCommission != null ">#{agentMchCommission,jdbcType=BIGINT},</if>
+            <if test="platformDeductionRate != null ">#{platformDeductionRate,jdbcType=DECIMAL},</if>
+            <if test="platformDeduction != null ">#{platformDeduction,jdbcType=BIGINT},</if>
+            <if test="platformCommissionRate != null ">#{platformCommissionRate,jdbcType=DECIMAL},</if>
+            <if test="platformCommission != null ">#{platformCommission,jdbcType=BIGINT},</if>
+            <if test="state != null ">#{state,jdbcType=TINYINT},</if>
+            <if test="payOrderTime != null ">#{payOrderTime,jdbcType=TIMESTAMP},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.BillExample" resultType="java.lang.Integer">
+        select count(*) from t_bill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_bill
+        <set>
+            <if test="record.mchId != null ">MchId = #{record.mchId,jdbcType=VARCHAR},</if>
+            <if test="record.agentMchId != null ">AgentMchId = #{record.agentMchId,jdbcType=VARCHAR},</if>
+            <if test="record.payOrderId != null ">PayOrderId = #{record.payOrderId,jdbcType=VARCHAR},</if>
+            <if test="record.payChannelId != null ">PayChannelId = #{record.payChannelId,jdbcType=VARCHAR},</if>
+            <if test="record.amount != null ">Amount = #{record.amount,jdbcType=BIGINT},</if>
+            <if test="record.platformActualAmount != null ">PlatformActualAmount =
+                #{record.platformActualAmount,jdbcType=BIGINT},
+            </if>
+            <if test="record.mchActualAmount != null ">MchActualAmount = #{record.mchActualAmount,jdbcType=BIGINT},</if>
+            <if test="record.thirdDeductionRate != null ">ThirdDeductionRate =
+                #{record.thirdDeductionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="record.thirdDeduction != null ">ThirdDeduction = #{record.thirdDeduction,jdbcType=BIGINT},</if>
+            <if test="record.agentMchCommissionRate != null ">AgentMchCommissionRate =
+                #{record.agentMchCommissionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="record.agentMchCommission != null ">AgentMchCommission =
+                #{record.agentMchCommission,jdbcType=BIGINT},
+            </if>
+            <if test="record.platformDeductionRate != null ">PlatformDeductionRate =
+                #{record.platformDeductionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="record.platformDeduction != null ">PlatformDeduction =
+                #{record.platformDeduction,jdbcType=BIGINT},
+            </if>
+            <if test="record.platformCommissionRate != null ">PlatformCommissionRate =
+                #{record.platformCommissionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="record.platformCommission != null ">PlatformCommission =
+                #{record.platformCommission,jdbcType=BIGINT},
+            </if>
+            <if test="record.state != null ">State = #{record.state,jdbcType=TINYINT},</if>
+            <if test="record.payOrderTime != null ">PayOrderTime = #{record.payOrderTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.createTime != null ">CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.updateTime != null ">UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_bill
+        set
+        MchId = #{record.mchId,jdbcType=VARCHAR},
+        AgentMchId = #{record.agentMchId,jdbcType=VARCHAR},
+        PayOrderId = #{record.payOrderId,jdbcType=VARCHAR},
+        PayChannelId = #{record.payChannelId,jdbcType=VARCHAR},
+        Amount = #{record.amount,jdbcType=BIGINT},
+        PlatformActualAmount = #{record.platformActualAmount,jdbcType=BIGINT},
+        MchActualAmount = #{record.mchActualAmount,jdbcType=BIGINT},
+        ThirdDeductionRate = #{record.thirdDeductionRate,jdbcType=DECIMAL},
+        ThirdDeduction = #{record.thirdDeduction,jdbcType=BIGINT},
+        AgentMchCommissionRate = #{record.agentMchCommissionRate,jdbcType=DECIMAL},
+        AgentMchCommission = #{record.agentMchCommission,jdbcType=BIGINT},
+        PlatformDeductionRate = #{record.platformDeductionRate,jdbcType=DECIMAL},
+        PlatformDeduction = #{record.platformDeduction,jdbcType=BIGINT},
+        PlatformCommissionRate = #{record.platformCommissionRate,jdbcType=DECIMAL},
+        PlatformCommission = #{record.platformCommission,jdbcType=BIGINT},
+        State = #{record.state,jdbcType=TINYINT},
+        PayOrderTime = #{record.payOrderTime,jdbcType=TIMESTAMP},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.Bill">
+        update t_bill
+        <set>
+            <if test="mchId != null ">MchId = #{mchId,jdbcType=VARCHAR},</if>
+            <if test="agentMchId != null ">AgentMchId = #{agentMchId,jdbcType=VARCHAR},</if>
+            <if test="payOrderId != null ">PayOrderId = #{payOrderId,jdbcType=VARCHAR},</if>
+            <if test="payChannelId != null ">PayChannelId = #{payChannelId,jdbcType=VARCHAR},</if>
+            <if test="amount != null ">Amount = #{amount,jdbcType=BIGINT},</if>
+            <if test="platformActualAmount != null ">PlatformActualAmount = #{platformActualAmount,jdbcType=BIGINT},
+            </if>
+            <if test="mchActualAmount != null ">MchActualAmount = #{mchActualAmount,jdbcType=BIGINT},</if>
+            <if test="thirdDeductionRate != null ">ThirdDeductionRate = #{thirdDeductionRate,jdbcType=DECIMAL},</if>
+            <if test="thirdDeduction != null ">ThirdDeduction = #{thirdDeduction,jdbcType=BIGINT},</if>
+            <if test="agentMchCommissionRate != null ">AgentMchCommissionRate =
+                #{agentMchCommissionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="agentMchCommission != null ">AgentMchCommission = #{agentMchCommission,jdbcType=BIGINT},</if>
+            <if test="platformDeductionRate != null ">PlatformDeductionRate =
+                #{platformDeductionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="platformDeduction != null ">PlatformDeduction = #{platformDeduction,jdbcType=BIGINT},</if>
+            <if test="platformCommissionRate != null ">PlatformCommissionRate =
+                #{platformCommissionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="platformCommission != null ">PlatformCommission = #{platformCommission,jdbcType=BIGINT},</if>
+            <if test="state != null ">State = #{state,jdbcType=TINYINT},</if>
+            <if test="payOrderTime != null ">PayOrderTime = #{payOrderTime,jdbcType=TIMESTAMP},</if>
+            <if test="createTime != null ">CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null ">UpdateTime = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where Id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.Bill">
+    update t_bill
+    set
+        MchId = #{mchId,jdbcType=VARCHAR},
+AgentMchId = #{agentMchId,jdbcType=VARCHAR},
+PayOrderId = #{payOrderId,jdbcType=VARCHAR},
+PayChannelId = #{payChannelId,jdbcType=VARCHAR},
+Amount = #{amount,jdbcType=BIGINT},
+PlatformActualAmount = #{platformActualAmount,jdbcType=BIGINT},
+MchActualAmount = #{mchActualAmount,jdbcType=BIGINT},
+ThirdDeductionRate = #{thirdDeductionRate,jdbcType=DECIMAL},
+ThirdDeduction = #{thirdDeduction,jdbcType=BIGINT},
+AgentMchCommissionRate = #{agentMchCommissionRate,jdbcType=DECIMAL},
+AgentMchCommission = #{agentMchCommission,jdbcType=BIGINT},
+PlatformDeductionRate = #{platformDeductionRate,jdbcType=DECIMAL},
+PlatformDeduction = #{platformDeduction,jdbcType=BIGINT},
+PlatformCommissionRate = #{platformCommissionRate,jdbcType=DECIMAL},
+PlatformCommission = #{platformCommission,jdbcType=BIGINT},
+State = #{state,jdbcType=TINYINT},
+PayOrderTime = #{payOrderTime,jdbcType=TIMESTAMP},
+CreateTime = #{createTime,jdbcType=TIMESTAMP},
+UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="sumPlatformCommissionByExample" parameterType="org.xxpay.dal.dao.model.BillExample"
+            resultType="java.lang.Long">
+        select sum(PlatformCommission) as sumPlatformCommission from t_bill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <select id="sumAgentCommissionByExample" parameterType="org.xxpay.dal.dao.model.BillExample"
+            resultType="java.lang.Long">
+        select sum(AgentMchCommission) as sumAgentCommission from t_bill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <select id="groupCreateDateSumAmountByExample" parameterType="org.xxpay.dal.dao.model.BillExample"
+            resultType="org.xxpay.dal.dao.model.dto.BillGroupCreateDateSumAmountModel">
+        select createDate,SUM(Amount) as Amount,SUM(ThirdDeduction) as ThirdDeduction, SUM(AgentMchCommission) as
+        AgentMchCommission,SUM(PlatformCommission) as PlatformCommission from (
+        select DATE_FORMAT(CreateTime,'%Y-%m-%d') as
+        createDate,Amount,ThirdDeduction,AgentMchCommission,PlatformCommission from t_bill t
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        ) as t1
+        GROUP BY createDate
+        ORDER BY createDate desc
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="countGroupCreateDateSumAmountByExample" parameterType="org.xxpay.dal.dao.model.BillExample"
+            resultType="java.lang.Integer" >
+        select count(*) from ( select createDate from (
+        select DATE_FORMAT(CreateTime,'%Y-%m-%d') as
+        createDate,Amount,ThirdDeduction,AgentMchCommission,PlatformCommission from t_bill t
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        ) as t1
+        GROUP BY createDate
+        ORDER BY createDate desc) t2
+    </select>
+</mapper>

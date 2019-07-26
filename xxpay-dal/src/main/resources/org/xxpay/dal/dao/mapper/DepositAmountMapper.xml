@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.DepositAmountMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.DepositAmount">
+        <id column="Id" property="id" jdbcType="VARCHAR"/>
+        <result column="MchId" property="mchId" jdbcType="VARCHAR"/>
+        <result column="MchType" property="mchType" jdbcType="TINYINT"/>
+        <result column="PayOrderId" property="payOrderId" jdbcType="VARCHAR"/>
+        <result column="Amount" property="amount" jdbcType="BIGINT"/>
+        <result column="State" property="state" jdbcType="TINYINT"/>
+        <result column="PlanUnlockTime" property="planUnlockTime" jdbcType="TIMESTAMP"/>
+        <result column="UnlockTime" property="unlockTime" jdbcType="TIMESTAMP"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    Id,
+    MchId,
+MchType,
+PayOrderId,
+Amount,
+State,
+PlanUnlockTime,
+UnlockTime,
+Remark,
+CreateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.DepositAmountExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_deposit_amount
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_deposit_amount
+        where Id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_deposit_amount
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.DepositAmountExample">
+        delete from t_deposit_amount
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.DepositAmount">
+    insert into t_deposit_amount (
+       Id,
+       MchId,
+MchType,
+PayOrderId,
+Amount,
+State,
+PlanUnlockTime,
+UnlockTime,
+Remark,
+CreateTime)
+    values (#{id,jdbcType=VARCHAR},
+     #{mchId,jdbcType=VARCHAR},
+#{mchType,jdbcType=TINYINT},
+#{payOrderId,jdbcType=VARCHAR},
+#{amount,jdbcType=BIGINT},
+#{state,jdbcType=TINYINT},
+#{planUnlockTime,jdbcType=TIMESTAMP},
+#{unlockTime,jdbcType=TIMESTAMP},
+#{remark,jdbcType=VARCHAR},
+#{createTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.DepositAmount">
+        insert into t_deposit_amount
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">Id,</if>
+            <if test="mchId != null ">MchId,</if>
+            <if test="mchType != null ">MchType,</if>
+            <if test="payOrderId != null ">PayOrderId,</if>
+            <if test="amount != null ">Amount,</if>
+            <if test="state != null ">State,</if>
+            <if test="planUnlockTime != null ">PlanUnlockTime,</if>
+            <if test="unlockTime != null ">UnlockTime,</if>
+            <if test="remark != null ">Remark,</if>
+            <if test="createTime != null ">CreateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id,jdbcType=VARCHAR},</if>
+            <if test="mchId != null ">#{mchId,jdbcType=VARCHAR},</if>
+            <if test="mchType != null ">#{mchType,jdbcType=TINYINT},</if>
+            <if test="payOrderId != null ">#{payOrderId,jdbcType=VARCHAR},</if>
+            <if test="amount != null ">#{amount,jdbcType=BIGINT},</if>
+            <if test="state != null ">#{state,jdbcType=TINYINT},</if>
+            <if test="planUnlockTime != null ">#{planUnlockTime,jdbcType=TIMESTAMP},</if>
+            <if test="unlockTime != null ">#{unlockTime,jdbcType=TIMESTAMP},</if>
+            <if test="remark != null ">#{remark,jdbcType=VARCHAR},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.DepositAmountExample" resultType="java.lang.Integer">
+        select count(*) from t_deposit_amount
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_deposit_amount
+        <set>
+            <if test="record.mchId != null "> MchId = #{record.mchId,jdbcType=VARCHAR},</if>
+            <if test="record.mchType != null "> MchType = #{record.mchType,jdbcType=TINYINT},</if>
+            <if test="record.payOrderId != null "> PayOrderId = #{record.payOrderId,jdbcType=VARCHAR},</if>
+            <if test="record.amount != null "> Amount = #{record.amount,jdbcType=BIGINT},</if>
+            <if test="record.state != null "> State = #{record.state,jdbcType=TINYINT},</if>
+            <if test="record.planUnlockTime != null "> PlanUnlockTime = #{record.planUnlockTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.unlockTime != null "> UnlockTime = #{record.unlockTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.remark != null "> Remark = #{record.remark,jdbcType=VARCHAR},</if>
+            <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_deposit_amount
+        set
+        MchId = #{record.mchId,jdbcType=VARCHAR},
+        MchType = #{record.mchType,jdbcType=TINYINT},
+        PayOrderId = #{record.payOrderId,jdbcType=VARCHAR},
+        Amount = #{record.amount,jdbcType=BIGINT},
+        State = #{record.state,jdbcType=TINYINT},
+        PlanUnlockTime = #{record.planUnlockTime,jdbcType=TIMESTAMP},
+        UnlockTime = #{record.unlockTime,jdbcType=TIMESTAMP},
+        Remark = #{record.remark,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.DepositAmount">
+        update t_deposit_amount
+        <set>
+            <if test="mchId != null "> MchId = #{mchId,jdbcType=VARCHAR},</if>
+            <if test="mchType != null "> MchType = #{mchType,jdbcType=TINYINT},</if>
+            <if test="payOrderId != null "> PayOrderId = #{payOrderId,jdbcType=VARCHAR},</if>
+            <if test="amount != null "> Amount = #{amount,jdbcType=BIGINT},</if>
+            <if test="state != null "> State = #{state,jdbcType=TINYINT},</if>
+            <if test="planUnlockTime != null "> PlanUnlockTime = #{planUnlockTime,jdbcType=TIMESTAMP},</if>
+            <if test="unlockTime != null "> UnlockTime = #{unlockTime,jdbcType=TIMESTAMP},</if>
+            <if test="remark != null "> Remark = #{remark,jdbcType=VARCHAR},</if>
+            <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where Id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.DepositAmount">
+    update t_deposit_amount
+    set
+        MchId = #{mchId,jdbcType=VARCHAR},
+MchType = #{mchType,jdbcType=TINYINT},
+PayOrderId = #{payOrderId,jdbcType=VARCHAR},
+Amount = #{amount,jdbcType=BIGINT},
+State = #{state,jdbcType=TINYINT},
+PlanUnlockTime = #{planUnlockTime,jdbcType=TIMESTAMP},
+UnlockTime = #{unlockTime,jdbcType=TIMESTAMP},
+Remark = #{remark,jdbcType=VARCHAR},
+CreateTime = #{createTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="sumAmountByExample" parameterType="org.xxpay.dal.dao.model.DepositAmount" resultType="java.lang.Long" >
+        select sum( Amount ) as sumAmount from t_deposit_amount
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <select id="groupMchIdSumAmountByExample" parameterType="org.xxpay.dal.dao.model.DepositAmount" resultType="org.xxpay.dal.dao.model.dto.DepositGroupMchIdSumAmount" >
+        select MchId,SUM(Amount) as sumAmount from t_deposit_amount t
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        GROUP BY MchId
+    </select>
+</mapper>

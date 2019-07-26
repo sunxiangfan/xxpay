@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.PlatformWithdrawMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.PlatformWithdraw">
+        <id column="Id" property="id" jdbcType="VARCHAR"/>
+        <result column="ApplyAmount" property="applyAmount" jdbcType="BIGINT"/>
+        <result column="Number" property="number" jdbcType="VARCHAR"/>
+        <result column="RegisteredBankName" property="registeredBankName" jdbcType="VARCHAR"/>
+        <result column="BankName" property="bankName" jdbcType="VARCHAR"/>
+        <result column="Mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="AccountName" property="accountName" jdbcType="VARCHAR"/>
+        <result column="IdCard" property="idCard" jdbcType="VARCHAR"/>
+        <result column="Province" property="province" jdbcType="VARCHAR"/>
+        <result column="City" property="city" jdbcType="VARCHAR"/>
+        <result column="ThirdDeduction" property="thirdDeduction" jdbcType="BIGINT"/>
+        <result column="CashChannelId" property="cashChannelId" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        Id,
+        ApplyAmount,
+Number,
+RegisteredBankName,
+BankName,
+Mobile,
+AccountName,
+IdCard,
+Province,
+City,
+ThirdDeduction,
+CashChannelId,
+CreateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.PlatformWithdrawExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_platform_withdraw
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_platform_withdraw
+        where Id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_platform_withdraw
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.PlatformWithdrawExample">
+        delete from t_platform_withdraw
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.PlatformWithdraw">
+    insert into t_platform_withdraw (Id,
+        ApplyAmount,
+Number,
+RegisteredBankName,
+BankName,
+Mobile,
+AccountName,
+IdCard,
+Province,
+City,
+ThirdDeduction,
+CashChannelId,
+CreateTime
+)
+      values (#{id,jdbcType=VARCHAR},
+      #{applyAmount,jdbcType=BIGINT},
+#{number,jdbcType=VARCHAR},
+#{registeredBankName,jdbcType=VARCHAR},
+#{bankName,jdbcType=VARCHAR},
+#{mobile,jdbcType=VARCHAR},
+#{accountName,jdbcType=VARCHAR},
+#{idCard,jdbcType=VARCHAR},
+#{province,jdbcType=VARCHAR},
+#{city,jdbcType=VARCHAR},
+#{thirdDeduction,jdbcType=BIGINT},
+#{cashChannelId,jdbcType=VARCHAR},
+#{createTime,jdbcType=TIMESTAMP})
+</insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.PlatformWithdraw">
+        insert into t_platform_withdraw
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">Id,</if>
+            <if test="applyAmount != null ">ApplyAmount,</if>
+            <if test="number != null ">Number,</if>
+            <if test="registeredBankName != null ">RegisteredBankName,</if>
+            <if test="bankName != null ">BankName,</if>
+            <if test="mobile != null ">Mobile,</if>
+            <if test="accountName != null ">AccountName,</if>
+            <if test="idCard != null ">IdCard,</if>
+            <if test="province != null ">Province,</if>
+            <if test="city != null ">City,</if>
+            <if test="thirdDeduction != null ">ThirdDeduction,</if>
+            <if test="cashChannelId != null ">CashChannelId,</if>
+            <if test="createTime != null ">CreateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id,jdbcType=VARCHAR},</if>
+            <if test="applyAmount != null ">#{applyAmount,jdbcType=BIGINT},</if>
+            <if test="number != null ">#{number,jdbcType=VARCHAR},</if>
+            <if test="registeredBankName != null ">#{registeredBankName,jdbcType=VARCHAR},</if>
+            <if test="bankName != null ">#{bankName,jdbcType=VARCHAR},</if>
+            <if test="mobile != null ">#{mobile,jdbcType=VARCHAR},</if>
+            <if test="accountName != null ">#{accountName,jdbcType=VARCHAR},</if>
+            <if test="idCard != null ">#{idCard,jdbcType=VARCHAR},</if>
+            <if test="province != null ">#{province,jdbcType=VARCHAR},</if>
+            <if test="city != null ">#{city,jdbcType=VARCHAR},</if>
+            <if test="thirdDeduction != null ">#{thirdDeduction,jdbcType=BIGINT},</if>
+            <if test="cashChannelId != null ">#{cashChannelId,jdbcType=VARCHAR},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.PlatformWithdrawExample" resultType="java.lang.Integer">
+        select count(*) from t_platform_withdraw
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_platform_withdraw
+        <set>
+            <if test="record.applyAmount != null "> ApplyAmount = #{record.applyAmount,jdbcType=BIGINT},</if>
+            <if test="record.number != null "> Number = #{record.number,jdbcType=VARCHAR},</if>
+            <if test="record.registeredBankName != null "> RegisteredBankName = #{record.registeredBankName,jdbcType=VARCHAR},</if>
+            <if test="record.bankName != null "> BankName = #{record.bankName,jdbcType=VARCHAR},</if>
+            <if test="record.mobile != null "> Mobile = #{record.mobile,jdbcType=VARCHAR},</if>
+            <if test="record.accountName != null "> AccountName = #{record.accountName,jdbcType=VARCHAR},</if>
+            <if test="record.idCard != null "> IdCard = #{record.idCard,jdbcType=VARCHAR},</if>
+            <if test="record.province != null "> Province = #{record.province,jdbcType=VARCHAR},</if>
+            <if test="record.city != null "> City = #{record.city,jdbcType=VARCHAR},</if>
+            <if test="record.thirdDeduction != null "> ThirdDeduction = #{record.thirdDeduction,jdbcType=BIGINT},</if>
+            <if test="record.cashChannelId != null "> CashChannelId = #{record.cashChannelId,jdbcType=VARCHAR},</if>
+            <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_platform_withdraw
+        set
+        ApplyAmount = #{record.applyAmount,jdbcType=BIGINT},
+        Number = #{record.number,jdbcType=VARCHAR},
+        RegisteredBankName = #{record.registeredBankName,jdbcType=VARCHAR},
+        BankName = #{record.bankName,jdbcType=VARCHAR},
+        Mobile = #{record.mobile,jdbcType=VARCHAR},
+        AccountName = #{record.accountName,jdbcType=VARCHAR},
+        IdCard = #{record.idCard,jdbcType=VARCHAR},
+        Province = #{record.province,jdbcType=VARCHAR},
+        City = #{record.city,jdbcType=VARCHAR},
+        ThirdDeduction = #{record.thirdDeduction,jdbcType=BIGINT},
+        CashChannelId = #{record.cashChannelId,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.PlatformWithdraw">
+        update t_platform_withdraw
+        <set>
+            <if test="applyAmount != null "> ApplyAmount = #{applyAmount,jdbcType=BIGINT},</if>
+            <if test="number != null "> Number = #{number,jdbcType=VARCHAR},</if>
+            <if test="registeredBankName != null "> RegisteredBankName = #{registeredBankName,jdbcType=VARCHAR},</if>
+            <if test="bankName != null "> BankName = #{bankName,jdbcType=VARCHAR},</if>
+            <if test="mobile != null "> Mobile = #{mobile,jdbcType=VARCHAR},</if>
+            <if test="accountName != null "> AccountName = #{accountName,jdbcType=VARCHAR},</if>
+            <if test="idCard != null "> IdCard = #{idCard,jdbcType=VARCHAR},</if>
+            <if test="province != null "> Province = #{province,jdbcType=VARCHAR},</if>
+            <if test="city != null "> City = #{city,jdbcType=VARCHAR},</if>
+            <if test="thirdDeduction != null "> ThirdDeduction = #{thirdDeduction,jdbcType=BIGINT},</if>
+            <if test="cashChannelId != null "> CashChannelId = #{cashChannelId,jdbcType=VARCHAR},</if>
+            <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where Id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.PlatformWithdraw">
+    update t_platform_withdraw
+    set
+       ApplyAmount = #{applyAmount,jdbcType=BIGINT},
+Number = #{number,jdbcType=VARCHAR},
+RegisteredBankName = #{registeredBankName,jdbcType=VARCHAR},
+BankName = #{bankName,jdbcType=VARCHAR},
+Mobile = #{mobile,jdbcType=VARCHAR},
+AccountName = #{accountName,jdbcType=VARCHAR},
+IdCard = #{idCard,jdbcType=VARCHAR},
+Province = #{province,jdbcType=VARCHAR},
+City = #{city,jdbcType=VARCHAR},
+ThirdDeduction = #{thirdDeduction,jdbcType=BIGINT},
+CashChannelId = #{cashChannelId,jdbcType=VARCHAR},
+CreateTime = #{createTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="sumApplyAmountByExample" parameterType="org.xxpay.dal.dao.model.PlatformWithdrawExample" resultType="java.lang.Long" >
+        select sum(ApplyAmount ) as sumAmount from t_platform_withdraw
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <select id="sumThirdDeductionByExample" parameterType="org.xxpay.dal.dao.model.PlatformWithdrawExample" resultType="java.lang.Long" >
+        select sum( ThirdDeduction) as sumAmount from t_platform_withdraw
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+</mapper>

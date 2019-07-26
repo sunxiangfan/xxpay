@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.MchBankCardMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.MchBankCard">
+        <id column="Id" property="id" jdbcType="VARCHAR"/>
+        <result column="MchId" property="mchId" jdbcType="VARCHAR"/>
+        <result column="MchType" property="mchType" jdbcType="TINYINT"/>
+        <result column="Number" property="number" jdbcType="VARCHAR"/>
+        <result column="RegisteredBankName" property="registeredBankName" jdbcType="VARCHAR"/>
+        <result column="BankName" property="bankName" jdbcType="VARCHAR"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="Type" property="type" jdbcType="TINYINT"/>
+        <result column="Mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="AccountName" property="accountName" jdbcType="VARCHAR"/>
+        <result column="IdCard" property="idCard" jdbcType="VARCHAR"/>
+        <result column="Province" property="province" jdbcType="VARCHAR"/>
+        <result column="City" property="city" jdbcType="VARCHAR"/>
+        <result column="BankUnionCode" property="bankUnionCode" jdbcType="VARCHAR"/>
+        <result column="CreateBy" property="createBy" jdbcType="VARCHAR"/>
+        <result column="UpdateBy" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        Id,
+        MchId,
+MchType,
+Number,
+RegisteredBankName,
+BankName,
+Remark,
+Type,
+Mobile,
+AccountName,
+IdCard,
+Province,
+City,
+BankUnionCode,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.MchBankCardExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_mch_bank_card
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_mch_bank_card
+        where Id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_mch_bank_card
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.MchBankCardExample">
+        delete from t_mch_bank_card
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.MchBankCard">
+    insert into t_mch_bank_card (Id,
+        MchId,
+MchType,
+Number,
+RegisteredBankName,
+BankName,
+Remark,
+Type,
+Mobile,
+AccountName,
+IdCard,
+Province,
+City,
+BankUnionCode,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime
+)
+      values (#{id,jdbcType=VARCHAR},
+        #{mchId,jdbcType=VARCHAR},
+#{mchType,jdbcType=TINYINT},
+#{number,jdbcType=VARCHAR},
+#{registeredBankName,jdbcType=VARCHAR},
+#{bankName,jdbcType=VARCHAR},
+#{remark,jdbcType=VARCHAR},
+#{type,jdbcType=TINYINT},
+#{mobile,jdbcType=VARCHAR},
+#{accountName,jdbcType=VARCHAR},
+#{idCard,jdbcType=VARCHAR},
+#{province,jdbcType=VARCHAR},
+#{city,jdbcType=VARCHAR},
+#{bankUnionCode,jdbcType=VARCHAR},
+#{createBy,jdbcType=VARCHAR},
+#{updateBy,jdbcType=VARCHAR},
+#{createTime,jdbcType=TIMESTAMP},
+#{updateTime,jdbcType=TIMESTAMP})
+</insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.MchBankCard">
+        insert into t_mch_bank_card
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">Id,</if>
+            <if test="mchId != null ">MchId,</if>
+            <if test="mchType != null ">MchType,</if>
+            <if test="number != null ">Number,</if>
+            <if test="registeredBankName != null ">RegisteredBankName,</if>
+            <if test="bankName != null ">BankName,</if>
+            <if test="remark != null ">Remark,</if>
+            <if test="type != null ">Type,</if>
+            <if test="mobile != null ">Mobile,</if>
+            <if test="accountName != null ">AccountName,</if>
+            <if test="idCard != null ">IdCard,</if>
+            <if test="province != null ">Province,</if>
+            <if test="city != null ">City,</if>
+            <if test="bankUnionCode != null ">BankUnionCode,</if>
+            <if test="createBy != null ">CreateBy,</if>
+            <if test="updateBy != null ">UpdateBy,</if>
+            <if test="createTime != null ">CreateTime,</if>
+            <if test="updateTime != null ">UpdateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">#{id,jdbcType=VARCHAR},</if>
+            <if test="mchId != null ">#{mchId,jdbcType=VARCHAR},</if>
+            <if test="mchType != null ">#{mchType,jdbcType=TINYINT},</if>
+            <if test="number != null ">#{number,jdbcType=VARCHAR},</if>
+            <if test="registeredBankName != null ">#{registeredBankName,jdbcType=VARCHAR},</if>
+            <if test="bankName != null ">#{bankName,jdbcType=VARCHAR},</if>
+            <if test="remark != null ">#{remark,jdbcType=VARCHAR},</if>
+            <if test="type != null ">#{type,jdbcType=TINYINT},</if>
+            <if test="mobile != null ">#{mobile,jdbcType=VARCHAR},</if>
+            <if test="accountName != null ">#{accountName,jdbcType=VARCHAR},</if>
+            <if test="idCard != null ">#{idCard,jdbcType=VARCHAR},</if>
+            <if test="province != null ">#{province,jdbcType=VARCHAR},</if>
+            <if test="city != null ">#{city,jdbcType=VARCHAR},</if>
+            <if test="bankUnionCode != null ">#{bankUnionCode,jdbcType=VARCHAR},</if>
+            <if test="createBy != null ">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null ">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.MchBankCardExample" resultType="java.lang.Integer">
+        select count(*) from t_mch_bank_card
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_mch_bank_card
+        <set>
+            <if test="record.mchId != null "> MchId = #{record.mchId,jdbcType=VARCHAR},</if>
+            <if test="record.mchType != null "> MchType = #{record.mchType,jdbcType=TINYINT},</if>
+            <if test="record.number != null "> Number = #{record.number,jdbcType=VARCHAR},</if>
+            <if test="record.registeredBankName != null "> RegisteredBankName = #{record.registeredBankName,jdbcType=VARCHAR},</if>
+            <if test="record.bankName != null "> BankName = #{record.bankName,jdbcType=VARCHAR},</if>
+            <if test="record.remark != null "> Remark = #{record.remark,jdbcType=VARCHAR},</if>
+            <if test="record.type != null "> Type = #{record.type,jdbcType=TINYINT},</if>
+            <if test="record.mobile != null "> Mobile = #{record.mobile,jdbcType=VARCHAR},</if>
+            <if test="record.accountName != null "> AccountName = #{record.accountName,jdbcType=VARCHAR},</if>
+            <if test="record.idCard != null "> IdCard = #{record.idCard,jdbcType=VARCHAR},</if>
+            <if test="record.province != null "> Province = #{record.province,jdbcType=VARCHAR},</if>
+            <if test="record.city != null "> City = #{record.city,jdbcType=VARCHAR},</if>
+            <if test="record.bankUnionCode != null "> BankUnionCode = #{record.bankUnionCode,jdbcType=VARCHAR},</if>
+            <if test="record.createBy != null "> CreateBy = #{record.createBy,jdbcType=VARCHAR},</if>
+            <if test="record.updateBy != null "> UpdateBy = #{record.updateBy,jdbcType=VARCHAR},</if>
+            <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.updateTime != null "> UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_mch_bank_card
+        set
+        MchId = #{record.mchId,jdbcType=VARCHAR},
+        MchType = #{record.mchType,jdbcType=TINYINT},
+        Number = #{record.number,jdbcType=VARCHAR},
+        RegisteredBankName = #{record.registeredBankName,jdbcType=VARCHAR},
+        BankName = #{record.bankName,jdbcType=VARCHAR},
+        Remark = #{record.remark,jdbcType=VARCHAR},
+        Type = #{record.type,jdbcType=TINYINT},
+        Mobile = #{record.mobile,jdbcType=VARCHAR},
+        AccountName = #{record.accountName,jdbcType=VARCHAR},
+        IdCard = #{record.idCard,jdbcType=VARCHAR},
+        Province = #{record.province,jdbcType=VARCHAR},
+        City = #{record.city,jdbcType=VARCHAR},
+        BankUnionCode = #{record.bankUnionCode,jdbcType=VARCHAR},
+        CreateBy = #{record.createBy,jdbcType=VARCHAR},
+        UpdateBy = #{record.updateBy,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.MchBankCard">
+        update t_mch_bank_card
+        <set>
+            <if test="mchId != null "> MchId = #{mchId,jdbcType=VARCHAR},</if>
+            <if test="mchType != null "> MchType = #{mchType,jdbcType=TINYINT},</if>
+            <if test="number != null "> Number = #{number,jdbcType=VARCHAR},</if>
+            <if test="registeredBankName != null "> RegisteredBankName = #{registeredBankName,jdbcType=VARCHAR},</if>
+            <if test="bankName != null "> BankName = #{bankName,jdbcType=VARCHAR},</if>
+            <if test="remark != null "> Remark = #{remark,jdbcType=VARCHAR},</if>
+            <if test="type != null "> Type = #{type,jdbcType=TINYINT},</if>
+            <if test="mobile != null "> Mobile = #{mobile,jdbcType=VARCHAR},</if>
+            <if test="accountName != null "> AccountName = #{accountName,jdbcType=VARCHAR},</if>
+            <if test="idCard != null "> IdCard = #{idCard,jdbcType=VARCHAR},</if>
+            <if test="province != null "> Province = #{province,jdbcType=VARCHAR},</if>
+            <if test="city != null "> City = #{city,jdbcType=VARCHAR},</if>
+            <if test="bankUnionCode != null "> BankUnionCode = #{bankUnionCode,jdbcType=VARCHAR},</if>
+            <if test="createBy != null "> CreateBy = #{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null "> UpdateBy = #{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null "> UpdateTime = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where Id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.MchBankCard">
+    update t_mch_bank_card
+    set
+       MchId = #{mchId,jdbcType=VARCHAR},
+MchType = #{mchType,jdbcType=TINYINT},
+Number = #{number,jdbcType=VARCHAR},
+RegisteredBankName = #{registeredBankName,jdbcType=VARCHAR},
+BankName = #{bankName,jdbcType=VARCHAR},
+Remark = #{remark,jdbcType=VARCHAR},
+Type = #{type,jdbcType=TINYINT},
+Mobile = #{mobile,jdbcType=VARCHAR},
+AccountName = #{accountName,jdbcType=VARCHAR},
+IdCard = #{idCard,jdbcType=VARCHAR},
+Province = #{province,jdbcType=VARCHAR},
+City = #{city,jdbcType=VARCHAR},
+BankUnionCode = #{bankUnionCode,jdbcType=VARCHAR},
+CreateBy = #{createBy,jdbcType=VARCHAR},
+UpdateBy = #{updateBy,jdbcType=VARCHAR},
+CreateTime = #{createTime,jdbcType=TIMESTAMP},
+UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

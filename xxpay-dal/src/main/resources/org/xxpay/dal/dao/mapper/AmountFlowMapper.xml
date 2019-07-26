@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.AmountFlowMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.AmountFlow">
+        <id column="Id" property="id" jdbcType="VARCHAR"/>
+        <result column="MchId" property="mchId" jdbcType="VARCHAR"/>
+        <result column="FlowType" property="flowType" jdbcType="TINYINT"/>
+        <result column="AmountType" property="amountType" jdbcType="VARCHAR"/>
+        <result column="Amount" property="amount" jdbcType="BIGINT"/>
+        <result column="PreBalance" property="preBalance" jdbcType="BIGINT"/>
+        <result column="SourceId" property="sourceId" jdbcType="VARCHAR"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    Id,
+    MchId,
+FlowType,
+AmountType,
+Amount,
+PreBalance,
+SourceId,
+Remark,
+CreateTime,
+UpdateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.BillExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_amount_flow
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_amount_flow
+        where Id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_amount_flow
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.BillExample">
+        delete from t_amount_flow
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.AmountFlow">
+    insert into t_amount_flow (
+       Id,
+       MchId,
+FlowType,
+AmountType,
+Amount,
+PreBalance,
+SourceId,
+Remark,
+CreateTime,
+UpdateTime)
+    values (#{id,jdbcType=VARCHAR},
+     #{mchId,jdbcType=VARCHAR},
+#{flowType,jdbcType=TINYINT},
+#{amountType,jdbcType=VARCHAR},
+#{amount,jdbcType=BIGINT},
+#{preBalance,jdbcType=BIGINT},
+#{sourceId,jdbcType=VARCHAR},
+#{remark,jdbcType=VARCHAR},
+#{createTime,jdbcType=TIMESTAMP},
+#{updateTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.AmountFlow">
+        insert into t_amount_flow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">Id,</if>
+            <if test="mchId != null ">MchId,</if>
+            <if test="flowType != null ">FlowType,</if>
+            <if test="amountType != null ">AmountType,</if>
+            <if test="amount != null ">Amount,</if>
+            <if test="preBalance != null ">PreBalance,</if>
+            <if test="sourceId != null ">SourceId,</if>
+            <if test="remark != null ">Remark,</if>
+            <if test="createTime != null ">CreateTime,</if>
+            <if test="updateTime != null ">UpdateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id,jdbcType=VARCHAR},</if>
+            <if test="mchId != null ">#{mchId,jdbcType=VARCHAR},</if>
+            <if test="flowType != null ">#{flowType,jdbcType=TINYINT},</if>
+            <if test="amountType != null ">#{amountType,jdbcType=VARCHAR},</if>
+            <if test="amount != null ">#{amount,jdbcType=BIGINT},</if>
+            <if test="preBalance != null ">#{preBalance,jdbcType=BIGINT},</if>
+            <if test="sourceId != null ">#{sourceId,jdbcType=VARCHAR},</if>
+            <if test="remark != null ">#{remark,jdbcType=VARCHAR},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.AmountFlowExample" resultType="java.lang.Integer">
+        select count(*) from t_amount_flow
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_amount_flow
+        <set>
+            <if test="record.mchId != null "> MchId = #{record.mchId,jdbcType=VARCHAR},</if>
+            <if test="record.flowType != null "> FlowType = #{record.flowType,jdbcType=TINYINT},</if>
+            <if test="record.amountType != null "> AmountType = #{record.amountType,jdbcType=VARCHAR},</if>
+            <if test="record.amount != null "> Amount = #{record.amount,jdbcType=BIGINT},</if>
+            <if test="record.preBalance != null "> PreBalance = #{record.preBalance,jdbcType=BIGINT},</if>
+            <if test="record.sourceId != null "> SourceId = #{record.sourceId,jdbcType=VARCHAR},</if>
+            <if test="record.remark != null "> Remark = #{record.remark,jdbcType=VARCHAR},</if>
+            <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.updateTime != null "> UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_amount_flow
+        set
+        MchId = #{record.mchId,jdbcType=VARCHAR},
+        FlowType = #{record.flowType,jdbcType=TINYINT},
+        AmountType = #{record.amountType,jdbcType=VARCHAR},
+        Amount = #{record.amount,jdbcType=BIGINT},
+        PreBalance = #{record.preBalance,jdbcType=BIGINT},
+        SourceId = #{record.sourceId,jdbcType=VARCHAR},
+        Remark = #{record.remark,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.AmountFlow">
+        update t_amount_flow
+        <set>
+            <if test="mchId != null "> MchId = #{mchId,jdbcType=VARCHAR},</if>
+            <if test="flowType != null "> FlowType = #{flowType,jdbcType=TINYINT},</if>
+            <if test="amountType != null "> AmountType = #{amountType,jdbcType=VARCHAR},</if>
+            <if test="amount != null "> Amount = #{amount,jdbcType=BIGINT},</if>
+            <if test="preBalance != null "> PreBalance = #{preBalance,jdbcType=BIGINT},</if>
+            <if test="sourceId != null "> SourceId = #{sourceId,jdbcType=VARCHAR},</if>
+            <if test="remark != null "> Remark = #{remark,jdbcType=VARCHAR},</if>
+            <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null "> UpdateTime = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where Id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.AmountFlow">
+    update t_amount_flow
+    set
+        MchId = #{mchId,jdbcType=VARCHAR},
+FlowType = #{flowType,jdbcType=TINYINT},
+AmountType = #{amountType,jdbcType=VARCHAR},
+Amount = #{amount,jdbcType=BIGINT},
+PreBalance = #{preBalance,jdbcType=BIGINT},
+SourceId = #{sourceId,jdbcType=VARCHAR},
+Remark = #{remark,jdbcType=VARCHAR},
+CreateTime = #{createTime,jdbcType=TIMESTAMP},
+UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

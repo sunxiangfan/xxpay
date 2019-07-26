@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.User">
+        <id column="UserId" property="userId" jdbcType="VARCHAR"/>
+        <result column="LoginAccount" property="loginAccount" jdbcType="VARCHAR"/>
+        <result column="Password" property="password" jdbcType="VARCHAR"/>
+        <result column="Name" property="name" jdbcType="VARCHAR"/>
+        <result column="Department" property="department" jdbcType="VARCHAR"/>
+        <result column="Mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="State" property="state" jdbcType="TINYINT"/>
+        <result column="Type" property="type" jdbcType="TINYINT"/>
+        <result column="BizId" property="bizId" jdbcType="VARCHAR"/>
+        <result column="CreateBy" property="createBy" jdbcType="VARCHAR"/>
+        <result column="UpdateBy" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    UserId,
+    LoginAccount,
+Password,
+Name,
+Department,
+Mobile,
+State,
+Type,
+BizId,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.UserExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where UserId = #{userId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_user
+    where UserId = #{userId,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.UserExample">
+        delete from t_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.User">
+    insert into t_user (`UserId`,
+    LoginAccount,
+Password,
+Name,
+Department,
+Mobile,
+State,
+Type,
+BizId,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime)
+    values (#{userId,jdbcType=VARCHAR},
+   #{loginAccount,jdbcType=VARCHAR},
+#{password,jdbcType=VARCHAR},
+#{name,jdbcType=VARCHAR},
+#{department,jdbcType=VARCHAR},
+#{mobile,jdbcType=VARCHAR},
+#{state,jdbcType=TINYINT},
+#{type,jdbcType=TINYINT},
+#{bizId,jdbcType=VARCHAR},
+#{createBy,jdbcType=VARCHAR},
+#{updateBy,jdbcType=VARCHAR},
+#{createTime,jdbcType=TIMESTAMP},
+#{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.User">
+        insert into t_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">UserId,</if>
+            <if test="loginAccount != null ">LoginAccount,</if>
+            <if test="password != null ">Password,</if>
+            <if test="name != null ">Name,</if>
+            <if test="department != null ">Department,</if>
+            <if test="mobile != null ">Mobile,</if>
+            <if test="state != null ">State,</if>
+            <if test="type != null ">Type,</if>
+            <if test="bizId != null ">BizId,</if>
+            <if test="createBy != null ">CreateBy,</if>
+            <if test="updateBy != null ">UpdateBy,</if>
+            <if test="createTime != null ">CreateTime,</if>
+            <if test="updateTime != null ">UpdateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+            <if test="loginAccount != null ">#{loginAccount,jdbcType=VARCHAR},</if>
+            <if test="password != null ">#{password,jdbcType=VARCHAR},</if>
+            <if test="name != null ">#{name,jdbcType=VARCHAR},</if>
+            <if test="department != null ">#{department,jdbcType=VARCHAR},</if>
+            <if test="mobile != null ">#{mobile,jdbcType=VARCHAR},</if>
+            <if test="state != null ">#{state,jdbcType=TINYINT},</if>
+            <if test="type != null ">#{type,jdbcType=TINYINT},</if>
+            <if test="bizId != null ">#{bizId,jdbcType=VARCHAR},</if>
+            <if test="createBy != null ">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null ">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.UserExample" resultType="java.lang.Integer">
+        select count(*) from t_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_user
+        <set>
+            <if test="record.loginAccount != null "> LoginAccount = #{record.loginAccount,jdbcType=VARCHAR},</if>
+            <if test="record.password != null "> Password = #{record.password,jdbcType=VARCHAR},</if>
+            <if test="record.name != null "> Name = #{record.name,jdbcType=VARCHAR},</if>
+            <if test="record.department != null "> Department = #{record.department,jdbcType=VARCHAR},</if>
+            <if test="record.mobile != null "> Mobile = #{record.mobile,jdbcType=VARCHAR},</if>
+            <if test="record.state != null "> State = #{record.state,jdbcType=TINYINT},</if>
+            <if test="record.type != null "> Type = #{record.type,jdbcType=TINYINT},</if>
+            <if test="record.bizId != null "> BizId = #{record.bizId,jdbcType=VARCHAR},</if>
+            <if test="record.createBy != null "> CreateBy = #{record.createBy,jdbcType=VARCHAR},</if>
+            <if test="record.updateBy != null "> UpdateBy = #{record.updateBy,jdbcType=VARCHAR},</if>
+            <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.updateTime != null "> UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_user
+        set
+        LoginAccount = #{record.loginAccount,jdbcType=VARCHAR},
+        Password = #{record.password,jdbcType=VARCHAR},
+        Name = #{record.name,jdbcType=VARCHAR},
+        Department = #{record.department,jdbcType=VARCHAR},
+        Mobile = #{record.mobile,jdbcType=VARCHAR},
+        State = #{record.state,jdbcType=TINYINT},
+        Type = #{record.type,jdbcType=TINYINT},
+        BizId = #{record.bizId,jdbcType=VARCHAR},
+        CreateBy = #{record.createBy,jdbcType=VARCHAR},
+        UpdateBy = #{record.updateBy,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.User">
+        update t_user
+        <set>
+            <if test="loginAccount != null "> LoginAccount = #{loginAccount,jdbcType=VARCHAR},</if>
+            <if test="password != null "> Password = #{password,jdbcType=VARCHAR},</if>
+            <if test="name != null "> Name = #{name,jdbcType=VARCHAR},</if>
+            <if test="department != null "> Department = #{department,jdbcType=VARCHAR},</if>
+            <if test="mobile != null "> Mobile = #{mobile,jdbcType=VARCHAR},</if>
+            <if test="state != null "> State = #{state,jdbcType=TINYINT},</if>
+            <if test="type != null "> Type = #{type,jdbcType=TINYINT},</if>
+            <if test="bizId != null "> BizId = #{bizId,jdbcType=VARCHAR},</if>
+            <if test="createBy != null "> CreateBy = #{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null "> UpdateBy = #{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null "> UpdateTime = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where UserId = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.User">
+    update t_user
+    set
+    LoginAccount = #{loginAccount,jdbcType=VARCHAR},
+Password = #{password,jdbcType=VARCHAR},
+Name = #{name,jdbcType=VARCHAR},
+Department = #{department,jdbcType=VARCHAR},
+Mobile = #{mobile,jdbcType=VARCHAR},
+State = #{state,jdbcType=TINYINT},
+Type = #{type,jdbcType=TINYINT},
+BizId = #{bizId,jdbcType=VARCHAR},
+CreateBy = #{createBy,jdbcType=VARCHAR},
+UpdateBy = #{updateBy,jdbcType=VARCHAR},
+CreateTime = #{createTime,jdbcType=TIMESTAMP},
+UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where UserId = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>

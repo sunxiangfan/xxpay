@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.PayChannelMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.model.PayChannel">
+        <id column="Id" property="id" jdbcType="VARCHAR"/>
+        <result column="Name" property="name" jdbcType="VARCHAR"/>
+        <result column="Code" property="code" jdbcType="VARCHAR"/>
+        <result column="Label" property="label" jdbcType="VARCHAR"/>
+        <result column="PayType" property="payType" jdbcType="VARCHAR"/>
+        <result column="State" property="state" jdbcType="TINYINT"/>
+        <result column="Material" property="material" jdbcType="TINYINT"/>
+        <result column="AccountingCycle" property="accountingCycle" jdbcType="VARCHAR"/>
+        <result column="MaxTransactionAmount" property="maxTransactionAmount" jdbcType="BIGINT"/>
+        <result column="MinTransactionAmount" property="minTransactionAmount" jdbcType="BIGINT"/>
+        <result column="StartTime" property="startTime" jdbcType="VARCHAR"/>
+        <result column="EndTime" property="endTime" jdbcType="VARCHAR"/>
+        <result column="ThirdDeductionRate" property="thirdDeductionRate" jdbcType="DECIMAL"/>
+        <result column="T1Rate" property="t1Rate" jdbcType="DECIMAL"/>
+        <result column="T1Time" property="t1Time" jdbcType="TIMESTAMP"/>
+        <result column="Param" property="param" jdbcType="VARCHAR"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="CreateBy" property="createBy" jdbcType="VARCHAR"/>
+        <result column="UpdateBy" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    Id,
+    Name,
+Code,
+Label,
+PayType,
+State,
+Material,
+AccountingCycle,
+MaxTransactionAmount,
+MinTransactionAmount,
+StartTime,
+EndTime,
+ThirdDeductionRate,
+T1Rate,
+T1Time,
+Param,
+Remark,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.PayChannelExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_pay_channel
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_pay_channel
+        where Id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_pay_channel
+    where Id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.dal.dao.model.PayChannelExample">
+        delete from t_pay_channel
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.dal.dao.model.PayChannel">
+    insert into t_pay_channel (Id,
+      Name,
+Code,
+Label,
+PayType,
+State,
+Material,
+AccountingCycle,
+MaxTransactionAmount,
+MinTransactionAmount,
+StartTime,
+EndTime,
+ThirdDeductionRate,
+T1Rate,
+T1Time,
+Param,
+Remark,
+CreateBy,
+UpdateBy,
+CreateTime,
+UpdateTime
+)
+    values (#{Id,jdbcType=VARCHAR},
+      #{name,jdbcType=VARCHAR},
+#{code,jdbcType=VARCHAR},
+#{label,jdbcType=VARCHAR},
+#{payType,jdbcType=VARCHAR},
+#{state,jdbcType=TINYINT},
+#{material,jdbcType=TINYINT},
+#{accountingCycle,jdbcType=VARCHAR},
+#{maxTransactionAmount,jdbcType=BIGINT},
+#{minTransactionAmount,jdbcType=BIGINT},
+#{startTime,jdbcType=VARCHAR},
+#{endTime,jdbcType=VARCHAR},
+#{thirdDeductionRate,jdbcType=DECIMAL},
+#{t1Rate,jdbcType=DECIMAL},
+#{t1Time,jdbcType=TIMESTAMP},
+#{param,jdbcType=VARCHAR},
+#{remark,jdbcType=VARCHAR},
+#{createBy,jdbcType=VARCHAR},
+#{updateBy,jdbcType=VARCHAR},
+#{createTime,jdbcType=TIMESTAMP},
+#{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.PayChannel">
+        insert into t_pay_channel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">Id,</if>
+            <if test="name != null ">Name,</if>
+            <if test="code != null ">Code,</if>
+            <if test="label != null ">Label,</if>
+            <if test="payType != null ">PayType,</if>
+            <if test="state != null ">State,</if>
+            <if test="material != null ">Material,</if>
+            <if test="accountingCycle != null ">AccountingCycle,</if>
+            <if test="maxTransactionAmount != null ">MaxTransactionAmount,</if>
+            <if test="minTransactionAmount != null ">MinTransactionAmount,</if>
+            <if test="startTime != null ">StartTime,</if>
+            <if test="endTime != null ">EndTime,</if>
+            <if test="thirdDeductionRate != null ">ThirdDeductionRate,</if>
+            <if test="t1Rate != null ">T1Rate,</if>
+            <if test="t1Time != null ">T1Time,</if>
+            <if test="param != null ">Param,</if>
+            <if test="remark != null ">Remark,</if>
+            <if test="createBy != null ">CreateBy,</if>
+            <if test="updateBy != null ">UpdateBy,</if>
+            <if test="createTime != null ">CreateTime,</if>
+            <if test="updateTime != null ">UpdateTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">#{id,jdbcType=VARCHAR},</if>
+            <if test="name != null ">#{name,jdbcType=VARCHAR},</if>
+            <if test="code != null ">#{code,jdbcType=VARCHAR},</if>
+            <if test="label != null ">#{label,jdbcType=VARCHAR},</if>
+            <if test="payType != null ">#{payType,jdbcType=VARCHAR},</if>
+            <if test="state != null ">#{state,jdbcType=TINYINT},</if>
+            <if test="material != null ">#{material,jdbcType=TINYINT},</if>
+            <if test="accountingCycle != null ">#{accountingCycle,jdbcType=VARCHAR},</if>
+            <if test="maxTransactionAmount != null ">#{maxTransactionAmount,jdbcType=BIGINT},</if>
+            <if test="minTransactionAmount != null ">#{minTransactionAmount,jdbcType=BIGINT},</if>
+            <if test="startTime != null ">#{startTime,jdbcType=VARCHAR},</if>
+            <if test="endTime != null ">#{endTime,jdbcType=VARCHAR},</if>
+            <if test="thirdDeductionRate != null ">#{thirdDeductionRate,jdbcType=DECIMAL},</if>
+            <if test="t1Rate != null ">#{t1Rate,jdbcType=DECIMAL},</if>
+            <if test="t1Time != null ">#{t1Time,jdbcType=TIMESTAMP},</if>
+            <if test="param != null ">#{param,jdbcType=VARCHAR},</if>
+            <if test="remark != null ">#{remark,jdbcType=VARCHAR},</if>
+            <if test="createBy != null ">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null ">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null ">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.dal.dao.model.PayChannelExample"
+            resultType="java.lang.Integer">
+        select count(*) from t_pay_channel
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_pay_channel
+        <set>
+            <if test="record.name != null "> Name = #{record.name,jdbcType=VARCHAR},</if>
+            <if test="record.code != null "> Code = #{record.code,jdbcType=VARCHAR},</if>
+            <if test="record.label != null "> Label = #{record.label,jdbcType=VARCHAR},</if>
+            <if test="record.payType != null "> PayType = #{record.payType,jdbcType=VARCHAR},</if>
+            <if test="record.state != null "> State = #{record.state,jdbcType=TINYINT},</if>
+            <if test="record.material != null "> Material = #{record.material,jdbcType=TINYINT},</if>
+            <if test="record.accountingCycle != null "> AccountingCycle = #{record.accountingCycle,jdbcType=VARCHAR},</if>
+            <if test="record.maxTransactionAmount != null "> MaxTransactionAmount = #{record.maxTransactionAmount,jdbcType=BIGINT},</if>
+            <if test="record.minTransactionAmount != null "> MinTransactionAmount = #{record.minTransactionAmount,jdbcType=BIGINT},</if>
+            <if test="record.startTime != null "> StartTime = #{record.startTime,jdbcType=VARCHAR},</if>
+            <if test="record.endTime != null "> EndTime = #{record.endTime,jdbcType=VARCHAR},</if>
+            <if test="record.thirdDeductionRate != null "> ThirdDeductionRate = #{record.thirdDeductionRate,jdbcType=DECIMAL},</if>
+            <if test="record.t1Rate != null "> T1Rate = #{record.t1Rate,jdbcType=DECIMAL},</if>
+            <if test="record.t1Time != null "> T1Time = #{record.t1Time,jdbcType=TIMESTAMP},</if>
+            <if test="record.param != null "> Param = #{record.param,jdbcType=VARCHAR},</if>
+            <if test="record.remark != null "> Remark = #{record.remark,jdbcType=VARCHAR},</if>
+            <if test="record.createBy != null "> CreateBy = #{record.createBy,jdbcType=VARCHAR},</if>
+            <if test="record.updateBy != null "> UpdateBy = #{record.updateBy,jdbcType=VARCHAR},</if>
+            <if test="record.createTime != null "> CreateTime = #{record.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="record.updateTime != null "> UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_pay_channel
+        set
+        Name = #{record.name,jdbcType=VARCHAR},
+        Code = #{record.code,jdbcType=VARCHAR},
+        Label = #{record.label,jdbcType=VARCHAR},
+        PayType = #{record.payType,jdbcType=VARCHAR},
+        State = #{record.state,jdbcType=TINYINT},
+        Material = #{record.material,jdbcType=TINYINT},
+        AccountingCycle = #{record.accountingCycle,jdbcType=VARCHAR},
+        MaxTransactionAmount = #{record.maxTransactionAmount,jdbcType=BIGINT},
+        MinTransactionAmount = #{record.minTransactionAmount,jdbcType=BIGINT},
+        StartTime = #{record.startTime,jdbcType=VARCHAR},
+        EndTime = #{record.endTime,jdbcType=VARCHAR},
+        ThirdDeductionRate = #{record.thirdDeductionRate,jdbcType=DECIMAL},
+        T1Rate = #{record.t1Rate,jdbcType=DECIMAL},
+        T1Time = #{record.t1Time,jdbcType=TIMESTAMP},
+        Param = #{record.param,jdbcType=VARCHAR},
+        Remark = #{record.remark,jdbcType=VARCHAR},
+        CreateBy = #{record.createBy,jdbcType=VARCHAR},
+        UpdateBy = #{record.updateBy,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.dal.dao.model.PayChannel">
+        update t_pay_channel
+        <set>
+            <if test="name != null "> Name = #{name,jdbcType=VARCHAR},</if>
+            <if test="code != null "> Code = #{code,jdbcType=VARCHAR},</if>
+            <if test="label != null "> Label = #{label,jdbcType=VARCHAR},</if>
+            <if test="payType != null "> PayType = #{payType,jdbcType=VARCHAR},</if>
+            <if test="state != null "> State = #{state,jdbcType=TINYINT},</if>
+            <if test="material != null "> Material = #{material,jdbcType=TINYINT},</if>
+            <if test="accountingCycle != null "> AccountingCycle = #{accountingCycle,jdbcType=VARCHAR},</if>
+            <if test="maxTransactionAmount != null "> MaxTransactionAmount = #{maxTransactionAmount,jdbcType=BIGINT},</if>
+            <if test="minTransactionAmount != null "> MinTransactionAmount = #{minTransactionAmount,jdbcType=BIGINT},</if>
+            <if test="startTime != null "> StartTime = #{startTime,jdbcType=VARCHAR},</if>
+            <if test="endTime != null "> EndTime = #{endTime,jdbcType=VARCHAR},</if>
+            <if test="thirdDeductionRate != null "> ThirdDeductionRate = #{thirdDeductionRate,jdbcType=DECIMAL},</if>
+            <if test="t1Rate != null "> T1Rate = #{t1Rate,jdbcType=DECIMAL},</if>
+            <if test="t1Time != null "> T1Time = #{t1Time,jdbcType=TIMESTAMP},</if>
+            <if test="param != null "> Param = #{param,jdbcType=VARCHAR},</if>
+            <if test="remark != null "> Remark = #{remark,jdbcType=VARCHAR},</if>
+            <if test="createBy != null "> CreateBy = #{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null "> UpdateBy = #{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null "> CreateTime = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null "> UpdateTime = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where Id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.dal.dao.model.PayChannel">
+    update t_pay_channel
+    set
+        Name = #{name,jdbcType=VARCHAR},
+Code = #{code,jdbcType=VARCHAR},
+Label = #{label,jdbcType=VARCHAR},
+PayType = #{payType,jdbcType=VARCHAR},
+State = #{state,jdbcType=TINYINT},
+Material = #{material,jdbcType=TINYINT},
+AccountingCycle = #{accountingCycle,jdbcType=VARCHAR},
+MaxTransactionAmount = #{maxTransactionAmount,jdbcType=BIGINT},
+MinTransactionAmount = #{minTransactionAmount,jdbcType=BIGINT},
+StartTime = #{startTime,jdbcType=VARCHAR},
+EndTime = #{endTime,jdbcType=VARCHAR},
+ThirdDeductionRate = #{thirdDeductionRate,jdbcType=DECIMAL},
+T1Rate = #{t1Rate,jdbcType=DECIMAL},
+T1Time = #{t1Time,jdbcType=TIMESTAMP},
+Param = #{param,jdbcType=VARCHAR},
+Remark = #{remark,jdbcType=VARCHAR},
+CreateBy = #{createBy,jdbcType=VARCHAR},
+UpdateBy = #{updateBy,jdbcType=VARCHAR},
+CreateTime = #{createTime,jdbcType=TIMESTAMP},
+UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByMchIdAndPayType" resultMap="BaseResultMap" >
+    select
+     c.Id,
+    c.Name,
+    c.Label,
+c.Code,
+c.PayType,
+c.State,
+c.Material,
+c.AccountingCycle,
+c.MaxTransactionAmount,
+c.MinTransactionAmount,
+c.StartTime,
+c.EndTime,
+c.ThirdDeductionRate,
+c.Param,
+c.T1Rate,
+c.T1Time,
+c.Remark,
+c.CreateBy,
+c.UpdateBy,
+c.CreateTime,
+c.UpdateTime
+     from t_pay_channel c INNER JOIN t_mch_pay_channel mc on mc.PayChannelId =c.Id
+        where mc.State=1 and c.State=1 and  mc.MchId=#{mchId,jdbcType=VARCHAR} and c.PayType=#{payType,jdbcType=VARCHAR}
+    </select>
+</mapper>

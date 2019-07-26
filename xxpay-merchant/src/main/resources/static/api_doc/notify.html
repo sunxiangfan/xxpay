@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>异步通知接口</title>
+		<link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/global.css" media="all">
+		<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../css/table.css" />
+		<meta http-equiv="pragma" content="no-cache"/><!-- 禁止浏览器从本地机的缓存中调阅页面内容 -->
+		<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"/>
+		<meta http-equiv="expires" content="0"/> <!-- 定义网页 缓存中的过期时间-->
+	</head>
+
+	<body>
+		<div class="admin-main">
+			<blockquote class="layui-elem-quote">
+				<p>请求方式：<span style="color:red;">POST</span></p>
+				<p>响应完成，请返回字符串：<span style="color:red;">success</span></p>
+			</blockquote>
+
+			<fieldset class="layui-elem-field">
+				<legend>参数列表</legend>
+				<div class="layui-field-box layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+						<tr>
+							<th>接口参数</th>
+							<th>类型</th>
+							<th>是否可空</th>
+							<th>参数说明</th>
+							<th>其他</th>
+						</tr>
+						</thead>
+						<tbody >
+						<tr>
+							<td>payOrderId</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>平台支付订单编号</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>mchId</td>
+							<td>string(20)</td>
+							<td>否</td>
+							<td>商户号</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>mchOrderNo</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>商户订单编号，唯一不允许重复</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>channelId</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>通道</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>amount</td>
+							<td>string(20)</td>
+							<td>否</td>
+							<td>金额，单位分</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>currency</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>币种</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>status</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>支付状态(2-支付成功。3-通知商户成功)。除2和3之外都是支付失败。</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>clientIp</td>
+							<td>string(30)</td>
+							<td>是</td>
+							<td>clientIp</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>device</td>
+							<td>string(30)</td>
+							<td>是</td>
+							<td>device</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>subject</td>
+							<td>string(64)</td>
+							<td>否</td>
+							<td>商品标题</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>param1</td>
+							<td>string(30)</td>
+							<td>是</td>
+							<td>param1</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>param2</td>
+							<td>string(30)</td>
+							<td>是</td>
+							<td>param2</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>paySuccTime</td>
+							<td>string(256)</td>
+							<td>否</td>
+							<td>支付时间</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>backType</td>
+							<td>string(30)</td>
+							<td>否</td>
+							<td>通知方式</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>sign</td>
+							<td>string(32)</td>
+							<td>否</td>
+							<td>请求参数的签名</td>
+							<td></td>
+						</tr>
+						<!--<tr>-->
+							<!--<td>extra</td>-->
+							<!--<td>string(30)</td>-->
+							<!--<td>否</td>-->
+							<!--<td>clientIp</td>-->
+							<!--<td></td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td>time</td>-->
+							<!--<td>string(20)</td>-->
+							<!--<td>否</td>-->
+							<!--<td>时间戳</td>-->
+							<!--<td></td>-->
+						<!--</tr>-->
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+			<div class="admin-table-page">
+				<div id="paged" class="page">
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../plugins/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '../js/'
+			});
+
+		</script>
+	</body>
+
+</html>

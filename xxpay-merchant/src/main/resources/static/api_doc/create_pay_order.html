@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>网关接口</title>
+		<link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/global.css" media="all">
+		<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../css/table.css" />
+		<meta http-equiv="pragma" content="no-cache"/><!-- 禁止浏览器从本地机的缓存中调阅页面内容 -->
+		<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"/>
+		<meta http-equiv="expires" content="0"/> <!-- 定义网页 缓存中的过期时间-->
+	</head>
+
+	<body>
+		<div class="admin-main">
+			<blockquote class="layui-elem-quote">
+				<p>接口名称：<span style="color:red;">统一下单接口</span></p>
+				<p>请求方式：<span style="color:red;">POST</span></p>
+				<p>请求地址：<span style="color:red;">http://domain:3030/api/pay/create_order</span></p>
+				<p>请求方法：请使用表单提交的方式，将所需参数放到表单域中，提交到该请求地址即可。</p>
+			</blockquote>
+
+			<fieldset class="layui-elem-field">
+				<legend>网关接口</legend>
+				<div class="layui-field-box layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th>接口参数</th>
+								<th>类型</th>
+								<th>是否可空</th>
+								<th>参数说明</th>
+								<th>其他</th>
+							</tr>
+						</thead>
+						<tbody id="content">
+							<tr>
+								<td>sign</td>
+								<td>string(32)</td>
+								<td>否</td>
+								<td>请求参数的签名</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>currency</td>
+								<td>string(10)</td>
+								<td>否</td>
+								<td>币种（固定传cny）</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>mchOrderNo</td>
+								<td>string(30)</td>
+								<td>否</td>
+								<td>商户订单编号，唯一不允许重复</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>subject</td>
+								<td>string(64)</td>
+								<td>否</td>
+								<td>商品标题</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>body</td>
+								<td>string(256)</td>
+								<td>否</td>
+								<td>商品描述信息</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>amount</td>
+								<td>string(20)</td>
+								<td>否</td>
+								<td>金额，单位分</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>clientIp</td>
+								<td>string(32)</td>
+								<td>是</td>
+								<td>客户端Ip</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>frontUrl</td>
+								<td>string(128)</td>
+								<td>否</td>
+								<td>用户支付成功后跳转的地址</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>notifyUrl</td>
+								<td>string(128)</td>
+								<td>否</td>
+								<td>商户接收支付结果通知的地址
+									生产环境该地址需要报备</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>mchId</td>
+								<td>string(20)</td>
+								<td>否</td>
+								<td>商户号</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>payType</td>
+								<td>string(20)</td>
+								<td>否</td>
+								<td>支付方式(参见通道payType。 网关 GATEWAY ,快捷 FAST_PAY ,支付宝H5 ALIPAY_WAP )</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>param1</td>
+								<td>string(60)</td>
+								<td>是</td>
+								<td>扩展参数1</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>param2</td>
+								<td>string(60)</td>
+								<td>是</td>
+								<td>扩展参数2</td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+			<div class="admin-table-page">
+				<div id="paged" class="page">
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../plugins/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '../js/'
+			});
+
+		</script>
+	</body>
+
+</html>
