@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("/pay")
 public class PayController {
 
-    static final String baseUrl = "http://localhost:3010/api";
+    static final String baseUrl = "http://www.gzbenshun112.com:3010/api";
     static final String notifyUrl = "http://www.baidu.com";
 
     static final String mchId = "";
