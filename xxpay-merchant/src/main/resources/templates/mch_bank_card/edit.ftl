@@ -26,16 +26,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">银行名称<span style="color: red">*</span></label>
             <div class="layui-input-block">
-                <select name="bankName" id="bankName" lay-search="">
-                    <#list banks as bank>
-                        <#if  item.bankName?exists&& item.bankName == bank.name>
-                            <option value="${bank.name}"
-                                    selected="selected">${bank.name}</option>
-                        <#else>
-                            <option value="${bank.name}">${bank.name}</option>
-                        </#if>
-                    </#list>
-                </select>
+                <input type="text" name="bankName" lay-verify="required" placeholder="银行名称" autocomplete="off"
+                       class="layui-input" value="${item.bankName?if_exists }">
             </div>
         </div>
         <div class="layui-form-item">
