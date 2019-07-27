@@ -262,6 +262,24 @@ public class PayOrderController {
                     model.put("payParams", object1);
                     return "payForm";
                 }
+                case PayConstant.CHANNEL_NAME_CJ: {
+                    String resp = payOrderServiceClient.doChangJiPayReq(getJsonParam("payOrder", payOrder));
+                    model.put("method", "post");
+                    Map object1=JSONObject.parseObject(resp,Map.class);
+                    System.out.println(object1);
+                    model.put("action", "https://pay.chanpay.com/mag-unify/gateway/receiveOrder.do?");
+                    model.put("payParams",object1);
+                    return "payForm";
+                }
+                case PayConstant.CHANNEL_NAME_CJ2: {
+                    String resp = payOrderServiceClient.doChangJiPayReq(getJsonParam("payOrder", payOrder));
+                    model.put("method", "post");
+                    Map object1=JSONObject.parseObject(resp,Map.class);
+                    System.out.println(object1);
+                    model.put("action", "https://pay.chanpay.com/mag-unify/gateway/receiveOrder.do?");
+                    model.put("payParams",object1);
+                    return "payForm";
+                }
                 case PayConstant.CHANNEL_NAME_MF_FAST_PAY: {
                     String resp =  payOrderServiceClient.doMinFuMessagePayReq(getJsonParam("payOrder", payOrder));
                     model.put("method", "post");

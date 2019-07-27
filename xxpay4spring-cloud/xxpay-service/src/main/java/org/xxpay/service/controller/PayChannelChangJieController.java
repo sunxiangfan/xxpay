@@ -1,17 +1,18 @@
 package org.xxpay.service.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.NameValuePair;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.service.channel.changjie.*;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -25,6 +26,8 @@ public class PayChannelChangJieController {
 
     private final MyLog log = MyLog.getLog(PayChannelChangJieController.class);
 
+
+
     /**
      * 畅捷支付平台公钥
      */
@@ -36,11 +39,23 @@ public class PayChannelChangJieController {
     private static String MERCHANT_PRIVATE_KEY = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAOhQ+OV9NjzRHgFqsEatX149qvEcXiyAlKIJhVbluAi46q3CLRivVGeuQ7LQ7Wt99HJ1maYpQv3sedryKVlWe3FiGIo6En/+E62s6PVAVXcvTmM3lNNlDVD8arp4Qy7wH5M7ofqSKsKCibtIzQkkhio6O+ti2Tjf7rDcl8TE9fefAgMBAAECgYEAtN++OWa4YLdrxiybnBuF4ejfe6Pbioh9sH77KsHl/ByE0s4YsFxpueOK3+EcyJEjTi5Td3QurWZ9JUNfgCf+KLgrusJgUW4tOLbaS51HRFsTgXbqiEw7dr4jPKuSTbeMkmuhp/57hbsUpPoyCKsmtzgMLVMa/HUXoLzh0dcg+fECQQD4AiITSFestrUmJmh+NzQsQkVfdqkC8oVbhIfCoo/uh+YMIvRmSD2oK9c9EIjrmeQxREriU4DGLbatbALJqB2HAkEA781kg3iYPOZkG9bm7bkMMqVNbgPjwgx93V2xReVKFOl9xb/WZweHhiwPaOy/F2BZNOzxjsO0BCjaacIl7bQbKQJABLI9pPHUvy+ChKNrjSBMe54RpDoh/y1Key4qR/Q+F305TPeIeztY94tE+yIKBbQXTxuE834zTQ1mjSgjcWAelwJASORFBlWU6QYbLf8v6NjT5V0r4SIbjDOh2rUNGrLsxtiGm6KJeH3oaxdfg8Ra/a8SzqyrbHr+cDk+0uDqCIwzqQJBAK1E2Y7SnH4QS+F50j/TMC1wEBmQjRBt+E0AjjMoti7O0zU/MzjvguIiAVeRuxs3AVRGmpw2yaYsUjky6nb9i2I=";
 
 
-    private static String urlStr = "https://pay.chanpay.com/mag-unify/gateway/receiveOrder.do";
+    private static String urlStr = "https://pay.chanpay.com/mag-unify/gateway/receiveOrder.do?";
     /**
      * 编码类型
      */
     private static String charset = "UTF-8";
+
+    /**
+     * 获取SimpleDateFormat
+     *
+     * @param parttern 日期格式
+     * @return SimpleDateFormat对象
+     * @throws RuntimeException 异常：非法日期格式
+     */
+    private static SimpleDateFormat getDateFormat(String parttern)
+            throws RuntimeException {
+        return new SimpleDateFormat(parttern);
+    }
 
     /**
      * 建立请求，以模拟远程HTTP的POST请求方式构造并获取钱包的处理结果
@@ -71,13 +86,14 @@ public class PayChannelChangJieController {
         }
 
         // 返回结果处理
-        HttpResponse response = httpProtocolHandler.execute(request, null, null);
-        if (response == null) {
-            return null;
-        }
-        String strResult = response.getStringResult();
+//        HttpResponse response = httpProtocolHandler.execute(request, null, null);
+//        if (response == null) {
+//            return null;
+//        }
+//        String strResult = response.getStringResult();
 
-        return strResult;
+        String str = JSONObject.toJSONString(request.getParameters());
+        return str;
     }
 
     /**
@@ -308,7 +324,7 @@ public class PayChannelChangJieController {
      * @param MERCHANT_PRIVATE_KEY 私钥
      * @throws Exception
      */
-    public void gatewayPost(Map<String, String> origMap, String charset, String MERCHANT_PRIVATE_KEY) {
+    public String gatewayPost(Map<String, String> origMap, String charset, String MERCHANT_PRIVATE_KEY) {
         String result = "";
         try {
             Map<String, String> sPara = buildRequestPara(origMap, "RSA", MERCHANT_PRIVATE_KEY, charset);
@@ -316,9 +332,7 @@ public class PayChannelChangJieController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(result);
-
-
+        return result;
     }
 
     /**
@@ -364,11 +378,12 @@ public class PayChannelChangJieController {
      */
     public Map<String, String> setCommonMap(Map<String, String> origMap) {
         // 2.1 基本参数
+        Date date = new Date();
         origMap.put("Version", "1.0");
         origMap.put("PartnerId", "200005300210");//商户号
         origMap.put("InputCharset", charset);// 字符集
-        origMap.put("TradeDate", "20190612");// 商户请求时间
-        origMap.put("TradeTime", "141200");// 商户请求时间
+        origMap.put("TradeDate", getDateFormat("yyyyMMdd").format(date));
+        origMap.put("TradeTime", getDateFormat("HHmmss").format(date));
         origMap.put("Memo", null);
         return origMap;
     }
@@ -392,8 +407,8 @@ public class PayChannelChangJieController {
         // 2.2 业务参数
         String trxId = Long.toString(System.currentTimeMillis());
         origMap.put("TrxId", trxId);// 订单号
-        origMap.put("OriPayTrxId", "101156414100736177980");// 原有支付请求订单号
-        origMap.put("SmsCode", "760745");// 短信验证码
+        origMap.put("OriPayTrxId", "101156419086843667614");// 原有支付请求订单号
+        origMap.put("SmsCode", "530314");// 短信验证码
         this.gatewayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
     }
 
@@ -408,9 +423,9 @@ public class PayChannelChangJieController {
         origMap = setCommonMap(origMap);
         origMap.put("Service", "nmg_zft_api_quick_payment");// 支付接口名称
         // 2.2 业务参数
-        origMap.put("TrxId", "2019031310452343143512");// 订单号
+        origMap.put("TrxId", "201903313102343143512");// 订单号
         origMap.put("OrdrName", "畅捷支付");// 商品名称
-        origMap.put("MerUserId", "101010123012011");// 用户标识（测试时需要替换一个新的meruserid）
+        origMap.put("MerUserId", "200005300210");// 用户标识（测试时需要替换一个新的meruserid）
         origMap.put("SellerId", "200005300210");// 子账户号
         origMap.put("SubMerchantNo", "200005300210");// 子商户号
         origMap.put("ExpiredTime", "40m");// 订单有效期
@@ -431,32 +446,92 @@ public class PayChannelChangJieController {
         this.gatewayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
     }
 
-    public static void main(String[] args) {
-        PayChannelChangJieController test = new PayChannelChangJieController();
-//        test.nmg_biz_api_auth_req();
-//        test.nmg_biz_api_quick_payment();
 
+    /**
+     * 4.2.1.1. api nmg_ebank_pay 下单支付(网银支付)
+     */
+    @RequestMapping("/pay/channel/changjiepay")
+    public String nmg_ebank_pay(@RequestParam String jsonParam) {
+        //log.info("jsonParam：" + jsonParam);
+        Date date = new Date();
+        Map<String, String> origMap = new HashMap<String, String>();
+        // 基本参数
+        origMap.put("Service", "nmg_ebank_pay");
+        origMap.put("Version", "1.0");
+        origMap.put("PartnerId", "200005280204");
+        origMap.put("InputCharset", charset);
+        origMap.put("TradeDate", getDateFormat("yyyyMMdd").format(date));
+        origMap.put("TradeTime", getDateFormat("HHmmss").format(date));
+        // origMap.put("SignType","RSA");
+        origMap.put("ReturnUrl", "http://www.baidu.com");// 前台跳转url
+        origMap.put("Memo", "备注");
 
-//		test.nmg_biz_api_auth_req(); // 2.1 鉴权请求---API
-//		test.nmg_page_api_auth_req(); //2.2 鉴权请求 ---畅捷前端
-//		test.nmg_api_auth_sms(); // 2.3 鉴权请求确认---API
-//		test.nmg_biz_api_quick_payment(); //2.4 支付请求---API
-        test.nmg_api_quick_payment_smsconfirm(); //2.5 支付确认---API
-        // 		test.nmg_zft_api_quick_payment(); //2.6 支付请求（直付通）
-//		test.nmg_quick_onekeypay();  //2.7 直接请求---畅捷前端
-//		test.nmg_nquick_onekeypay();  //2.8 支付请求---畅捷前端
-//		test.nmg_api_auth_info_qry(); // 2.9 鉴权绑卡查询
-//		test.nmg_api_auth_unbind(); // 鉴权解绑（普通）
-//		test.nmg_api_refund();//商户退款请求
-//
+        // 4.2.1.1. 网银支付 api 业务参数
+        origMap.put("OutTradeNo", Long.toString(System.currentTimeMillis()));
+        origMap.put("MchId", "200005280204");
+        origMap.put("MchName", "XX商户");
+        origMap.put("ChannelType", "02");
+        origMap.put("BizType", "01");
+        origMap.put("CardFlag", "01");
+        origMap.put("PayFlag", "00");
+        origMap.put("ServiceType", "01");
+        origMap.put("BankCode", "CCB");
+        origMap.put("OrderDesc", "XXXX商户订单");
+        origMap.put("BuyerId", "");
+        origMap.put("BuyerName", "");
+        origMap.put("BuyerMoblie", "");
+        origMap.put("BuyerAddress", "");
+        origMap.put("ConsigneeAddress", "");
+        origMap.put("BuyerCertType", "");
+        origMap.put("BuyerCertId", "");
 
-//		test.nmg_sms_resend(); //2.11 短信重发
-//		test.nmg_api_query_trade(); //2.14 订单状态查询
-//		test.nmg_api_refund_trade_file(); //2.12 退款对账单
-//		test.nmg_api_everyday_trade_file(); //2.15 交易对账单
-//		test.nmg_api_quick_payment_receiptconfirm();// 2.13 确认收货接口
-//		test.notifyVerify(); // 测试异步通知验签
+        origMap.put("TradeType", "00");
+        origMap.put("GoodsType", "00");
+        origMap.put("GoodsName", "测试");
+        origMap.put("GoodsDetail", "测试");
+        origMap.put("Currency", "00");
+        origMap.put("OrderStartTime", "20170731191900");
+        origMap.put("ExpiredTime", "2d");
+
+        origMap.put("OrderAmt", "1");
+        origMap.put("EnsureAmt", "");
+        origMap.put("NotifyUrl", "http://106.12.39.167:3000/nmg_quick_payment_notify");
+        origMap.put("UserIp", "127.0.0.1");
+        origMap.put("PreferentialAmt", "");
+        origMap.put("SplitList", "");
+        origMap.put("Ext", "{'ext':'ext1'}");
+
+        String result = this.gatewayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
+
+        Map<String, Object> requestParam = new HashMap<>();
+        JSONArray jsons = JSONArray.parseArray(result);
+        for (int i = 0; i < jsons.size(); i++) {
+            requestParam.put(jsons.getJSONObject(i).getString("name"),jsons.getJSONObject(i).getString("value"));
+        }
+        String json = JSONObject.toJSONString(requestParam);
+
+        return json;
     }
 
+    private void nmg_api_query_trade() {
 
+        Map<String, String> origMap = new HashMap<String, String>();
+        // 2.1 基本参数
+        origMap = setCommonMap(origMap);
+        origMap.put("Service", "nmg_api_quick_payment_smsconfirm");// 请求的接口名
+        // 2.2 业务参数
+        origMap.put("TrxId", "20170309152323322302027");// 订单号
+        origMap.put("OriPayTrxId", "101156414590397668372");// 原业务请求订单号
+        origMap.put("TradeType", "pay_order");// 原业务订单类型
+        origMap.put("SmsCode", "760745");
+        this.gatewayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
+    }
+
+    public static void main(String[] args) {
+        PayChannelChangJieController test = new PayChannelChangJieController();
+//        test.nmg_api_quick_payment_smsconfirm(); //2.5 支付确认---API
+//        test.nmg_zft_api_quick_payment(); //2.6 支付请求（直付通）
+//        test.nmg_ebank_pay(""); //网银支付
+//        test.nmg_api_query_trade();
+    }
 }

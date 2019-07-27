@@ -193,6 +193,19 @@ public class PayOrderServiceClient {
     }
 
     /**
+     * 处理CJ(畅捷)
+     * @param jsonParam
+     * @return
+     */
+    @HystrixCommand(fallbackMethod = "doChangJiePayFallback")
+    public String doChangJiPayReq(String jsonParam) {
+        return restTemplate.getForEntity("http://xxpay-service/pay/channel/changjiepay?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
+    }
+    public String doChangJiePayFallback(String jsonParam) {
+        return "error";
+    }
+
+    /**
      * 处理MIFU(敏付快捷支付获取短信)
      * @param jsonParam
      * @return
