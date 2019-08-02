@@ -46,8 +46,8 @@ public class PayConstant {
     public final static String CHANNEL_NAME_HUITONG = "HUITONG";//汇通
     public final static String CHANNEL_NAME_MF = "MF";        // 渠道名称:网关MF(敏付)
     public final static String CHANNEL_NAME_MFDF = "MFDF";        // 渠道名称:代付(敏付)
-    public final static String CHANNEL_NAME_CJ = "CJ";        // 渠道名称:畅捷
-    public final static String CHANNEL_NAME_CJ2 = "CJ2";        // 渠道名称:畅捷
+    public final static String CHANNEL_NAME_CJ_GATEWAY = "CJ_GATEWAY";        // 渠道名称:畅捷
+    public final static String CHANNEL_NAME_CJ_FAST_PAY = "CJ_FAST_PAY";        // 渠道名称:畅捷
 
 
     public final static String CHANNEL_NAME_MF_FAST_PAY = "MF_FAST_PAY";        // 渠道名称:网关MF(敏付)

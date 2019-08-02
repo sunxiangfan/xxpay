@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("/pay")
 public class PayController {
 
-    static final String baseUrl = "http://www.gzbenshun112.com:3010/api";
+    static final String baseUrl = "http://localhost:3010/api";
     static final String notifyUrl = "http://www.baidu.com";
 
     static final String mchId = "";
@@ -30,16 +30,16 @@ public class PayController {
     private AtomicLong seq = new AtomicLong(0L);
 
     @RequestMapping("/index")
-    public String index(ModelMap modelMap){
+    public String index(ModelMap modelMap) {
         return "pay/index";
     }
 
     @RequestMapping("/do_pay")
-    public  String doPay(@RequestParam HashMap<String,String> params, HttpServletResponse response){
-        String mchId="10007";
+    public String doPay(@RequestParam HashMap<String, String> params, HttpServletResponse response) {
+        String mchId = "10007";
 
         String goodsOrderId = String.format("%s%s%06d", "G", DateUtil.getSeqString(), (int) seq.getAndIncrement() % 1000000);
-        String payType=params.get("payType");
+        String payType = params.get("payType");
         //String amount=params.get("amount");
         //String centAmount= AmountUtil.convertDollar2Cent(amount);
         long amount = 200;
@@ -59,6 +59,11 @@ public class PayController {
         paramMap.put("param2", "");                         // 扩展参数2
         paramMap.put("extra", "");  // 附加参数
 
+        paramMap.put("BkAcctNo", "6222023500015959782");// 卡号
+        paramMap.put("IDNo", "231222199110194015");// 证件号
+        paramMap.put("CstmrNm", "孙祥帆");// 持卡人姓名
+        paramMap.put("MobNo", "13111110495");// 银行预留手机号
+
         String reqSign = PayDigestUtil.getSign(paramMap, reqKey);
         paramMap.put("sign", reqSign);   // 签名
         String reqData = "params=" + paramMap.toJSONString();
@@ -76,12 +81,13 @@ public class PayController {
         }
         return null;
     }
+
     @RequestMapping(value = "/fast_pay", method = RequestMethod.GET)
     @ResponseBody
     public String fast_pay(HttpServletResponse response) {
         String goodsOrderId = String.format("%s%s%06d", "G", DateUtil.getSeqString(), (int) seq.getAndIncrement() % 1000000);
 
-        String mchId="10003";
+        String mchId = "10003";
         long amount = 200;
         JSONObject paramMap = new JSONObject();
         paramMap.put("mchId", mchId);                       // 商户ID
@@ -98,9 +104,9 @@ public class PayController {
         paramMap.put("param1", "");                         // 扩展参数1
         paramMap.put("param2", "");                         // 扩展参数2
         paramMap.put("extra", "");  // 附加参数
-        paramMap.put("bankCode","CIB");//测试敏付
-        paramMap.put("cardNo","6214623521001915597");//测试敏付
-        paramMap.put("mobile","18855782343");//测试敏付
+        paramMap.put("bankCode", "CIB");//测试敏付
+        paramMap.put("cardNo", "6214623521001915597");//测试敏付
+        paramMap.put("mobile", "18855782343");//测试敏付
         String reqSign = PayDigestUtil.getSign(paramMap, reqKey);
         paramMap.put("sign", reqSign);   // 签名
         String reqData = "params=" + paramMap.toJSONString();
@@ -126,7 +132,7 @@ public class PayController {
     public String gateway(HttpServletResponse response) {
         String goodsOrderId = String.format("%s%s%06d", "G", DateUtil.getSeqString(), (int) seq.getAndIncrement() % 1000000);
 
-        String mchId="10002";
+        String mchId = "10002";
         long amount = 1;
         JSONObject paramMap = new JSONObject();
         paramMap.put("mchId", mchId);                       // 商户ID

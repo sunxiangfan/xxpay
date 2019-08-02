@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -23,7 +22,10 @@ import org.xxpay.web.service.channel.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author dingzhiwei jmdhappy@126.com
@@ -74,22 +76,22 @@ public class PayOrderController {
     private PayChannel4HuitongService payChannel4HuitongService;
 
     @RequestMapping(value = "api/pay/testKj")
-    public Object testKj(@RequestParam Map<String, String> params){
+    public Object testKj(@RequestParam Map<String, String> params) {
         return payOrderServiceClient.doMinFuMessageVerifyPayReq(getJsonParam("payOrder", params));
     }
 
     //测试敏付企业转账
     @RequestMapping(value = "api/pay/transfer")
-    public Object testtransfer(){
-        Map<String ,Object> map=new HashMap<>();
-        map.put("id",new Date().getTime());
-        map.put("bankCode","GDB");
-        map.put("cardNo","6214623521001915597");
-        map.put("bankName","王魁圆");
-        map.put("provinceCode","31");
-        map.put("bankCity","2900");
-        map.put("amount","2");
-        map.put("mchId","10007");
+    public Object testtransfer() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", new Date().getTime());
+        map.put("bankCode", "GDB");
+        map.put("cardNo", "6214623521001915597");
+        map.put("bankName", "王魁圆");
+        map.put("provinceCode", "31");
+        map.put("bankCity", "2900");
+        map.put("amount", "2");
+        map.put("mchId", "10007");
         return payOrderServiceClient.doMinFuTransferPayReq(getJsonParam("payOrder", map));
     }
 
@@ -257,33 +259,33 @@ public class PayOrderController {
                 case PayConstant.CHANNEL_NAME_MF: {
                     String resp = payOrderServiceClient.doMinFuPayReq(getJsonParam("payOrder", payOrder));
                     model.put("method", "post");
-                    Map object1=JSONObject.parseObject(resp,Map.class);
+                    Map object1 = JSONObject.parseObject(resp, Map.class);
                     model.put("action", object1.get("payUrl"));
                     model.put("payParams", object1);
                     return "payForm";
                 }
-                case PayConstant.CHANNEL_NAME_CJ: {
-                    String resp = payOrderServiceClient.doChangJiPayReq(getJsonParam("payOrder", payOrder));
+                case PayConstant.CHANNEL_NAME_CJ_GATEWAY: {
+                    String resp = payOrderServiceClient.nmg_ebank_pay(getJsonParam("payOrder", payOrder));
                     model.put("method", "post");
-                    Map object1=JSONObject.parseObject(resp,Map.class);
+                    Map object1 = JSONObject.parseObject(resp, Map.class);
                     System.out.println(object1);
                     model.put("action", "https://pay.chanpay.com/mag-unify/gateway/receiveOrder.do?");
-                    model.put("payParams",object1);
+                    model.put("payParams", object1);
                     return "payForm";
                 }
-                case PayConstant.CHANNEL_NAME_CJ2: {
-                    String resp = payOrderServiceClient.doChangJiPayReq(getJsonParam("payOrder", payOrder));
+                case PayConstant.CHANNEL_NAME_CJ_FAST_PAY: {
+                    String resp = payOrderServiceClient.nmg_zft_api_quick_payment(getJsonParam("payOrder", payOrder));
                     model.put("method", "post");
-                    Map object1=JSONObject.parseObject(resp,Map.class);
+                    Map object1 = JSONObject.parseObject(resp, Map.class);
                     System.out.println(object1);
                     model.put("action", "https://pay.chanpay.com/mag-unify/gateway/receiveOrder.do?");
-                    model.put("payParams",object1);
+                    model.put("payParams", object1);
                     return "payForm";
                 }
                 case PayConstant.CHANNEL_NAME_MF_FAST_PAY: {
-                    String resp =  payOrderServiceClient.doMinFuMessagePayReq(getJsonParam("payOrder", payOrder));
+                    String resp = payOrderServiceClient.doMinFuMessagePayReq(getJsonParam("payOrder", payOrder));
                     model.put("method", "post");
-                    Map object1=JSONObject.parseObject(resp,Map.class);
+                    Map object1 = JSONObject.parseObject(resp, Map.class);
                     model.put("action", "http://localhost:3010/api/pay/testKj");
                     model.put("payParams", object1);
                     System.out.println(JSONObject.toJSONString(model));
@@ -340,6 +342,12 @@ public class PayOrderController {
             String sign = params.getString("sign");                // 签名
             String subject = params.getString("subject");            // 商品主题
             String body = params.getString("body");                    // 商品描述信息
+            String BkAcctNo = params.getString("BkAcctNo");//银行卡号
+            String IDNo = params.getString("IDNo");//证件号
+            String CstmrNm = params.getString("CstmrNm");//持卡人姓名
+            String MobNo = params.getString("MobNo");//银行预留手机号
+
+
             // 验证请求参数有效性（必选项）
             Assert.isTrue(StringUtils.isNotBlank(mchId), "request params[mchId] error.");
             Assert.isTrue(StringUtils.isNotBlank(mchOrderNo), "request params[mchOrderNo] error.");
@@ -410,12 +418,7 @@ public class PayOrderController {
             payOrder.put("payChannelName", payChannelName);
             payOrder.put("amount", amount);
             payOrder.put("payType", payType);
-
-//            long actualPayAmount= AmountUtil.randomSuffix(amount);
-//            payOrder.put("payAmount",actualPayAmount);
-
             payOrder.put("payAmount", amount);
-
             payOrder.put("platformActualAmount", platformActualAmount);
             payOrder.put("subMchActualAmount", subMchActualAmount);
             payOrder.put("platformDeductionRate", platformDeductionRate);
@@ -431,13 +434,13 @@ public class PayOrderController {
             payOrder.put("param2", param2);
             payOrder.put("frontUrl", frontUrl);
             payOrder.put("notifyUrl", notifyUrl);
-            payOrder.put("bankCode",params.getString("bankCode"));
-            payOrder.put("cardNo",params.getString("cardNo"));
-
-            payOrder.put("mobile",params.getString("mobile"));
-
-            //payOrder.put("bankCode",params.getString("bankCode"));
-
+            payOrder.put("bankCode", params.getString("bankCode"));
+            payOrder.put("cardNo", params.getString("cardNo"));
+            payOrder.put("mobile", params.getString("mobile"));
+            payOrder.put("BkAcctNo", BkAcctNo);
+            payOrder.put("IDNo", IDNo);
+            payOrder.put("CstmrNm", CstmrNm);
+            payOrder.put("MobNo", MobNo);
             return payOrder;
         } catch (IllegalArgumentException ex) {
             errorMessage = ex.getMessage();

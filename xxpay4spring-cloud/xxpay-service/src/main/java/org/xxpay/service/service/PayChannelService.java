@@ -43,6 +43,6 @@ public class PayChannelService {
     public PayChannel selectMchPayChannelByMchIdAndPayType(String mchId, String payType){
         List<PayChannel> payChannels=payChannelMapper.selectByMchIdAndPayType(mchId,payType);
         if(CollectionUtils.isEmpty(payChannels)) return null;
-        return  payChannels.get(1);
+        return  payChannels.get(0);
     }
 }

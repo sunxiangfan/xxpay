@@ -193,17 +193,48 @@ public class PayOrderServiceClient {
     }
 
     /**
-     * 处理CJ(畅捷)
+     * 处理CJ(畅捷网银)
      * @param jsonParam
      * @return
      */
     @HystrixCommand(fallbackMethod = "doChangJiePayFallback")
-    public String doChangJiPayReq(String jsonParam) {
-        return restTemplate.getForEntity("http://xxpay-service/pay/channel/changjiepay?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
+    public String nmg_ebank_pay(String jsonParam) {
+        return restTemplate.getForEntity("http://xxpay-service/pay/channel/nmg_ebank_pay?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
     }
+
     public String doChangJiePayFallback(String jsonParam) {
         return "error";
     }
+
+    /**
+     * 处理CJ(畅捷快捷)
+     * @param jsonParam
+     * @return
+     */
+    @HystrixCommand(fallbackMethod = "doChangJiePayFallback")
+    public String nmg_zft_api_quick_payment(String jsonParam) {
+        return restTemplate.getForEntity("http://xxpay-service/pay/channel/nmg_zft_api_quick_payment?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
+    }
+
+//    /**
+//     * 处理CJ(畅捷快捷确认)
+//     * @param jsonParam
+//     * @return
+//     */
+//    @HystrixCommand(fallbackMethod = "doChangJiePayFallback")
+//    public String nmg_api_quick_payment_smsconfirm(String jsonParam) {
+//        return restTemplate.getForEntity("http://xxpay-service/pay/channel/nmg_api_quick_payment_smsconfirm?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
+//    }
+
+//    /**
+//     * 处理CJ(畅捷代付)
+//     * @param jsonParam
+//     * @return
+//     */
+//    @HystrixCommand(fallbackMethod = "doChangJiePayFallback")
+//    public String doChangJiPayReq(String jsonParam) {
+//        return restTemplate.getForEntity("http://xxpay-service/pay/channel/nmg_ebank_pay?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
+//    }
 
     /**
      * 处理MIFU(敏付快捷支付获取短信)

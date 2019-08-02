@@ -86,11 +86,11 @@
         </div>
     </div>
     <div class="layui-footer footer footer-demo" id="admin-footer">
-        <div class="layui-main">
-            <p>2019 &copy;
-                <a href="">鑫享付商户后台</a>
-            </p>
-        </div>
+<#--        <div class="layui-main">-->
+<#--            <p>2019 &copy;-->
+<#--                <a href="">鑫享付商户后台</a>-->
+<#--            </p>-->
+<#--        </div>-->
     </div>
     <div class="site-tree-mobile layui-hide">
         <i class="layui-icon">&#xe602;</i>
