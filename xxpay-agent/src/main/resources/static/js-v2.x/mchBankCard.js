@@ -44,7 +44,7 @@ layui.define(['form', 'table'], function (exports) {
             scope.layerTips.alert('请输入有效的提现金额！');
             return;
         }
-        if (applyAmount < 100) {
+        if (applyAmount < 2) {
             scope.layerTips.alert('单笔提现金额不能少于100元！');
             return;
         }
