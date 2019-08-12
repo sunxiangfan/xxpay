@@ -443,7 +443,6 @@ public class PayChannelChangJieController {
         // 2.1 基本参数
         Date date = new Date();
         origMap.put("Version", "1.0");
-        origMap.put("PartnerId", "200005300210");//商户号
         origMap.put("InputCharset", charset);// 字符集
         origMap.put("TradeDate", getDateFormat("yyyyMMdd").format(date));
         origMap.put("TradeTime", getDateFormat("HHmmss").format(date));
@@ -453,8 +452,13 @@ public class PayChannelChangJieController {
 
     @PostMapping("/nmg_quick_payment_notify")
     public String nmg_quick_payment_notify(@RequestBody ChangJieEntity changJieEntity) {
-        System.out.println(JSON.toJSONString(changJieEntity));
+        log.info("nmg_quick_payment_notify:" + JSON.toJSONString(changJieEntity));
         return "success";
+    }
+
+    @PostMapping("/api/pay/cjreq")
+    public Object cjreq(@RequestParam Map<String, String> params) {
+        return params;
     }
 
     /**
@@ -463,7 +467,39 @@ public class PayChannelChangJieController {
 
     @RequestMapping("/pay/channel/nmg_api_quick_payment_smsconfirm")
     public String nmg_api_quick_payment_smsconfirm(@RequestParam String jsonParam) {
-        JSONObject paramObj = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
+        JSONObject payOrders = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
+        Map<String, String> origMap = new HashMap<String, String>();
+
+        String mchId = payOrders.getString("mchId");
+        String SmsCode = payOrders.getString("SmsCode");
+        String trxId = payOrders.getString("trxId");
+        String OriPayTrxId = payOrders.getString("OriPayTrxId");
+
+        // 2.1 基本参数
+        origMap = setCommonMap(origMap);
+        origMap.put("Service", "nmg_api_quick_payment_smsconfirm");// 请求的接口名称
+        // 2.2 业务参数
+        origMap.put("TrxId", trxId);// 订单号
+        origMap.put("OriPayTrxId", OriPayTrxId);// 原有支付请求订单号
+        origMap.put("SmsCode", SmsCode);// 短信验证码
+
+        String merchantId = "";
+        if (mchId.equals("10007")) {
+            merchantId = "200005280204";
+        } else if (mchId.equals("10003")) {
+            merchantId = "200005300210";
+        } else if (mchId.equals("10017")) {
+            merchantId = "200005300210";
+        } else {
+            merchantId = "200005300210";
+        }
+
+        origMap.put("PartnerId", merchantId);//商户号
+        String result = fastpayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
+        return result;
+    }
+
+    public String nmg_api_quick_payment_smsconfirm1() {
 
         Map<String, String> origMap = new HashMap<String, String>();
         // 2.1 基本参数
@@ -472,11 +508,12 @@ public class PayChannelChangJieController {
         // 2.2 业务参数
         String trxId = Long.toString(System.currentTimeMillis());
         origMap.put("TrxId", trxId);// 订单号
-        origMap.put("OriPayTrxId", "201904311102333143512");// 原有支付请求订单号
-        origMap.put("SmsCode", "023011");// 短信验证码
+        origMap.put("OriPayTrxId", "G20190806213043000000");// 原有支付请求订单号
+        origMap.put("SmsCode", "801251");// 短信验证码
         String result = fastpayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
         return result;
     }
+
 
     /**
      * 2.6 支付请求接口(直付通) api nmg_zft_api_quick_payment
@@ -499,16 +536,20 @@ public class PayChannelChangJieController {
             merchantId = "200005280204";
         } else if (mchId.equals("10003")) {
             merchantId = "200005300210";
-        }
-        // 2.1 基本参数
+        } else if (mchId.equals("10017")) {
+            merchantId = "200005300210";
+        } else {
+            merchantId = "200005300210";
+        }        // 2.1 基本参数
         origMap = setCommonMap(origMap);
         origMap.put("Service", "nmg_zft_api_quick_payment");// 支付接口名称
         // 2.2 业务参数
         origMap.put("TrxId", mchOrderNo);// 订单号
-        origMap.put("OrdrName", subject);// 商品名称
+        origMap.put("OrdrName", "交易");// 商品名称
         origMap.put("MerUserId", merchantId);// 用户标识（测试时需要替换一个新的meruserid）
         origMap.put("SellerId", merchantId);// 子账户号
         origMap.put("SubMerchantNo", merchantId);// 子商户号
+        origMap.put("PartnerId", merchantId);//商户号
         origMap.put("ExpiredTime", "40m");// 订单有效期
         origMap.put("BkAcctTp", "01");// 卡类型（00 – 银行贷记卡;01 – 银行借记卡;）
         origMap.put("BkAcctNo", this.encrypt(BkAcctNo, MERCHANT_PUBLIC_KEY, charset));// 卡号
@@ -543,6 +584,10 @@ public class PayChannelChangJieController {
         if (mchId.equals("10007")) {
             merchantId = "200005280204";
         } else if (mchId.equals("10003")) {
+            merchantId = "200005300210";
+        } else if (mchId.equals("10017")) {
+            merchantId = "200005300210";
+        } else {
             merchantId = "200005300210";
         }
         Date date = new Date();
@@ -579,8 +624,8 @@ public class PayChannelChangJieController {
 
         origMap.put("TradeType", "00");
         origMap.put("GoodsType", "00");
-        origMap.put("GoodsName", subject);
-        origMap.put("GoodsDetail", subject);
+        origMap.put("GoodsName", "交易");
+        origMap.put("GoodsDetail", "交易");
         origMap.put("Currency", "00");
         origMap.put("OrderStartTime", "20170731191900");
         origMap.put("ExpiredTime", "2d");
@@ -630,11 +675,11 @@ public class PayChannelChangJieController {
         this.fastpayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
     }
 
-    //   public static void main(String[] args) {
-    //       PayChannelChangJieController test = new PayChannelChangJieController();
-//        test.nmg_api_quick_payment_smsconfirm(); //2.5 支付确认---API
-    //       test.nmg_zft_api_quick_payment(); //2.6 支付请求（直付通）
-//        test.nmg_ebank_pay(""); //网银支付
-    //       test.nmg_api_query_trade();
-    //  }
+//    public static void main(String[] args) {
+//        PayChannelChangJieController test = new PayChannelChangJieController();
+//        test.nmg_api_quick_payment_smsconfirm1(); //2.5 支付确认---API
+//        //       test.nmg_zft_api_quick_payment(); //2.6 支付请求（直付通）
+////        test.nmg_ebank_pay(""); //网银支付
+//        //       test.nmg_api_query_trade();
+//    }
 }

@@ -216,6 +216,16 @@ public class PayOrderServiceClient {
         return restTemplate.getForEntity("http://xxpay-service/pay/channel/nmg_zft_api_quick_payment?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
     }
 
+    /**
+     * 处理CJ(畅捷快捷)
+     * @param jsonParam
+     * @return
+     */
+    @HystrixCommand(fallbackMethod = "doChangJiePayFallback")
+    public String nmg_api_quick_payment_smsconfirm(String jsonParam) {
+        return restTemplate.getForEntity("http://xxpay-service/pay/channel/nmg_api_quick_payment_smsconfirm?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
+    }
+
 //    /**
 //     * 处理CJ(畅捷快捷确认)
 //     * @param jsonParam

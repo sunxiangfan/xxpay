@@ -10,6 +10,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.xxpay.common.constant.PayConstant;
@@ -96,6 +97,20 @@ public class PayOrderController {
     }
 
     /**
+     * zhifu QUEREN 接口:
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "api/pay/smsconfirm")
+    public Object smsconfirm(@RequestBody Map<String, String> params, HttpServletResponse response, ModelMap model) {
+        _log.info("###### smsconfirm ######" + JSON.toJSONString(params));
+        String resp = payOrderServiceClient.nmg_api_quick_payment_smsconfirm(JSON.toJSONString(params));
+        String retMsg = XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, resp, null, null));
+        return writeResponse(response, retMsg);
+    }
+
+    /**
      * 统一下单接口:
      * 1)先验证接口参数以及签名信息
      * 2)验证通过创建支付订单
@@ -113,7 +128,6 @@ public class PayOrderController {
         _log.info("{}/pay/create_order, host:{}, service_id:{}, params:{}", logPrefix, instance.getHost(), instance.getServiceId(), params);
         String retMsg = null;
         try {
-//        	JSONObject po = (JSONObject) JSONObject.parse(params.get("params"));
             JSONObject po = (JSONObject) JSON.toJSON(params);
             String payType = po.getString("payType");
             JSONObject payOrder = null;
@@ -275,12 +289,13 @@ public class PayOrderController {
                 }
                 case PayConstant.CHANNEL_NAME_CJ_FAST_PAY: {
                     String resp = payOrderServiceClient.nmg_zft_api_quick_payment(getJsonParam("payOrder", payOrder));
-                    model.put("method", "post");
-                    Map object1 = JSONObject.parseObject(resp, Map.class);
-                    System.out.println(object1);
-                    model.put("action", "https://pay.chanpay.com/mag-unify/gateway/receiveOrder.do?");
-                    model.put("payParams", object1);
-                    return "payForm";
+//                    model.put("method", "post");
+//                    Map object1 = JSONObject.parseObject(resp, Map.class);
+//                    System.out.println(object1);
+//                    model.put("action", "http://localhost:3000/api/pay/cjreq");
+//                    model.put("payParams", object1);
+                    retMsg = XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, resp, null, null));
+                    return writeResponse(response, retMsg);
                 }
                 case PayConstant.CHANNEL_NAME_MF_FAST_PAY: {
                     String resp = payOrderServiceClient.doMinFuMessagePayReq(getJsonParam("payOrder", payOrder));
@@ -357,12 +372,9 @@ public class PayOrderController {
             Long amount = Long.parseLong(strAmount);
             Assert.isTrue(amount.compareTo(0L) > 0, "request params[amount] error.");
             Assert.isTrue(StringUtils.isNotBlank(currency), "request params[currency] error.");
-//            Assert.isTrue(StringUtils.isNotBlank(frontUrl), "request params[frontUrl] error.");
-            //Assert.isTrue(StringUtils.isNotBlank(notifyUrl), "request params[notifyUrl] error.");
             Assert.isTrue(StringUtils.isNotBlank(subject), "request params[subject] error.");
             Assert.isTrue(StringUtils.isNotBlank(body), "request params[body] error.");
             Assert.isTrue(StringUtils.isNotBlank(sign), "request params[sign] error.");
-//            Assert.isTrue(StringUtils.isNotBlank(sign), "request params[sign] error.");
 
             // 查询商户信息
             JSONObject mchInfo = getMchInfo(mchId);

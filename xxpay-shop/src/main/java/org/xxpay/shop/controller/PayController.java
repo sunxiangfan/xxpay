@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("/pay")
 public class PayController {
 
-    static final String baseUrl = "http://localhost:3010/api";
+    static final String baseUrl = "http://106.12.13.47:3010/api";
     static final String notifyUrl = "http://www.baidu.com";
 
     static final String mchId = "";
@@ -36,7 +36,7 @@ public class PayController {
 
     @RequestMapping("/do_pay")
     public String doPay(@RequestParam HashMap<String, String> params, HttpServletResponse response) {
-        String mchId = "10007";
+        String mchId = "10003";
 
         String goodsOrderId = String.format("%s%s%06d", "G", DateUtil.getSeqString(), (int) seq.getAndIncrement() % 1000000);
         String payType = params.get("payType");
@@ -58,7 +58,7 @@ public class PayController {
         paramMap.put("param1", "");                         // 扩展参数1
         paramMap.put("param2", "");                         // 扩展参数2
         paramMap.put("extra", "");  // 附加参数
-
+        paramMap.put("bankCode", "ICBC");//测试
         paramMap.put("BkAcctNo", "6222023500015959782");// 卡号
         paramMap.put("IDNo", "231222199110194015");// 证件号
         paramMap.put("CstmrNm", "孙祥帆");// 持卡人姓名
