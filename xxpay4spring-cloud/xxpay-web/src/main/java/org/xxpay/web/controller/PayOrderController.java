@@ -10,6 +10,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -106,6 +107,14 @@ public class PayOrderController {
     public Object smsconfirm(@RequestBody Map<String, String> params, HttpServletResponse response, ModelMap model) {
         _log.info("###### smsconfirm ######" + JSON.toJSONString(params));
         String resp = payOrderServiceClient.nmg_api_quick_payment_smsconfirm(JSON.toJSONString(params));
+        String retMsg = XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, resp, null, null));
+        return writeResponse(response, retMsg);
+    }
+
+    @RequestMapping("api/pay/query_order")
+    public String query_order(@RequestBody Map<String, Object> params, HttpServletResponse response, ModelMap model) {
+        _log.info("query_order:" + JSON.toJSONString(params));
+        String resp = payOrderServiceClient.query_order(JSON.toJSONString(params));
         String retMsg = XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, resp, null, null));
         return writeResponse(response, retMsg);
     }
@@ -289,13 +298,17 @@ public class PayOrderController {
                 }
                 case PayConstant.CHANNEL_NAME_CJ_FAST_PAY: {
                     String resp = payOrderServiceClient.nmg_zft_api_quick_payment(getJsonParam("payOrder", payOrder));
-//                    model.put("method", "post");
-//                    Map object1 = JSONObject.parseObject(resp, Map.class);
-//                    System.out.println(object1);
-//                    model.put("action", "http://localhost:3000/api/pay/cjreq");
-//                    model.put("payParams", object1);
                     retMsg = XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, resp, null, null));
                     return writeResponse(response, retMsg);
+                }
+                case PayConstant.CHANNEL_NAME_CJ_FAST_PAY_WAP: {
+                    String resp = payOrderServiceClient.nmg_quick_onekeypay(getJsonParam("payOrder", payOrder));
+                    model.put("method", "post");
+                    Map object1 = JSONObject.parseObject(resp, Map.class);
+                    System.out.println(object1);
+                    model.put("action", "https://pay.chanpay.com/mag-unify/gateway/receiveOrder.do?");
+                    model.put("payParams", object1);
+                    return "payForm";
                 }
                 case PayConstant.CHANNEL_NAME_MF_FAST_PAY: {
                     String resp = payOrderServiceClient.doMinFuMessagePayReq(getJsonParam("payOrder", payOrder));

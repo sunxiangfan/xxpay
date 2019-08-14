@@ -1,14 +1,24 @@
 package org.xxpay.service.controller;
 
+import com.alibaba.druid.util.HttpClientUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.NameValuePair;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.xxpay.common.constant.PayConstant;
+import org.xxpay.common.util.HttpClientUtilNew;
 import org.xxpay.common.util.MyBase64;
 import org.xxpay.common.util.MyLog;
+import org.xxpay.common.util.PayDigestUtil;
+import org.xxpay.dal.dao.mapper.MchCompanyMapper;
+import org.xxpay.dal.dao.mapper.MchInfoMapper;
+import org.xxpay.dal.dao.model.MchInfo;
+import org.xxpay.dal.dao.model.PayOrder;
 import org.xxpay.service.channel.changjie.*;
+import org.xxpay.service.service.PayOrderService;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
@@ -25,6 +35,11 @@ import java.util.*;
  */
 @RestController
 public class PayChannelChangJieController {
+
+    @Autowired
+    private PayOrderService payOrderService;
+    @Autowired
+    private MchInfoMapper mchInfoMapper;
 
     private final MyLog log = MyLog.getLog(PayChannelChangJieController.class);
 
@@ -87,10 +102,6 @@ public class PayChannelChangJieController {
         request.setParameters(generatNameValuePair(createLinkRequestParas(sPara), inputCharset));
         request.setUrl(gatewayUrl);
         System.out.println(gatewayUrl + "" + httpProtocolHandler.toString(generatNameValuePair(createLinkRequestParas(sPara), inputCharset)));
-        if (sParaTemp.get("Service").equalsIgnoreCase("nmg_quick_onekeypay") || sParaTemp.get("Service").equalsIgnoreCase("nmg_nquick_onekeypay")) {
-            return null;
-        }
-
         // 返回结果处理
 //        HttpResponse response = httpProtocolHandler.execute(request, null, null);
 //        if (response == null) {
@@ -451,22 +462,119 @@ public class PayChannelChangJieController {
     }
 
     @PostMapping("/nmg_quick_payment_notify")
-    public String nmg_quick_payment_notify(@RequestBody ChangJieEntity changJieEntity) {
-        log.info("nmg_quick_payment_notify:" + JSON.toJSONString(changJieEntity));
+    public String nmg_quick_payment_notify(@RequestParam Map<String, Object> params) {
+        log.info("nmg_quick_payment_notify:" + JSON.toJSONString(params));
+        String mchOrderNo = params.get("outer_trade_no").toString();
+        PayOrder payOrder = payOrderService.selectPayOrderByMchOrderNo(mchOrderNo);
+        if (null == payOrder || payOrder.getStatus() == PayConstant.PAY_STATUS_SUCCESS) {
+            return "success";
+        }
+        payOrderService.updateStatus4Success(payOrder.getId(), null);
+        MchInfo info = mchInfoMapper.selectByPrimaryKey(payOrder.getMchId());
+
+        /**
+         * 冻结金额(单位分)
+         */
+        Long lockAmount = info.getLockAmount();
+        info.setId(payOrder.getMchId());
+        info.setLockAmount(lockAmount + payOrder.getSubMchActualAmount());
+        mchInfoMapper.updateByPrimaryKey(info);
+
+        String result = "";
+        String reqKey = "yN8Oj38HY88OIIV4VvYAQdKqYrdVhCYCvYRQxbX34DVSYQ8RqwKn4Vh3jqvp3V8d4YQV7VYVHr44NbArhXdxwqKp";
+        Map<String, Object> map = new HashMap<>();
+        map.put("outer_trade_no", payOrder.getMchOrderNo());
+        map.put("extension", "交易成功");
+
+        String reqSign = PayDigestUtil.getSign(map, reqKey);
+        map.put("sign", reqSign);
+        try {
+            result = HttpClientUtilNew.doPost(payOrder.getNotifyUrl(), map);
+        } catch (Exception e) {
+            log.error("回调失败", e);
+        }
+        //log.info("回调响应：" + result);
         return "success";
     }
 
-    @PostMapping("/api/pay/cjreq")
-    public Object cjreq(@RequestParam Map<String, String> params) {
-        return params;
+    @RequestMapping("/pay/channel/query_order")
+    public Object query_order(@RequestBody Map<String, Object> params) {
+        log.info("query_order:" + JSON.toJSONString(params));
+        String mchOrderNo = params.get("mchOrderNo").toString();
+        PayOrder payOrder = payOrderService.selectPayOrderByMchOrderNo(mchOrderNo);
+        return JSON.toJSONString(payOrder);
+    }
+
+
+    /**
+     * 2.2.7. 直接支付请求接口(畅捷前台)  nmg_quick_onekeypay
+     */
+    @RequestMapping("/pay/channel/nmg_quick_onekeypay")
+    private String nmg_quick_onekeypay(@RequestParam String jsonParam) {
+        JSONObject paramObj = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
+        JSONObject payOrders = paramObj.getJSONObject("payOrder");
+        Map<String, String> origMap = new HashMap<String, String>();
+        String mchId = payOrders.getString("mchId");
+        String amount = changeF2Y(payOrders.getString("amount"));
+        String mchOrderNo = payOrders.getString("mchOrderNo");
+        String BkAcctNo = payOrders.getString("BkAcctNo");
+        String IDNo = payOrders.getString("IDNo");
+        String CstmrNm = payOrders.getString("CstmrNm");
+        String MobNo = payOrders.getString("MobNo");
+        String frontUrl = payOrders.getString("frontUrl");
+        String merchantId = "";
+        if (mchId.equals("10007")) {
+            merchantId = "200005280204";
+        } else if (mchId.equals("10024")) {
+            merchantId = "200005280204";
+        } else if (mchId.equals("10003")) {
+            merchantId = "200005300210";
+        } else if (mchId.equals("10017")) {
+            merchantId = "200005300210";
+        } else {
+            merchantId = "200005300210";
+        }
+        origMap = setCommonMap(origMap);
+        origMap.put("PartnerId", merchantId);//商户号
+        origMap.put("Service", "nmg_quick_onekeypay");// 直接支付
+        origMap.put("TrxId", mchOrderNo);// 订单号
+        origMap.put("OrdrName", "交易"); // 商品名称
+        origMap.put("OrdrDesc", "[{'商品型号':'交易','商品性能':'交易'}]");// 商品描述
+        origMap.put("MerUserId", merchantId);// 用户标识（测试时需要替换一个新的meruserid）
+        origMap.put("SellerId", merchantId);// 生产环境
+        origMap.put("SubMerchantNo", merchantId);// 子商户号
+        origMap.put("ExpiredTime", "40m");// 订单有效期
+        origMap.put("BkAcctTp", "01");// 卡类型（00 – 银行贷记卡;01 – 银行借记卡;）
+        origMap.put("BkAcctNo", this.encrypt(BkAcctNo, MERCHANT_PUBLIC_KEY, charset));// 卡号
+        origMap.put("IDTp", "01");// 证件类型 （目前只支持身份证 01：身份证）
+        origMap.put("IDNo", this.encrypt(IDNo, MERCHANT_PUBLIC_KEY, charset));// 证件号
+        origMap.put("CstmrNm", this.encrypt(CstmrNm, MERCHANT_PUBLIC_KEY, charset));// 持卡人姓名
+        origMap.put("MobNo", this.encrypt(MobNo, MERCHANT_PUBLIC_KEY, charset));// 银行预留手机号
+        origMap.put("TrxAmt", amount);// 交易金额
+        origMap.put("TradeType", "11");// 交易类型
+        origMap.put("AccessChannel", "web");//用户终端类型  web  wap
+        origMap.put("ReturnUrl", frontUrl);//同步回调地址
+        origMap.put("NotifyUrl", "http://106.12.13.47:3000/nmg_quick_payment_notify");//异步回调地址
+        origMap.put("Extension", "");//扩展字段
+
+        String result = this.gatewayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
+
+        Map<String, Object> requestParam = new HashMap<>();
+        JSONArray jsons = JSONArray.parseArray(result);
+        for (int i = 0; i < jsons.size(); i++) {
+            requestParam.put(jsons.getJSONObject(i).getString("name"), jsons.getJSONObject(i).getString("value"));
+        }
+        String json = JSON.toJSONString(requestParam);
+        return json;
     }
 
     /**
      * 2.5 支付确认接口： api nmg_api_quick_payment_smsconfirm
      */
-
     @RequestMapping("/pay/channel/nmg_api_quick_payment_smsconfirm")
     public String nmg_api_quick_payment_smsconfirm(@RequestParam String jsonParam) {
+        log.info("nmg_api_quick_payment_smsconfirm:" + jsonParam);
+
         JSONObject payOrders = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
         Map<String, String> origMap = new HashMap<String, String>();
 
@@ -486,6 +594,8 @@ public class PayChannelChangJieController {
         String merchantId = "";
         if (mchId.equals("10007")) {
             merchantId = "200005280204";
+        } else if (mchId.equals("10024")) {
+            merchantId = "200005280204";
         } else if (mchId.equals("10003")) {
             merchantId = "200005300210";
         } else if (mchId.equals("10017")) {
@@ -493,7 +603,6 @@ public class PayChannelChangJieController {
         } else {
             merchantId = "200005300210";
         }
-
         origMap.put("PartnerId", merchantId);//商户号
         String result = fastpayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
         return result;
@@ -507,9 +616,10 @@ public class PayChannelChangJieController {
         origMap.put("Service", "nmg_api_quick_payment_smsconfirm");// 请求的接口名称
         // 2.2 业务参数
         String trxId = Long.toString(System.currentTimeMillis());
-        origMap.put("TrxId", trxId);// 订单号
-        origMap.put("OriPayTrxId", "G20190806213043000000");// 原有支付请求订单号
-        origMap.put("SmsCode", "801251");// 短信验证码
+        origMap.put("PartnerId", "200005300210");//商户号
+        origMap.put("TrxId", trxId);
+        origMap.put("OriPayTrxId", "G20190813093712000003");// 原有支付请求订单号
+        origMap.put("SmsCode", "548276");// 短信验证码
         String result = fastpayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
         return result;
     }
@@ -534,13 +644,15 @@ public class PayChannelChangJieController {
         String merchantId = "";
         if (mchId.equals("10007")) {
             merchantId = "200005280204";
+        } else if (mchId.equals("10024")) {
+            merchantId = "200005280204";
         } else if (mchId.equals("10003")) {
             merchantId = "200005300210";
         } else if (mchId.equals("10017")) {
             merchantId = "200005300210";
         } else {
             merchantId = "200005300210";
-        }        // 2.1 基本参数
+        }
         origMap = setCommonMap(origMap);
         origMap.put("Service", "nmg_zft_api_quick_payment");// 支付接口名称
         // 2.2 业务参数
@@ -561,8 +673,8 @@ public class PayChannelChangJieController {
         origMap.put("TrxAmt", amount);// 交易金额
         origMap.put("TradeType", "11");// 交易类型
         origMap.put("SmsFlag", "1");//短信发送标识
-        origMap.put("ReturnUrl", "http://106.12.39.167:3000/nmg_quick_payment_notify");//同步回调地址
-        origMap.put("NotifyUrl", "http://106.12.39.167:3000/nmg_quick_payment_notify");//异步回调地址
+        origMap.put("ReturnUrl", "http://106.12.13.47:3000/nmg_quick_payment_notify");//同步回调地址
+        origMap.put("NotifyUrl", "http://106.12.13.47:3000/nmg_quick_payment_notify");//异步回调地址
         String result = fastpayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
         return result;
     }
@@ -578,10 +690,12 @@ public class PayChannelChangJieController {
         String mchId = payOrders.getString("mchId");
         String amount = changeF2Y(payOrders.getString("amount"));
         String mchOrderNo = payOrders.getString("mchOrderNo");
-        String subject = payOrders.getString("subject");
         String bankCode = payOrders.getString("bankCode");
+        String frontUrl = payOrders.getString("frontUrl");
         String merchantId = "";
         if (mchId.equals("10007")) {
+            merchantId = "200005280204";
+        } else if (mchId.equals("10024")) {
             merchantId = "200005280204";
         } else if (mchId.equals("10003")) {
             merchantId = "200005300210";
@@ -599,8 +713,7 @@ public class PayChannelChangJieController {
         origMap.put("InputCharset", charset);
         origMap.put("TradeDate", getDateFormat("yyyyMMdd").format(date));
         origMap.put("TradeTime", getDateFormat("HHmmss").format(date));
-        // origMap.put("SignType","RSA");
-        origMap.put("ReturnUrl", "http://www.baidu.com");// 前台跳转url
+        origMap.put("ReturnUrl", frontUrl);// 前台跳转url
         origMap.put("Memo", "备注");
 
         // 4.2.1.1. 网银支付 api 业务参数
@@ -632,7 +745,7 @@ public class PayChannelChangJieController {
 
         origMap.put("OrderAmt", amount);
         origMap.put("EnsureAmt", "");
-        origMap.put("NotifyUrl", "http://106.12.39.167:3000/nmg_quick_payment_notify");
+        origMap.put("NotifyUrl", "http://106.12.13.47:3000/nmg_quick_payment_notify");
         origMap.put("UserIp", "127.0.0.1");
         origMap.put("PreferentialAmt", "");
         origMap.put("SplitList", "");
@@ -645,7 +758,7 @@ public class PayChannelChangJieController {
         for (int i = 0; i < jsons.size(); i++) {
             requestParam.put(jsons.getJSONObject(i).getString("name"), jsons.getJSONObject(i).getString("value"));
         }
-        String json = JSONObject.toJSONString(requestParam);
+        String json = JSON.toJSONString(requestParam);
 
         return json;
     }
@@ -675,11 +788,11 @@ public class PayChannelChangJieController {
         this.fastpayPost(origMap, charset, MERCHANT_PRIVATE_KEY);
     }
 
-//    public static void main(String[] args) {
-//        PayChannelChangJieController test = new PayChannelChangJieController();
-//        test.nmg_api_quick_payment_smsconfirm1(); //2.5 支付确认---API
+    public static void main(String[] args) {
+        PayChannelChangJieController test = new PayChannelChangJieController();
+        test.nmg_api_quick_payment_smsconfirm1(); //2.5 支付确认---API
 //        //       test.nmg_zft_api_quick_payment(); //2.6 支付请求（直付通）
 ////        test.nmg_ebank_pay(""); //网银支付
 //        //       test.nmg_api_query_trade();
-//    }
+    }
 }

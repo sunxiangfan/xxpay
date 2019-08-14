@@ -38,11 +38,7 @@ layui.define(['form', 'table', 'myList', 'layer'], function (exports) {
         };
         var scope = this;
         $.get('/pay_order/renotify', p, function (res) {
-            if (res.state === 0) {
-                scope.layerTips.msg('已提交。请稍候刷新列表查看');
-            } else {
-                scope.layerTips.msg(res.msg);
-            }
+            scope.layerTips.msg("提交成功！");
         }, 'JSON');
     }
     exports(mod_name, function (options) {

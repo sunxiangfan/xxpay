@@ -56,6 +56,7 @@
 </script>
 
 <script type="text/html" id="barPayType">
+    {{# if(d.payChannel.payType === 'FAST_PAY_WAP'){ }} <span style="color: green"><i class="layui-icon layui-icon-cellphone" ></i>  快捷前台</span> {{#  } }}
     {{# if(d.payChannel.payType === 'FAST_PAY'){ }} <span style="color: green"><i class="layui-icon layui-icon-cellphone" ></i>  快捷</span> {{#  } }}
     {{# if(d.payChannel.payType === 'GATEWAY'){ }} <span style="color: blue"><i class="layui-icon layui-icon-auz" ></i>网关</span> {{#  } }}
     {{# if(d.payChannel.payType === 'ALIPAY_WAP'){ }} <span style="color: blue"><i class="layui-icon layui-icon-auz" ></i>支付宝H5</span> {{#  } }}

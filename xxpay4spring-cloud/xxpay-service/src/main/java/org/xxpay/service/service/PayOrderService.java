@@ -39,6 +39,14 @@ public class PayOrderService {
         return payOrderMapper.selectByPrimaryKey(payOrderId);
     }
 
+    public PayOrder selectPayOrderByMchOrderNo(String mchOrderNo) {
+        PayOrderExample example = new PayOrderExample();
+        PayOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andMchOrderNoEqualTo(mchOrderNo);
+        List<PayOrder> payOrderList = payOrderMapper.selectByExample(example);
+        return CollectionUtils.isEmpty(payOrderList) ? null : payOrderList.get(0);
+    }
+
     public PayOrder selectPayOrderByMchIdAndPayOrderId(String mchId, String payOrderId) {
         PayOrderExample example = new PayOrderExample();
         PayOrderExample.Criteria criteria = example.createCriteria();
@@ -95,11 +103,10 @@ public class PayOrderService {
     public int updateStatus4Complete(String payOrderId) {
         PayOrder payOrder = new PayOrder();
         payOrder.setId(payOrderId);
-        payOrder.setStatus(PayConstant.PAY_STATUS_COMPLETE);
+        payOrder.setStatus(PayConstant.PAY_STATUS_SUCCESS);
         PayOrderExample example = new PayOrderExample();
         PayOrderExample.Criteria criteria = example.createCriteria();
         criteria.andIdEqualTo(payOrderId);
-        criteria.andStatusEqualTo(PayConstant.PAY_STATUS_SUCCESS);
         return payOrderMapper.updateByExampleSelective(payOrder, example);
     }
 

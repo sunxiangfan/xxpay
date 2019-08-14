@@ -3,16 +3,10 @@ package org.xxpay.agent.service;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.xxpay.common.enumm.MchState;
-import org.xxpay.common.enumm.MchType;
-import org.xxpay.common.util.PasswordUtil;
 import org.xxpay.dal.dao.mapper.MchInfoMapper;
 import org.xxpay.dal.dao.model.MchInfo;
 import org.xxpay.dal.dao.model.MchInfoExample;
-import org.xxpay.dal.dao.model.User;
-import org.xxpay.dal.dao.model.UserExample;
 
 import java.util.List;
 

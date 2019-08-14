@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xxpay.common.util.*;
-import org.xxpay.dal.dao.model.*;
+import org.xxpay.dal.dao.model.Agent;
+import org.xxpay.dal.dao.model.MchInfo;
+import org.xxpay.dal.dao.model.PayChannel;
+import org.xxpay.dal.dao.model.PayOrder;
 import org.xxpay.dal.dao.plugin.PageModel;
 import org.xxpay.mgr.service.AgentService;
 import org.xxpay.mgr.service.MchInfoService;
@@ -85,7 +88,8 @@ public class PayOrderController {
                 JSONObject object = (JSONObject) JSONObject.toJSON(po);
                 if (po.getCreateTime() != null) object.put("createTime", DateUtil.date2Str(po.getCreateTime()));
                 if (po.getAmount() != null) object.put("amount", AmountUtil.convertCent2Dollar(po.getAmount() + ""));
-                if (po.getPayAmount() != null) object.put("payAmount", AmountUtil.convertCent2Dollar(po.getPayAmount() + ""));
+                if (po.getPayAmount() != null)
+                    object.put("payAmount", AmountUtil.convertCent2Dollar(po.getPayAmount() + ""));
                 if (po.getSubMchActualAmount() != null)
                     object.put("subMchActualAmount", AmountUtil.convertCent2Dollar(po.getSubMchActualAmount() + ""));
                 if (po.getMchOrderNo() != null) object.put("mchOrderNo", "\t" + po.getMchOrderNo());
@@ -147,7 +151,23 @@ public class PayOrderController {
     @RequestMapping("/renotify")
     @ResponseBody
     public String renotify(String id) {
-        String result = HttpClient.callHttpPost("http://localhost:3030/notify/pay/renotify_mch.htm?payOrderId=" + id);
-        return result;
+        PageModel pageModel = new PageModel();
+        PayOrder payOrder = payOrderService.selectPayOrder(id);
+        String result = "";
+        Map<String, Object> params = new HashMap<>();
+        params.put("outer_trade_no", payOrder.getMchOrderNo());
+        params.put("extension", "交易成功");
+        String reqKey = "yN8Oj38HY88OIIV4VvYAQdKqYrdVhCYCvYRQxbX34DVSYQ8RqwKn4Vh3jqvp3V8d4YQV7VYVHr44NbArhXdxwqKp";
+        String reqSign = PayDigestUtil.getSign(params, reqKey);
+        params.put("sign", reqSign);
+        try {
+            result = HttpClientUtilNew.doPost(payOrder.getNotifyUrl(), params);
+        } catch (Exception e) {
+            _log.error("回调失败", e);
+        }
+        _log.info("回调响应：" + result);
+        pageModel.setMsg("ok");
+        pageModel.setRel(true);
+        return JSON.toJSONString(pageModel);
     }
 }

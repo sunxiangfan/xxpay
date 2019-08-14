@@ -67,7 +67,7 @@ public class MchBankCardController {
                 depositAmount = 0L;
             }
             model.put("depositAmount", AmountUtil.convertCent2Dollar(depositAmount + ""));
-            long effectiveBalance = BigDecimalUtils.sub(balance.longValue(), depositAmount.longValue());
+            long effectiveBalance = balance;
             model.put("effectiveBalance", AmountUtil.convertCent2Dollar(effectiveBalance + ""));
         }
         return "mch_bank_card/list";
