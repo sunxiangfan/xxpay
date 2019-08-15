@@ -1,6 +1,5 @@
 package org.xxpay.service.controller;
 
-import com.alibaba.druid.util.HttpClientUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -13,7 +12,6 @@ import org.xxpay.common.util.HttpClientUtilNew;
 import org.xxpay.common.util.MyBase64;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.common.util.PayDigestUtil;
-import org.xxpay.dal.dao.mapper.MchCompanyMapper;
 import org.xxpay.dal.dao.mapper.MchInfoMapper;
 import org.xxpay.dal.dao.model.MchInfo;
 import org.xxpay.dal.dao.model.PayOrder;
@@ -526,7 +524,7 @@ public class PayChannelChangJieController {
         if (mchId.equals("10007")) {
             merchantId = "200005280204";
         } else if (mchId.equals("10024")) {
-            merchantId = "200005280204";
+            merchantId = "200005300210";
         } else if (mchId.equals("10003")) {
             merchantId = "200005300210";
         } else if (mchId.equals("10017")) {
@@ -595,7 +593,7 @@ public class PayChannelChangJieController {
         if (mchId.equals("10007")) {
             merchantId = "200005280204";
         } else if (mchId.equals("10024")) {
-            merchantId = "200005280204";
+            merchantId = "200005300210";
         } else if (mchId.equals("10003")) {
             merchantId = "200005300210";
         } else if (mchId.equals("10017")) {
@@ -645,7 +643,7 @@ public class PayChannelChangJieController {
         if (mchId.equals("10007")) {
             merchantId = "200005280204";
         } else if (mchId.equals("10024")) {
-            merchantId = "200005280204";
+            merchantId = "200005300210";
         } else if (mchId.equals("10003")) {
             merchantId = "200005300210";
         } else if (mchId.equals("10017")) {
@@ -696,7 +694,7 @@ public class PayChannelChangJieController {
         if (mchId.equals("10007")) {
             merchantId = "200005280204";
         } else if (mchId.equals("10024")) {
-            merchantId = "200005280204";
+            merchantId = "200005300210";
         } else if (mchId.equals("10003")) {
             merchantId = "200005300210";
         } else if (mchId.equals("10017")) {
