@@ -36,18 +36,18 @@ public class PayController {
 
     @RequestMapping("/do_pay")
     public String doPay(@RequestParam HashMap<String, String> params, HttpServletResponse response) {
-        String mchId = "10007";
+       // String mchId = "10007";
 
         String goodsOrderId = String.format("%s%s%06d", "G", DateUtil.getSeqString(), (int) seq.getAndIncrement() % 1000000);
         String payType = params.get("payType");
         //String amount=params.get("amount");
         //String centAmount= AmountUtil.convertDollar2Cent(amount);
-        long amount = 499900;
+        //long amount = 499900;
         JSONObject paramMap = new JSONObject();
-        paramMap.put("mchId", mchId);                       // 商户ID
+        paramMap.put("mchId", params.get("mchId"));                       // 商户ID
         paramMap.put("mchOrderNo", goodsOrderId);           // 商户订单号
         paramMap.put("payType", payType);             // 支付渠道ID, WX_NATIVE,ALIPAY_WAP
-        paramMap.put("amount", amount);                          // 支付金额,单位元
+        paramMap.put("amount", params.get("amount"));                          // 支付金额,单位元
         paramMap.put("currency", "cny");                    // 币种, cny-人民币
         paramMap.put("clientIp", "114.112.124.236");        // 用户地址,IP或手机号
         paramMap.put("device", "WEB");                      // 设备
@@ -58,11 +58,11 @@ public class PayController {
         paramMap.put("param1", "");                         // 扩展参数1
         paramMap.put("param2", "");                         // 扩展参数2
         paramMap.put("extra", "");  // 附加参数
-        paramMap.put("bankCode", "CCB");//测试
-        paramMap.put("BkAcctNo", "6222023500015959782");// 卡号
-        paramMap.put("IDNo", "231222199110194015");// 证件号
-        paramMap.put("CstmrNm", "孙祥帆");// 持卡人姓名
-        paramMap.put("MobNo", "13111110495");// 银行预留手机号
+        paramMap.put("bankCode", params.get("bankCode"));//测试
+//        paramMap.put("BkAcctNo", "6222023500015959782");// 卡号
+//        paramMap.put("IDNo", "231222199110194015");// 证件号
+//        paramMap.put("CstmrNm", "孙祥帆");// 持卡人姓名
+//        paramMap.put("MobNo", "13111110495");// 银行预留手机号
 
         String reqSign = PayDigestUtil.getSign(paramMap, reqKey);
         paramMap.put("sign", reqSign);   // 签名

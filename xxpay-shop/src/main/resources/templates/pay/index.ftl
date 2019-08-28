@@ -52,9 +52,15 @@
     <div id="info" style="font-size: 16px;">
         <table>
             <tr>
-                <td>金额(元)</td>
+                <td>商户号</td>
                 <td class="fr">
-                <input type="number" name="amount" placeholder="充值金额（单位元）" style="width: 100%">
+                    <input type="text" name="mchId"  style="width: 100%">
+                </td>
+            </tr>
+            <tr>
+                <td>金额(分)</td>
+                <td class="fr">
+                <input type="number" name="amount" placeholder="充值金额（单位分）" style="width: 100%">
                 </td>
             </tr>
             <tr>
@@ -65,6 +71,12 @@
                         <option value="GATEWAY">网关</option>
                         <option value="ALIPAY_WAP">支付宝H5</option>
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td>选择银行(大写字母简称)</td>
+                <td class="fr">
+                    <input type="text" name="bankCode"  style="width: 100%">
                 </td>
             </tr>
             <tr>
