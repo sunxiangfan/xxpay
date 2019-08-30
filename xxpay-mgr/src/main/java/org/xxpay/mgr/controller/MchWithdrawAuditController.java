@@ -1,5 +1,6 @@
 package org.xxpay.mgr.controller;
 
+import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -9,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.xxpay.common.model.SimpleResult;
 import org.xxpay.common.model.SimpleResultT;
+import org.xxpay.common.util.MyBase64;
 import org.xxpay.mgr.service.MchInfoService;
 import org.xxpay.mgr.service.MchWithdrawApplyService;
 import org.xxpay.mgr.util.SessionUtil;
@@ -20,7 +23,9 @@ import org.xxpay.common.util.MyLog;
 import org.xxpay.dal.dao.model.MchWithdrawApply;
 import org.xxpay.dal.dao.plugin.PageModel;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/mch_withdraw_audit")
@@ -34,9 +39,6 @@ public class MchWithdrawAuditController {
     @Autowired
     private SessionUtil sessionUtil;
 
-    @Autowired
-    private MchInfoService mchInfoService;
-
     @RequestMapping("/list.html")
     public String listInput(String mchType, ModelMap model) {
         model.put("mchType", mchType);
@@ -45,6 +47,7 @@ public class MchWithdrawAuditController {
 
     /**
      * 查询待审批提醒
+     *
      * @return
      */
     @RequestMapping("/todo_count")
@@ -126,12 +129,21 @@ public class MchWithdrawAuditController {
         try {
             JSONObject po = JSONObject.parseObject(params);
             String id = po.getString("id");
-            int updateRows = mchWithdrawApplyService.audit(id, true, sessionUtil.getLoginInfo().getLoginAccount());
-            _log.info("通过提现申请记录,返回:{}", updateRows);
-            result = SimpleResult.buildSucRes("操作成功！");
-        } catch (IllegalArgumentException ex) {
+            String i = mchWithdrawApplyService.audit(id, true, sessionUtil.getLoginInfo().getLoginAccount());
+            JSONObject json = JSONObject.parseObject(i);
+            String code = json.getString("code");
+            if ("0000".equals(code)) {
+                result = SimpleResult.buildSucRes("操作成功！");
+            } else {
+                result = SimpleResult.buildFailRes("操作失败！详情：" + i);
+                MchWithdrawApply info = new MchWithdrawApply();
+                info.setId(id);
+                info.setMchOrderNo(String.valueOf(System.currentTimeMillis()));
+                mchWithdrawApplyService.update(info);
+            }
+        } catch (Exception ex) {
             _log.info("通过提现申请通过失败，详情：{}", ex.getMessage());
-            result = SimpleResult.buildSucRes("操作失败！详情：" + ex.getMessage());
+            result = SimpleResult.buildFailRes("操作失败！详情：" + ex.getMessage());
         }
         return result;
     }
@@ -143,10 +155,10 @@ public class MchWithdrawAuditController {
         try {
             JSONObject po = JSONObject.parseObject(params);
             String id = po.getString("id");
-            int updateRows = mchWithdrawApplyService.audit(id, false, sessionUtil.getLoginInfo().getLoginAccount());
+            String updateRows = mchWithdrawApplyService.audit(id, false, sessionUtil.getLoginInfo().getLoginAccount());
             _log.info("拒绝提现申请记录,返回:{}", updateRows);
             result = SimpleResult.buildSucRes("操作成功！");
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             _log.info("拒绝提现申请失败，详情：{}", ex.getMessage());
             result = SimpleResult.buildFailRes("操作失败！详情：" + ex.getMessage());
         }

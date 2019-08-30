@@ -27,7 +27,6 @@ public class MchWithdrawApplyService {
     @Autowired
     private MchWithdrawApplyDomainService mchWithdrawApplyDomainService;
 
-
     @Transactional
     public int apply(String mchId, String mchBackCardId, Long applyAmount) {
         MchBankCard mchBankCard = mchBankCardMapper.selectByPrimaryKey(mchBackCardId);

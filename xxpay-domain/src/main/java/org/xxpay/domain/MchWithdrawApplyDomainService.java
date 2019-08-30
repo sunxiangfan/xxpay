@@ -93,7 +93,7 @@ public class MchWithdrawApplyDomainService {
         mchWithdrawApply.setCashState((byte) 0);
         mchWithdrawApply.setCreateTime(new Date());
         mchWithdrawApply.setUpdateTime(new Date());
-        mchWithdrawApply.setMchOrderNo(mchOrderNo);
+        mchWithdrawApply.setMchOrderNo(String.valueOf(System.currentTimeMillis()));
         mchWithdrawApply.setBankUnionCode(mchBankCard.getBankUnionCode());
         return mchWithdrawApplyMapper.insert(mchWithdrawApply);
     }
