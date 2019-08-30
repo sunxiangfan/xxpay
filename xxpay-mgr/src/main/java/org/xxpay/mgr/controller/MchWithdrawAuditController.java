@@ -129,18 +129,8 @@ public class MchWithdrawAuditController {
         try {
             JSONObject po = JSONObject.parseObject(params);
             String id = po.getString("id");
-            String i = mchWithdrawApplyService.audit(id, true, sessionUtil.getLoginInfo().getLoginAccount());
-            JSONObject json = JSONObject.parseObject(i);
-            String code = json.getString("code");
-            if ("0000".equals(code)) {
-                result = SimpleResult.buildSucRes("操作成功！");
-            } else {
-                result = SimpleResult.buildFailRes("操作失败！详情：" + i);
-                MchWithdrawApply info = new MchWithdrawApply();
-                info.setId(id);
-                info.setMchOrderNo(String.valueOf(System.currentTimeMillis()));
-                mchWithdrawApplyService.update(info);
-            }
+            mchWithdrawApplyService.audit(id, true, sessionUtil.getLoginInfo().getLoginAccount());
+            result = SimpleResult.buildSucRes("操作成功！");
         } catch (Exception ex) {
             _log.info("通过提现申请通过失败，详情：{}", ex.getMessage());
             result = SimpleResult.buildFailRes("操作失败！详情：" + ex.getMessage());
@@ -155,7 +145,7 @@ public class MchWithdrawAuditController {
         try {
             JSONObject po = JSONObject.parseObject(params);
             String id = po.getString("id");
-            String updateRows = mchWithdrawApplyService.audit(id, false, sessionUtil.getLoginInfo().getLoginAccount());
+            int updateRows = mchWithdrawApplyService.audit(id, false, sessionUtil.getLoginInfo().getLoginAccount());
             _log.info("拒绝提现申请记录,返回:{}", updateRows);
             result = SimpleResult.buildSucRes("操作成功！");
         } catch (Exception ex) {

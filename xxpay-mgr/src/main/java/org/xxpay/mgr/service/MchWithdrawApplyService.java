@@ -35,35 +35,9 @@ public class MchWithdrawApplyService {
         return mchWithdrawApplyMapper.insertSelective(info);
     }
 
-    @Transactional
-    public String audit(String id, boolean isPass, String auditor) {
-        String request = "1";
-        int i = mchWithdrawApplyDomainService.audit(id, isPass, auditor);
-        if (i == 1 && isPass) {
-            MchWithdrawApply mchWithdraw = mchWithdrawApplyMapper.selectByPrimaryKey(id);
-            Map<String, String> map = new HashMap<>();
-            map.put("bankCardMobile", mchWithdraw.getMobile());
-            map.put("bankCardNo", mchWithdraw.getNumber());
-            map.put("bankCardOwnerName", mchWithdraw.getAccountName());
-            map.put("bankName", mchWithdraw.getBankName());
-            map.put("idCardNo", mchWithdraw.getIdCard());
-            map.put("mchRequestNo", mchWithdraw.getMchOrderNo());
-            map.put("transferAmt", String.valueOf(mchWithdraw.getApplyAmount()));
-            map.put("callbackUrl", "http://baidu.com");
-
-            request = HttpRequest.post(baseUrl).charset("UTF-8")
-                    .header("Content-Type", "application/json")
-                    .body(JSON.toJSONString(map))
-                    .execute().body();
-            _log.info("通过提现申请记录,返回:{}", request);
-            JSONObject jsonParam = JSONObject.parseObject(request);
-            if (!"0000".equals(jsonParam.getString("code"))) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
-        }
-        return request;
+    public int audit(String id, boolean isPass, String auditor) {
+        return mchWithdrawApplyDomainService.audit(id, isPass, auditor);
     }
-
 
     public int update(MchWithdrawApply info) {
         info.setUpdateTime(new Date());
