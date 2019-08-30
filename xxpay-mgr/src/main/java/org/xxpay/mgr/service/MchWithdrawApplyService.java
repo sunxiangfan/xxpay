@@ -21,7 +21,7 @@ public class MchWithdrawApplyService {
 
     private final static MyLog _log = MyLog.getLog(MchWithdrawApplyService.class);
 
-    final String baseUrl = "http://localhost:3000/pay/zx/transfer";
+    final String baseUrl = "http://106.12.13.47:3000/pay/zx/transfer";
 
     @Autowired
     private MchWithdrawApplyMapper mchWithdrawApplyMapper;
