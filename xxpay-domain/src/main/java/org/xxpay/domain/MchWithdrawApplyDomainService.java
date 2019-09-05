@@ -54,7 +54,7 @@ public class MchWithdrawApplyDomainService {
         Assert.isTrue(StringUtils.isNotBlank(mchId), "商户号不能为空！");
         Assert.notNull(mchBankCard, "银行卡信息不能为空！");
         Assert.notNull(applyAmount, "申请金额不能为空！");
-        Assert.isTrue(applyAmount >= 100, "申请金额不能为空，且必须大于100！申请值为：" + AmountUtil.convertCent2Dollar(applyAmount + ""));
+        Assert.isTrue(applyAmount >= 2, "申请金额不能为空，且必须大于2！申请值为：" + AmountUtil.convertCent2Dollar(applyAmount + ""));
         Assert.isTrue(applyAmount <= 4999900, "单笔金额不能超过49999元！");
         String cashOrderId = MySeq.getCash();
         Long actualAmount = applyAmount;
