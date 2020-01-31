@@ -26,7 +26,7 @@ import java.util.Map;
 @Service
 public class CashApplyChannelService {
 
-    final String baseUrl = "http://106.12.13.47:3000/pay/zx/transfer";
+    final String baseUrl = "http://106.12.13.47:3001/pay/zx/transfer";
 
     @Autowired
     private MchWithdrawApplyService mchWithdrawApplyService;

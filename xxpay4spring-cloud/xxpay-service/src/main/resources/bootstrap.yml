@@ -1,29 +1,64 @@
+server:
+  port: 3001
+
 spring:
   application:
     name: xxpay-service
-  cloud:
-    config:
-      discovery:
-        enabled: true            # 默认false，设为true表示使用注册中心中的configserver配置而不自己配置configserver的uri
-        serviceId: xxpay-config  # 指定config server在服务发现中的serviceId，默认为：configserver
-      profile: home
-      fail-fast: true
-      password: xxpay
-      username: user
-  freemarker:
-    cache: false
-    charset: UTF-8
-    check-template-location: true
-    content-type: text/html
-    expose-request-attributes: true
-    expose-session-attributes: true
-    request-context-attribute: request
-    suffix: .ftl
-    templateEncoding: UTF-8
-    template-loader-path: classpath:/templates/
+  datasource:
+    #type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    #url: jdbc:mysql://47.96.125.87:3306/xxpaydb?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+    #username: XinWei
+    #password: XinWei2019
+    url: jdbc:mysql://39.98.191.248:3306/xxpaydb?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+    username: root
+    password: aaa1110.0
+    initialSize: 5    # 初始化大小
+    minIdle: 5        # 最小
+    maxActive: 20     # 最大
+    maxWait: 60000    # 获取连接等待超时的时间
+    timeBetweenEvictionRunsMillis: 60000    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    minEvictableIdleTimeMillis: 300000      # 配置一个连接在池中最小生存的时间，单位是毫秒
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true                    # 打开PSCache
+    maxPoolPreparedStatementPerConnectionSize: 20   # 指定每个连接上PSCache的大小
+    filters: stat,wall,log4j                        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000  # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+  profiles:
+    active: prod
+
 logging:
   level: debug
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:2000/eureka/
+
+ali:
+  notify_url: http://api.xxpay.org/notify/pay/aliPayNotifyRes.htm
+  return_url: http://www.xxpay.org
+
+wx:
+  notify_url: http://api.xxpay.org/notify/pay/wxPayNotifyRes.htm
+
+cert:
+  root:
+    path: /home/xxpay/service/cert
+
+tengjing:
+  notifyUrl: http://localhost:3030/notify/pay/tengjingPayNotifyRes.htm
+  platPublicKeyText:
+  merchPrivateKeyText:
+
+blzqzbs:
+  mchId:
+  notifyUrl: http://localhost:3030/notify/pay/blzqzbsPayNotifyRes.htm
+  key:
+
+xq316:
+  mchId:
+  notifyUrl: http://localhost:3030/notify/pay/xq316NotifyRes.htm
+  key:

@@ -1,25 +1,9 @@
 spring:
   application:
     name: xxpay-web
-  cloud:
-    config:
-      discovery:
-        enabled: true            # 默认false，设为true表示使用注册中心中的configserver配置而不自己配置configserver的uri
-        serviceId: xxpay-config  # 指定config server在服务发现中的serviceId，默认为：configserver
-      fail-fast: true
-      password: xxpay
-      username: user
-  freemarker:
-    cache: false
-    charset: UTF-8
-    check-template-location: true
-    content-type: text/html
-    expose-request-attributes: true
-    expose-session-attributes: true
-    request-context-attribute: request
-    suffix: .ftl
-    templateEncoding: UTF-8
-    template-loader-path: classpath:/templates/
+
+server:
+  port: 3010
 
 eureka:
   client:
