@@ -51,18 +51,22 @@
 <form method="get" action="/pay/do_pay">
     <div id="info" style="font-size: 16px;">
         <table>
+            <!--
             <tr>
                 <td>商户号</td>
                 <td class="fr">
                     <input type="text" name="mchId"  style="width: 100%">
                 </td>
             </tr>
+            -->
+            <input type="hidden" name="mchId" value="10002"/>
             <tr>
-                <td>金额(分)</td>
+                <td>金额(元)</td>
                 <td class="fr">
-                <input type="number" name="amount" placeholder="充值金额（单位分）" style="width: 100%">
+                <input type="number" name="amount" placeholder="充值金额" style="width: 100%">
                 </td>
             </tr>
+            <!--
             <tr>
                 <td>支付方式</td>
                 <td class="fr">
@@ -79,9 +83,11 @@
                     <input type="text" name="bankCode"  style="width: 100%">
                 </td>
             </tr>
+            -->
+            <input type="hidden" name="payType" value="ALIPAY_WAP"/>
             <tr>
                 <td class="fr" colspan="2">
-                    <button type="submit" style="width: 100px;height: 28px;">继续</button>
+                    <button type="submit" style="width: 100px;height: 28px;">发起支付</button>
                 </td>
             </tr>
         </table>

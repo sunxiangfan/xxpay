@@ -479,7 +479,7 @@ public class PayChannelChangJieController {
         mchInfoMapper.updateByPrimaryKey(info);
 
         String result = "";
-        String reqKey = "yN8Oj38HY88OIIV4VvYAQdKqYrdVhCYCvYRQxbX34DVSYQ8RqwKn4Vh3jqvp3V8d4YQV7VYVHr44NbArhXdxwqKp";
+        String reqKey = "Yn3jNH7Nl1F7DbM7V8kzNdpsWsljffHj4AHHGVnA1udp7tHN8l4cUGJ5jJFzs03G37qjnM3877f1FU3wo78un3FW";
         Map<String, Object> map = new HashMap<>();
         map.put("outer_trade_no", payOrder.getMchOrderNo());
         map.put("extension", "交易成功");

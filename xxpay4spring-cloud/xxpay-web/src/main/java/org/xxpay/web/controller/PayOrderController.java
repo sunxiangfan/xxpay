@@ -82,6 +82,11 @@ public class PayOrderController {
         return payOrderServiceClient.doMinFuMessageVerifyPayReq(getJsonParam("payOrder", params));
     }
 
+    @RequestMapping(value = "api/pay/alipay")
+    public Object alipay(@RequestParam Map<String, String> params) {
+        return payOrderServiceClient.doALiPayReq(getJsonParam("payOrder", params));
+    }
+
     //测试敏付企业转账
     @RequestMapping(value = "api/pay/transfer")
     public Object testtransfer() {
@@ -178,8 +183,8 @@ public class PayOrderController {
                     return payOrderServiceClient.doAliPayMobileReq(getJsonParam("payOrder", payOrder));
                 case PayConstant.PAY_CHANNEL_ALIPAY_PC:
                     return payOrderServiceClient.doAliPayPcReq(getJsonParam("payOrder", payOrder));
-                case PayConstant.PAY_CHANNEL_ALIPAY_WAP:
-                    return payOrderServiceClient.doAliPayWapReq(getJsonParam("payOrder", payOrder));
+//                case PayConstant.PAY_CHANNEL_ALIPAY_WAP:
+//                    return payOrderServiceClient.doAliPayWapReq(getJsonParam("payOrder", payOrder));
                 case PayConstant.PAY_CHANNEL_ALIPAY_QR:
                     return payOrderServiceClient.doAliPayQrReq(getJsonParam("payOrder", payOrder));
                 case PayConstant.CHANNEL_NAME_TENGJING:
@@ -317,6 +322,13 @@ public class PayOrderController {
                     model.put("action", "http://localhost:3010/api/pay/testKj");
                     model.put("payParams", object1);
                     System.out.println(JSONObject.toJSONString(model));
+                    return "payFormNew";
+                }
+                case PayConstant.PAY_TYPE_ALIPAY_WAP: {
+                    String resp = payOrderServiceClient.doALiPayReq(getJsonParam("payOrder", payOrder));
+                    model.put("method", "post");
+                    model.put("action", resp);
+                    System.out.println(resp);
                     return "payFormNew";
                 }
                 default:

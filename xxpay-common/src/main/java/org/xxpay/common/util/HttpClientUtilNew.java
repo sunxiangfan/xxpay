@@ -1,5 +1,6 @@
 package org.xxpay.common.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.util.IOUtils;
 import org.apache.http.*;
 import org.apache.http.client.config.CookieSpecs;
@@ -25,10 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
@@ -39,10 +37,10 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpClientUtilNew {
-    private static final Logger logger= LoggerFactory.getLogger(HttpClientUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
     private static PoolingHttpClientConnectionManager connMgr;
     private static RequestConfig requestConfig;
-    private static final int MAX_TIMEOUT =30000;//默认30秒超时
+    private static final int MAX_TIMEOUT = 30000;//默认30秒超时
 
     static {
         // 设置连接池
@@ -68,6 +66,7 @@ public class HttpClientUtilNew {
 
     /**
      * 发送 POST 请求（HTTP），不带输入数据
+     *
      * @param apiUrl
      * @return
      */
@@ -77,6 +76,7 @@ public class HttpClientUtilNew {
 
     /**
      * 发送 POST 请求（HTTP），K-V形式
+     *
      * @param apiUrl API接口URL
      * @param params 参数map
      * @return
@@ -95,7 +95,7 @@ public class HttpClientUtilNew {
                 pairList.add(pair);
             }
             httpPost.setEntity(new UrlEncodedFormEntity(pairList, Charset.forName("UTF-8")));
-            logger.info("[http工具类]请求地址:{}请求参数:{}",apiUrl,params);
+            logger.info("[http工具类]请求地址:{}请求参数:{}", apiUrl, params);
             response = httpClient.execute(httpPost);
             /*if(302==response.getStatusLine().getStatusCode()){
                 Header header = response.getFirstHeader("location"); // 跳转的目标地址是在 HTTP-HEAD 中的
@@ -104,15 +104,15 @@ public class HttpClientUtilNew {
             }*/
             HttpEntity entity = response.getEntity();
             httpStr = EntityUtils.toString(entity, "UTF-8");
-            logger.info("[http工具类]响应内容:{}",httpStr);
+            logger.info("[http工具类]响应内容:{}", httpStr);
         } catch (IOException e) {
-            logger.error("[http工具类]请求发生IO异常:",e);
+            logger.error("[http工具类]请求发生IO异常:", e);
         } finally {
             if (response != null) {
                 try {
                     EntityUtils.consume(response.getEntity());
                 } catch (IOException e) {
-                    logger.error("[http工具类]请求发生IO异常1:",e);
+                    logger.error("[http工具类]请求发生IO异常1:", e);
                 }
             }
         }
@@ -162,8 +162,9 @@ public class HttpClientUtilNew {
 
     /**
      * 发送 POST 请求（HTTP），JSON形式
+     *
      * @param apiUrl
-     * @param json json对象
+     * @param json   json对象
      * @return
      */
    /* public static String doPost(String apiUrl, Object json) {
@@ -195,7 +196,37 @@ public class HttpClientUtilNew {
         }
         return httpStr;
     }*/
+    public static String post(JSONObject json, String url) {
+        String result = "";
+        HttpPost post = new HttpPost(url);
+        try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
 
+            post.setHeader("Content-Type", "application/json;charset=utf-8");
+            StringEntity postingString = new StringEntity(json.toString(), "utf-8");
+            post.setEntity(postingString);
+            HttpResponse response = httpClient.execute(post);
 
+            InputStream in = response.getEntity().getContent();
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, "utf-8"));
+            StringBuilder strber = new StringBuilder();
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                strber.append(line + '\n');
+            }
+            br.close();
+            in.close();
+            result = strber.toString();
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+                result = "服务器异常";
+            }
+        } catch (Exception e) {
+            System.out.println("请求异常");
+            throw new RuntimeException(e);
+        } finally {
+            post.abort();
+        }
+        return result;
+    }
 
 }

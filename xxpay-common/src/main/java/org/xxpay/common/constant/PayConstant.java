@@ -54,10 +54,12 @@ public class PayConstant {
 
     public final static String CHANNEL_NAME_MF_FAST_PAY = "MF_FAST_PAY";        // 渠道名称:网关MF(敏付)
 
+//    public final static String CHANNEL_NAME_ALIPAY_WAP = "ALIPAY_WAP";
+
     public final static String PAY_TYPE_FAST_PAY = "FAST_PAY"; //支付类型：快捷支付
     public final static String PAY_TYPE_GATEWAY = "GATEWAY"; //支付类型：网银支付
     public final static String PAY_TYPE_TRANSFER = "TRANSFER"; //支付类型：线下转账
-    public final static String PAY_TYPE_ALIPAY_WAP = "ALIPAY_WAP"; //支付类型：支付宝H5
+    public final static String PAY_TYPE_ALIPAY_WAP = "zfb"; //支付类型：支付宝H5
 
     public final static byte PAY_STATUS_EXPIRED = -2;    // 订单过期
     public final static byte PAY_STATUS_FAILED = -1;    // 支付失败

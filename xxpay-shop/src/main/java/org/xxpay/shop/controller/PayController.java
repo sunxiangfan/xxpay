@@ -23,7 +23,7 @@ public class PayController {
 
     static final String mchId = "";
     // 加签key
-    static final String reqKey = "yN8Oj38HY88OIIV4VvYAQdKqYrdVhCYCvYRQxbX34DVSYQ8RqwKn4Vh3jqvp3V8d4YQV7VYVHr44NbArhXdxwqKp";
+    static final String reqKey = "Yn3jNH7Nl1F7DbM7V8kzNdpsWsljffHj4AHHGVnA1udp7tHN8l4cUGJ5jJFzs03G37qjnM3877f1FU3wo78un3FW";
     // 验签key
     static final String resKey = "";
 
@@ -36,7 +36,7 @@ public class PayController {
 
     @RequestMapping("/do_pay")
     public String doPay(@RequestParam HashMap<String, String> params, HttpServletResponse response) {
-       // String mchId = "10007";
+        String mchId = "10002";
 
         String goodsOrderId = String.format("%s%s%06d", "G", DateUtil.getSeqString(), (int) seq.getAndIncrement() % 1000000);
         String payType = params.get("payType");
@@ -44,10 +44,12 @@ public class PayController {
         //String centAmount= AmountUtil.convertDollar2Cent(amount);
         //long amount = 499900;
         JSONObject paramMap = new JSONObject();
-        paramMap.put("mchId", params.get("mchId"));                       // 商户ID
+        paramMap.put("mchId", mchId);                       // 商户ID
         paramMap.put("mchOrderNo", goodsOrderId);           // 商户订单号
-        paramMap.put("payType", payType);             // 支付渠道ID, WX_NATIVE,ALIPAY_WAP
-        paramMap.put("amount", params.get("amount"));                          // 支付金额,单位元
+        paramMap.put("payType", payType);// 支付渠道ID, WX_NATIVE,ALIPAY_WAP
+        String amountStr = params.get("amount");
+        int amount = (int)(Double.valueOf(amountStr) * 100);
+        paramMap.put("amount", String.valueOf(amount));                          // 支付金额,单位元
         paramMap.put("currency", "cny");                    // 币种, cny-人民币
         paramMap.put("clientIp", "114.112.124.236");        // 用户地址,IP或手机号
         paramMap.put("device", "WEB");                      // 设备
@@ -58,7 +60,7 @@ public class PayController {
         paramMap.put("param1", "");                         // 扩展参数1
         paramMap.put("param2", "");                         // 扩展参数2
         paramMap.put("extra", "");  // 附加参数
-        paramMap.put("bankCode", params.get("bankCode"));//测试
+        paramMap.put("bankCode", "ICBC");//测试
 //        paramMap.put("BkAcctNo", "6222023500015959782");// 卡号
 //        paramMap.put("IDNo", "231222199110194015");// 证件号
 //        paramMap.put("CstmrNm", "孙祥帆");// 持卡人姓名
@@ -70,9 +72,12 @@ public class PayController {
         System.out.println("请求支付中心下单接口,请求数据:" + reqData);
         String url = baseUrl + "/pay/create_order";
 // form1.submit()
-        String html = "<html><body onload=''><form id='form1' action='" + url + "' method='post'>"
+
+        String html = "<html><head><script type='text/javascript' src='/js/jquery.min.js'></script></head>" +
+                "<body onload=''><form id='form1' action='" + url + "' method='post'>"
                 + createForm(paramMap)
-                + "<button type='submit'>提交</button></form></body></html>";
+                + "<script type='text/javascript'>$(function(){ $('form').submit();});</script>"
+                + "<button type='submit'>提交中</button></form></body></html>";
         try {
             response.setHeader("content-type", "text/html;charset=utf-8");
             response.getWriter().write(html);
@@ -162,7 +167,7 @@ public class PayController {
     private String createForm(Map<String, Object> map) {
         String form = "";
         for (String key : map.keySet()) {
-            form += String.format("<input type='text' name='%s' value='%s' ></input>", key, map.get(key));
+            form += String.format("<input type='hidden' name='%s' value='%s' ></input>", key, map.get(key));
         }
         return form;
 

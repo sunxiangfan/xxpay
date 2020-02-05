@@ -276,7 +276,16 @@ public class PayOrderServiceClient {
         return restTemplate.getForEntity("http://xxpay-service/pay/kj/message?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
     }
 
+    @HystrixCommand(fallbackMethod = "doALiPayFallback")
+    public String doALiPayReq(String jsonParam) {
+        return restTemplate.getForEntity("http://xxpay-service/pay/channel/alipay?jsonParam=" + MyBase64.encode(jsonParam.getBytes()), String.class).getBody();
+    }
+
     public String doMinFuMessagePayFallback(String jsonParam) {
+        return "error";
+    }
+
+    public String doALiPayFallback(String jsonParam) {
         return "error";
     }
      /**
